@@ -15,7 +15,6 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    @OneToMany(mappedBy = "nestedComments")
     private Long commentId;
     @Column(name = "comment")
     private String comment;
@@ -27,8 +26,8 @@ public class Comment {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private List<Comment> nestedComments;
+    @JoinColumn(name = "parent_comment_id")
+    private Comment parentComment;
 
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     @JoinColumn(name = "user_id")

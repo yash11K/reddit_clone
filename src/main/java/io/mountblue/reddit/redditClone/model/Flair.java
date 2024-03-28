@@ -23,6 +23,6 @@ public class Flair {
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "subRedditId")
+    @JoinColumn(name = "sub_reddit_id")
     private SubReddit subReddit;
 }

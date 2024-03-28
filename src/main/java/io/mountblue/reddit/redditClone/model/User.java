@@ -10,9 +10,10 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "\"user\"")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
     @Column(name = "username", updatable = false)

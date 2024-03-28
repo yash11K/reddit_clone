@@ -25,8 +25,8 @@ public class SubReddit {
     @Column(name = "sub_reddit_description")
     private String description;
 
-    @Column(name = "sub_reddit_rules")
-    private List<String> rules;
+    @OneToMany(mappedBy = "subReddit")
+    private List<Rule> rules;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -35,10 +35,10 @@ public class SubReddit {
     @OneToMany(mappedBy = "subreddit", cascade = CascadeType.ALL)
     private List<Post> posts;
 
-    @ManyToMany(mappedBy = "subscribedSubreddits")
+    @ManyToMany(mappedBy = "subscribedSubReddits")
     private List<User> subscribedUsers;
 
-    @OneToMany(mappedBy = "subreddit", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subReddit", cascade = CascadeType.ALL)
     private List<Flair> flairs;
 
 }
