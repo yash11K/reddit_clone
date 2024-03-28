@@ -1,0 +1,53 @@
+package io.mountblue.reddit.redditClone.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "user_id")
+    private Long userId;
+    @Column(name = "username", updatable = false)
+    private String username;
+    @Column(name = "password")
+    private String password;
+    @Column(name = "gender", updatable = false)
+    private GENDER gender;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "joinDate")
+    private LocalDateTime joinDate;
+    @Column(name = "bio")
+    private String bio;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+    @Column(name = "profile_dp")
+    private String profilePic;
+
+    @OneToMany(mappedBy = "opUser", cascade = CascadeType.ALL)
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Vote> votes;
+
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
+    @JoinTable(
+            name = "sub_reddit_subscription",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "post_id")}
+    )
+    private List<SubReddit> subscribedSubReddits;
+}
