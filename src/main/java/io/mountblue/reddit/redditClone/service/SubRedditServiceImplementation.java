@@ -1,6 +1,7 @@
 package io.mountblue.reddit.redditClone.service;
 
 import io.mountblue.reddit.redditClone.dto.SubRedditDto;
+import io.mountblue.reddit.redditClone.exception.SubRedditNotFound;
 import io.mountblue.reddit.redditClone.model.Flair;
 import io.mountblue.reddit.redditClone.model.Rule;
 import io.mountblue.reddit.redditClone.model.SubReddit;
@@ -23,7 +24,6 @@ public class SubRedditServiceImplementation implements SubRedditService{
 
     private final SubRedditRepository subRedditRepository;
     private final RuleRepository ruleRepository;
-    //private final UserRepository userRepository;
     @Override
     public SubRedditDto save(SubRedditDto subRedditDto, Principal principal) {
         subRedditRepository.save(
@@ -41,7 +41,8 @@ public class SubRedditServiceImplementation implements SubRedditService{
 
     @Override
     public SubRedditDto update(SubRedditDto subRedditDto, String subRedditName) {
-        SubReddit subReddit = subRedditRepository.findBySubRedditName(subRedditName).get();
+        SubReddit subReddit = subRedditRepository.findSubRedditBySubRedditName(subRedditName)
+                .orElseThrow(()->new SubRedditNotFound("Subreddit not found with name: " + subRedditName));
         List<String> rules = subRedditDto.getRules();
         List<Rule> subRedditRules = new ArrayList<>();
         for(String rule: rules) {
@@ -66,8 +67,8 @@ public class SubRedditServiceImplementation implements SubRedditService{
 
     @Override
     public SubReddit show(String subRedditName) {
-        System.out.println(subRedditRepository.findBySubRedditName(subRedditName).get());
-        return subRedditRepository.findBySubRedditName(subRedditName).get();
+        return subRedditRepository.findSubRedditBySubRedditName(subRedditName)
+                .orElseThrow(()->new SubRedditNotFound("Subreddit not found with name: " + subRedditName));
 
     }
 
