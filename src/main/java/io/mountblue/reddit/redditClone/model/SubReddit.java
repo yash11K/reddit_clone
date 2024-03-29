@@ -1,14 +1,16 @@
 package io.mountblue.reddit.redditClone.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "sub_reddit")
 public class SubReddit {
@@ -16,9 +18,9 @@ public class SubReddit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sub_reddit_id")
     private Long subRedditId;
-    private String profilePicture;
-    private Date createdAt;
-    private String backgroundPicture;
+    private String avatar;
+    private LocalDateTime createdAt;
+    private String banner;
 
     @Column(name = "sub_reddit_name")
     private String subRedditName;
