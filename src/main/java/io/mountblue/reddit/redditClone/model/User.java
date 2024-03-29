@@ -51,4 +51,13 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "post_id")}
     )
     private List<SubReddit> subscribedSubReddits;
+
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
+    @JoinTable(
+            name = "user_topic",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "topic_id")}
+    )
+    private List<Topic> topics;
+
 }
