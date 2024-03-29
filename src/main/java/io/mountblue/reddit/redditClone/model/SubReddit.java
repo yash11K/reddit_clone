@@ -1,5 +1,7 @@
 package io.mountblue.reddit.redditClone.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,10 +40,10 @@ public class SubReddit {
     @OneToMany(mappedBy = "subreddit", cascade = CascadeType.ALL)
     private List<Post> posts;
 
-    @ManyToMany(mappedBy = "subscribedSubReddits")
+    @ManyToMany(mappedBy = "subscribedSubReddits", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     private List<User> subscribedUsers;
 
-    @OneToMany(mappedBy = "subReddit", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subReddit", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     private List<Flair> flairs;
 
 }

@@ -26,7 +26,10 @@ public class Flair {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     @JoinColumn(name = "sub_reddit_id")
     private SubReddit subReddit;
+
+    @ManyToMany(mappedBy = "flairs", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
+    List<Post> posts;
 }
