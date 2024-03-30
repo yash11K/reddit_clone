@@ -1,7 +1,11 @@
 package io.mountblue.reddit.redditClone.restcontroller;
 
+import io.mountblue.reddit.redditClone.dto.TopicDto;
 import io.mountblue.reddit.redditClone.dto.UserDto;
+import io.mountblue.reddit.redditClone.model.Topic;
 import io.mountblue.reddit.redditClone.model.User;
+import io.mountblue.reddit.redditClone.service.TopicManager;
+import io.mountblue.reddit.redditClone.service.TopicService;
 import io.mountblue.reddit.redditClone.service.UserManager;
 import io.mountblue.reddit.redditClone.service.UserService;
 import jakarta.validation.Valid;
@@ -10,15 +14,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
+    private final TopicService topicService;
 
     @Autowired
-    public UserController(UserManager userService) {
+    public UserController(UserManager userService,TopicService topicService) {
         this.userService = userService;
+        this.topicService=topicService;
     }
 
     @PostMapping("/new/user")
@@ -56,5 +65,12 @@ public class UserController {
         userService.deleteUser(userId);
         return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
     }
+    @PutMapping("/user/{userId}/topic")
+    public ResponseEntity<String> updateUserTopics(@PathVariable Long userId, @RequestBody List<TopicDto> topicDtos) {
+        return userService.updateUserTopics(userId, topicDtos);
+    }
+
+
+
 
 }

@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Long> {
+    Topic findByName(String name);
     List<Topic> findByNameInOrderByName(List<String> topicNames);
 }
