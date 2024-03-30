@@ -1,17 +1,17 @@
 package io.mountblue.reddit.redditClone.model;
 import java.util.Arrays;
 
-public enum VoteType {
+public enum VOTE_TYPE {
     UPVOTE(1),
     DOWNVOTE(-1);
 
     private int direction;
 
-    VoteType(int direction) {
+    VOTE_TYPE(int direction) {
     }
 
-    public static VoteType lookup(Integer direction) {
-        return Arrays.stream(VoteType.values())
+    public static VOTE_TYPE lookup(Integer direction) {
+        return Arrays.stream(VOTE_TYPE.values())
                 .filter(value -> value.getDirection().equals(direction))
                 .findAny().orElseThrow();
     }
