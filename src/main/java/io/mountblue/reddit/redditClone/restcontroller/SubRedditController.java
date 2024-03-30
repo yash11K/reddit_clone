@@ -51,4 +51,19 @@ public class SubRedditController {
     public SubReddit saveFlair(@PathVariable String subRedditName, @RequestBody FlairDto flairDto){
         return subRedditService.saveFlair(flairDto, subRedditName);
     }
+
+    @PostMapping("/{subRedditName}/rule/{ruleID}/update")
+    public SubReddit updateRule(@PathVariable String subRedditName, @RequestBody RuleDto ruleDto, @PathVariable Long ruleId) {
+        return subRedditService.updateRule(subRedditName, ruleDto, ruleId);
+    }
+
+    @DeleteMapping("/{subRedditName}/rule/{ruleID}/delete")
+    public String deleteRule(@PathVariable Long ruleId) {
+        return subRedditService.deleteRule(ruleId);
+    }
+
+    @DeleteMapping("/{subRedditName}/flair/{flairId}/delete")
+    public String deleteFlair(@PathVariable Long flairId) {
+        return subRedditService.deleteFlair(flairId);
+    }
 }

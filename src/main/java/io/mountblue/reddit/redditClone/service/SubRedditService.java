@@ -19,4 +19,10 @@ public interface SubRedditService {
     SubReddit saveRule(RuleDto ruleDto, String subRedditName);
 
     SubReddit saveFlair(FlairDto flairDto, String subRedditName);
+
+    SubReddit updateRule(String subRedditName, RuleDto ruleDto, Long ruleId);
+
+    String deleteRule(Long ruleId);
+
+    String deleteFlair(Long flairId);
 }
