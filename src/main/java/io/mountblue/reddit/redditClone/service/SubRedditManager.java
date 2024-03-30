@@ -1,8 +1,11 @@
 package io.mountblue.reddit.redditClone.service;
 
+import io.mountblue.reddit.redditClone.repository.UserRepository;
 import io.mountblue.reddit.redditClone.dto.FlairDto;
 import io.mountblue.reddit.redditClone.dto.RuleDto;
 import io.mountblue.reddit.redditClone.dto.SubRedditDto;
+import io.mountblue.reddit.redditClone.exception.FlairNotFound;
+import io.mountblue.reddit.redditClone.exception.RuleNotFound;
 import io.mountblue.reddit.redditClone.exception.SubRedditNotFound;
 import io.mountblue.reddit.redditClone.model.Flair;
 import io.mountblue.reddit.redditClone.model.Rule;
@@ -29,7 +32,7 @@ public class SubRedditManager implements SubRedditService{
                 SubReddit.builder()
                         .subRedditName(subRedditDto.getSubRedditName())
                         .createdAt(LocalDateTime.now())
-                        //.modUser(userRepository.findByUsername(principal.getName()))
+//                        .modUser(userRepository.findByUsername(principal.getName()))
                         .build()
         );
         String subRedditName = subRedditDto.getSubRedditName();
@@ -41,25 +44,6 @@ public class SubRedditManager implements SubRedditService{
     public SubReddit update(SubRedditDto subRedditDto, String subRedditName) {
         SubReddit subReddit = subRedditRepository.findSubRedditBySubRedditName(subRedditName)
                 .orElseThrow(()->new SubRedditNotFound("SubReddit not found with name: " + subRedditName));
-
-//        subReddit.setRules(subRedditDto.getRules().stream().map(
-//                rule -> Rule.builder()
-//                        .subReddit(subReddit)
-//                        .rule(rule)
-//                        .created_at(LocalDateTime.now())
-//                        .build())
-//                .toList());
-//
-//        subReddit.getFlairs().clear();
-//        subReddit.getRules().clear();
-//        subReddit.setFlairs(subRedditDto.getFlairs().stream().map(
-//                flair -> Flair.builder()
-//                        .subReddit(subReddit)
-//                        .color(flair.getColor())
-//                        .flairName(flair.getName())
-//                        .createdAt(LocalDateTime.now())
-//                        .build())
-//                .toList());
         subReddit.setUpdatedAt(LocalDateTime.now());
         subReddit.setDescription(subRedditDto.getSubRedditDescription());
         subRedditRepository.save(subReddit); //FIRST SAVE THE FLAIR AND RULE
@@ -115,4 +99,32 @@ public class SubRedditManager implements SubRedditService{
         return subReddit;
     }
 
+    @Override
+    public SubReddit updateRule(String subRedditName, RuleDto ruleDto, Long ruleId) {
+        SubReddit subReddit = subRedditRepository.findSubRedditBySubRedditName(subRedditName)
+                .orElseThrow(()->new SubRedditNotFound("SubReddit not found with name: " + subRedditName));
+        Rule rule = ruleRepository.findById(ruleId).orElseThrow(() ->new RuleNotFound("Rule Not Found"));
+        ruleRepository.save(Rule.builder()
+                .ruleId(rule.getRuleId())
+                .rule(ruleDto.getRule())
+                .subReddit(rule.getSubReddit())
+                .created_at(rule.getCreated_at())
+                .build()
+        );
+        return subReddit;
+    }
+
+    @Override
+    public String deleteRule(Long ruleId) {
+        Rule rule = ruleRepository.findById(ruleId).orElseThrow(()->new RuleNotFound("Rule Not Found"));
+        ruleRepository.delete(rule);
+        return "Successfully Deleted";
+    }
+
+    @Override
+    public String deleteFlair(Long flairId) {
+        Flair flair = flairRepository.findById(flairId).orElseThrow(()->new FlairNotFound("Flair Not Found"));
+        flairRepository.delete(flair);
+        return "Successfully Deleted";
+    }
 }
