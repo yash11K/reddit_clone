@@ -1,6 +1,9 @@
 package io.mountblue.reddit.redditClone.controller;
 
+import io.mountblue.reddit.redditClone.dto.FlairDto;
+import io.mountblue.reddit.redditClone.dto.RuleDto;
 import io.mountblue.reddit.redditClone.dto.SubRedditDto;
+import io.mountblue.reddit.redditClone.model.Flair;
 import io.mountblue.reddit.redditClone.model.SubReddit;
 import io.mountblue.reddit.redditClone.service.SubRedditService;
 import lombok.AllArgsConstructor;
@@ -10,7 +13,7 @@ import java.security.Principal;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/subreddit")
+@RequestMapping("/r")
 public class SubRedditController {
     private SubRedditService subRedditService;
 
@@ -21,7 +24,7 @@ public class SubRedditController {
     }
 
     @PostMapping("/update/{subRedditName}")
-    public SubRedditDto updateSubReddit(@RequestBody SubRedditDto subRedditDto, @PathVariable(value = "subRedditName" ) String subRedditName) {
+    public SubReddit updateSubReddit(@RequestBody SubRedditDto subRedditDto, @PathVariable(value = "subRedditName" ) String subRedditName) {
         return subRedditService.update(subRedditDto, subRedditName);
     }
 
@@ -40,4 +43,13 @@ public class SubRedditController {
         subRedditService.delete(subRedditId);
     }
 
+    @PostMapping("/{subRedditName}/rule/new")
+    public SubReddit saveRule(@PathVariable String subRedditName, @RequestBody RuleDto ruleDto){
+        return subRedditService.saveRule(ruleDto, subRedditName);
+    }
+
+    @PostMapping("/{subRedditName}/flair/new")
+    public SubReddit saveFlair(@PathVariable String subRedditName, @RequestBody FlairDto flairDto){
+        return subRedditService.saveFlair(flairDto, subRedditName);
+    }
 }

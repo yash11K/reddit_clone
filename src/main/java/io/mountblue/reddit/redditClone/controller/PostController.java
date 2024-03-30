@@ -1,5 +1,6 @@
 package io.mountblue.reddit.redditClone.controller;
 
+import io.mountblue.reddit.redditClone.dto.FlairDto;
 import io.mountblue.reddit.redditClone.dto.PostDto;
 import io.mountblue.reddit.redditClone.exception.PostNotFound;
 import io.mountblue.reddit.redditClone.exception.SubRedditNotFound;
@@ -39,5 +40,10 @@ public class PostController {
     @PostMapping("/delete/{postId}")
     public String deletePost(@PathVariable Long postId){
         return postService.deletePostById(postId);
+    }
+
+    @PostMapping("{postId}/flair/new")
+    public Post saveFlair(@PathVariable Long postId,@RequestBody FlairDto flairDto){
+        return postService.saveFlairToPostFromDto(flairDto, postId);
     }
 }

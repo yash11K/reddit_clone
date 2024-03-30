@@ -23,10 +23,11 @@ public class User {
     @Column(name = "password")
     private String password;
     @Column(name = "gender", updatable = false)
+    @Enumerated(EnumType.STRING)
     private GENDER gender;
     @Column(name = "email")
     private String email;
-    @Column(name = "joinDate")
+    @Column(name = "join_date")
     private LocalDateTime joinDate;
     @Column(name = "bio")
     private String bio;

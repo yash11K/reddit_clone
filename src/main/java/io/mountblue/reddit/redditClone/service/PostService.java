@@ -1,5 +1,6 @@
 package io.mountblue.reddit.redditClone.service;
 
+import io.mountblue.reddit.redditClone.dto.FlairDto;
 import io.mountblue.reddit.redditClone.dto.PostDto;
 import io.mountblue.reddit.redditClone.model.Post;
 import org.springframework.stereotype.Service;
@@ -13,4 +14,6 @@ public interface PostService {
     Post updatePostFromDto(PostDto postDto, Long postId);
 
     String deletePostById(Long postId);
+
+    Post saveFlairToPostFromDto(FlairDto flairDto, Long postId);
 }

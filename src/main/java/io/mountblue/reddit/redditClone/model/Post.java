@@ -61,7 +61,7 @@ public class Post {
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     @JoinColumn(name = "sub_reddit_id", updatable = false)
-    private SubReddit subreddit;
+    private SubReddit subReddit;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;

@@ -1,44 +1,47 @@
 package io.mountblue.reddit.redditClone.service;
 
+import io.mountblue.reddit.redditClone.dto.FlairDto;
 import io.mountblue.reddit.redditClone.dto.PostDto;
+import io.mountblue.reddit.redditClone.exception.FlairNotFound;
 import io.mountblue.reddit.redditClone.exception.PostNotFound;
+import io.mountblue.reddit.redditClone.model.Flair;
 import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.model.SubReddit;
 import io.mountblue.reddit.redditClone.model.Topic;
+import io.mountblue.reddit.redditClone.repository.FlairRepository;
 import io.mountblue.reddit.redditClone.repository.PostRepository;
 import io.mountblue.reddit.redditClone.repository.SubRedditRepository;
 import io.mountblue.reddit.redditClone.exception.SubRedditNotFound;
 import io.mountblue.reddit.redditClone.repository.TopicRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class PostManager implements PostService{
     private final PostRepository postRepository;
     private final SubRedditRepository subRedditRepository;
     private final TopicRepository topicRepository;
-
-    @Autowired
-    public PostManager(PostRepository postRepository, SubRedditRepository subRedditRepository, TopicRepository topicRepository) {
-        this.postRepository = postRepository;
-        this.subRedditRepository = subRedditRepository;
-        this.topicRepository = topicRepository;
-    }
+    private final FlairRepository flairRepository;
 
     @Override
     public Post savePostFromDto(PostDto postDto) throws SubRedditNotFound{
         SubReddit subReddit = subRedditRepository.findSubRedditBySubRedditName(postDto.getSubRedditName())
                 .orElseThrow(() -> new SubRedditNotFound("Subreddit not found with name: " + postDto.getSubRedditName()));
+        List<Flair> flairs = postDto.getFlair().stream().map(
+                flair -> flairRepository.findFlairByFlairName(flair)
+                        .orElseThrow(() -> new FlairNotFound("no flair with name : " + flair))
+        ).toList();
+
         List<Topic> topics = topicRepository.findByNameInOrderByName(postDto.getTopics());
         return postRepository.save(Post.builder()
-                .subreddit(subReddit)
+                .subReddit(subReddit)
                 .title(postDto.getTitle())
                 .body(postDto.getBody())
 //                .mediaUri()
-//                .flairs(subReddit.getFlairs())
                 .isCommentsMediaAllowed(postDto.isCommentMediaAllowed())
                 .isPublished(postDto.isPublished())
                 .popularityScore((double) 0)
@@ -60,6 +63,11 @@ public class PostManager implements PostService{
                 .orElseThrow(()-> new PostNotFound("Post not found with id: " + postId));
         post.setUpdatedAt(LocalDateTime.now());
 
+        List<Flair> flairs = postDto.getFlair().stream().map(
+                flair -> flairRepository.findFlairByFlairName(flair)
+                        .orElseThrow(() -> new FlairNotFound("no flair with name : " + flair))
+        ).toList();
+
         List<Topic> topics = topicRepository.findByNameInOrderByName(postDto.getTopics());
         post.setBody(postDto.getBody());
         post.setTitle(postDto.getTitle());
@@ -76,5 +84,14 @@ public class PostManager implements PostService{
         postRepository.delete(postRepository.findPostByPostId(postId)
                 .orElseThrow(()-> new PostNotFound("Post not found with id: " + postId)));
         return "delete post operation successful";
+    }
+
+    @Override
+    public Post saveFlairToPostFromDto(FlairDto flairDto, Long postId){
+        Post post = postRepository.findPostByPostId(postId)
+                .orElseThrow(()-> new PostNotFound("no post with id : " + postId));
+        post.getFlairs().add(flairRepository.findFlairByFlairName(flairDto.getName())
+                .orElseThrow(()->new FlairNotFound("no flair with name: " + flairDto.getName())));
+        return postRepository.save(post);
     }
 }
