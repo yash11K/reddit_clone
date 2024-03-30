@@ -6,6 +6,8 @@ import io.mountblue.reddit.redditClone.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class UserManager implements UserService {
 
@@ -17,6 +19,8 @@ public class UserManager implements UserService {
     }
     @Override
     public void createUser(User user) {
+        user.setJoinDate(LocalDateTime.now());
+        user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
     }
     @Override
@@ -26,6 +30,7 @@ public class UserManager implements UserService {
                 .password(userDto.getPassword())
                 .gender(userDto.getGender())
                 .topics(userDto.getInterests())
+                .email((userDto.getEmail()))
                 .build();
     }
     @Override
@@ -39,6 +44,7 @@ public class UserManager implements UserService {
                 .password(user.getPassword())
                 .gender(user.getGender())
                 .interests(user.getTopics())
+                .email(user.getEmail())
                 .build();
     }
     @Override

@@ -20,4 +20,5 @@ public class UserDto {
     private String password;
     private GENDER gender; //can be skipped
     private List<Topic> interests;
+    private String email;
 }
