@@ -1,9 +1,8 @@
-package io.mountblue.reddit.redditClone.controller;
+package io.mountblue.reddit.redditClone.restcontroller;
 
 import io.mountblue.reddit.redditClone.dto.FlairDto;
 import io.mountblue.reddit.redditClone.dto.RuleDto;
 import io.mountblue.reddit.redditClone.dto.SubRedditDto;
-import io.mountblue.reddit.redditClone.model.Flair;
 import io.mountblue.reddit.redditClone.model.SubReddit;
 import io.mountblue.reddit.redditClone.service.SubRedditService;
 import lombok.AllArgsConstructor;

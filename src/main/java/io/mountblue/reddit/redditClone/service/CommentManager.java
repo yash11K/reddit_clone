@@ -1,6 +1,5 @@
 package io.mountblue.reddit.redditClone.service;
 
-import io.mountblue.reddit.redditClone.dao.UserRepository;
 import io.mountblue.reddit.redditClone.dto.CommentDto;
 import io.mountblue.reddit.redditClone.exception.PostNotFound;
 import io.mountblue.reddit.redditClone.exception.SubRedditNotFound;
@@ -8,6 +7,7 @@ import io.mountblue.reddit.redditClone.model.Comment;
 import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.repository.CommentRepository;
 import io.mountblue.reddit.redditClone.repository.PostRepository;
+import io.mountblue.reddit.redditClone.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,8 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class CommentManager implements CommentService{
-    @Autowired
     private CommentRepository commentRepository;
-    @Autowired
     private PostRepository postRepository;
-    @Autowired
     private UserRepository userRepository;
 
     @Override

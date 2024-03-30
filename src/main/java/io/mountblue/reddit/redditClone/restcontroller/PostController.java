@@ -1,12 +1,9 @@
-package io.mountblue.reddit.redditClone.controller;
+package io.mountblue.reddit.redditClone.restcontroller;
 
 import io.mountblue.reddit.redditClone.dto.FlairDto;
 import io.mountblue.reddit.redditClone.dto.PostDto;
-import io.mountblue.reddit.redditClone.exception.PostNotFound;
-import io.mountblue.reddit.redditClone.exception.SubRedditNotFound;
 import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.service.PostService;
-import jakarta.persistence.JoinColumn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
