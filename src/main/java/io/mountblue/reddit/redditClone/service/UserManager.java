@@ -1,6 +1,6 @@
 package io.mountblue.reddit.redditClone.service;
 
-import io.mountblue.reddit.redditClone.dao.UserRepository;
+import io.mountblue.reddit.redditClone.repository.UserRepository;
 import io.mountblue.reddit.redditClone.dto.UserDto;
 import io.mountblue.reddit.redditClone.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
