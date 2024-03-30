@@ -22,5 +22,5 @@ public class SubRedditDto {
     MultipartFile banner;
     MultipartFile avatar;
     List<String> rules; // Rule has a Title, Description
-    List<Flair> flairs; //optional flairs
+    List<FlairDto> flairs; //
 }

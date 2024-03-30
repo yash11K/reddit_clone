@@ -1,5 +1,6 @@
 package io.mountblue.reddit.redditClone.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,6 +23,7 @@ public class Rule {
     private String rule;
     @Column(name = "created_at")
     private LocalDateTime created_at;
+
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     @JoinColumn(name = "sub_reddit_id")
