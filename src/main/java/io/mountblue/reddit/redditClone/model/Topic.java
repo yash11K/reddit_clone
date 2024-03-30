@@ -24,6 +24,7 @@ public class Topic {
     @ManyToMany(mappedBy = "topics",cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     private List<Post> relatedPosts;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "topics",cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     private List<User> users;
 }

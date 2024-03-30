@@ -32,10 +32,10 @@ public class SubRedditController {
         return subRedditService.show(subRedditName);
     }
 
-    @GetMapping("/create")
-    public SubRedditDto newSubRedditForm() {
-        return new SubRedditDto();
-    }
+//    @GetMapping("/create")
+//    public SubRedditDto newSubRedditForm() {
+//        return new SubRedditDto();
+//    }
 
     @DeleteMapping("delete/{subRedditId}")
     public void deleteSubReddit(@PathVariable(value = "subRedditId" ) Long subRedditId) {

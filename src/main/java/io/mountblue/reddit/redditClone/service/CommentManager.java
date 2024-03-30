@@ -62,15 +62,14 @@ public class CommentManager implements CommentService{
     }
 
     private Comment convertDtoToModel(CommentDto commentDto, Long postId) {
-        Post post = postRepository.findPostByPostId(commentDto.getPostId())
+        Post post = postRepository.findPostByPostId(postId)
                 .orElseThrow(() -> new PostNotFound("Post not found for id : " + postId));
-        String commentBody = commentDto.getText();
 
-        Optional<Long> parentCommentId = commentDto.getParentCommentId();
+        String commentBody = commentDto.getText();
         Comment parentComment = null;
-        if(parentCommentId.isPresent()){
-            parentComment = commentRepository.findById(parentCommentId.get()).orElseThrow(
-                    () -> new CommentNotFound("Comment not found for parent id: " + parentCommentId.get())
+        if(commentDto.getParentCommentId()!=null){
+            parentComment = commentRepository.findById(commentDto.getParentCommentId().get()).orElseThrow(
+                    () -> new CommentNotFound("Comment not found for parent id: " + commentDto.getParentCommentId().get())
             );
         }
 

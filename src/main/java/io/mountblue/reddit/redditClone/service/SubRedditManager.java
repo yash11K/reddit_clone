@@ -63,7 +63,7 @@ public class SubRedditManager implements SubRedditService{
     }
 
     public static String subRedditNameFormatter(String subRedditName){
-        subRedditName = "/r" + subRedditName;
+        subRedditName = "r/" + subRedditName;
         return subRedditName;
     }
 
