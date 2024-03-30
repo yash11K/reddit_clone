@@ -1,4 +1,4 @@
-package io.mountblue.reddit.redditClone.rest;
+package io.mountblue.reddit.redditClone.controller;
 
 import io.mountblue.reddit.redditClone.dto.UserDto;
 import io.mountblue.reddit.redditClone.model.User;
