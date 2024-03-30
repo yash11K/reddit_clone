@@ -8,13 +8,13 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
-@Builder
 public class CommentDto {
-    private String postId; // base post of comment (get from @PathVariable)
-    private String commentId; //only if subComment (get from @PathVariable)
+    private Long postId; // base post of comment (get from @PathVariable)
+    private Optional<Long> parentCommentId; //only if subComment (get from @PathVariable)
     @Max(value = 4000, message = "comment should be less than 4000 characters")
     private String text;
     private List<MultipartFile> media; //only if Comments.isCommentsMediaAllowed
