@@ -3,6 +3,7 @@ package io.mountblue.reddit.redditClone.service;
 import io.mountblue.reddit.redditClone.dto.FlairDto;
 import io.mountblue.reddit.redditClone.dto.RuleDto;
 import io.mountblue.reddit.redditClone.dto.SubRedditDto;
+import io.mountblue.reddit.redditClone.dto.SubRedditViewDto;
 import io.mountblue.reddit.redditClone.model.SubReddit;
 
 import java.security.Principal;
@@ -25,4 +26,6 @@ public interface SubRedditService {
     String deleteRule(Long ruleId);
 
     String deleteFlair(Long flairId);
+
+    SubRedditViewDto subRedditToSubRedditViewDto(SubReddit subReddit);
 }

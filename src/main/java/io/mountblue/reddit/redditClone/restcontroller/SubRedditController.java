@@ -3,6 +3,7 @@ package io.mountblue.reddit.redditClone.restcontroller;
 import io.mountblue.reddit.redditClone.dto.FlairDto;
 import io.mountblue.reddit.redditClone.dto.RuleDto;
 import io.mountblue.reddit.redditClone.dto.SubRedditDto;
+import io.mountblue.reddit.redditClone.dto.SubRedditViewDto;
 import io.mountblue.reddit.redditClone.model.SubReddit;
 import io.mountblue.reddit.redditClone.service.SubRedditService;
 import lombok.AllArgsConstructor;
@@ -27,10 +28,11 @@ public class SubRedditController {
         return subRedditService.update(subRedditDto, subRedditName);
     }
 
-    @GetMapping("/{subRedditName}")
-    public SubReddit showSubReddit(@PathVariable(value = "subRedditName" ) String subRedditName) {
-        return subRedditService.show(subRedditName);
-    }
+//    @GetMapping("/{subRedditName}")
+//    public SubRedditViewDto showSubReddit(@PathVariable(value = "subRedditName" ) String subRedditName) {
+//        SubReddit subReddit =  subRedditService.show(subRedditName);
+//        return subRedditService.subRedditToSubRedditViewDto(subReddit);
+//    }
 
 //    @GetMapping("/create")
 //    public SubRedditDto newSubRedditForm() {

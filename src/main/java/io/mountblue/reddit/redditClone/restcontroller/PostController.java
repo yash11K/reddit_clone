@@ -17,7 +17,7 @@ import java.security.Principal;
 @RequestMapping("/post")
 public class PostController {
     PostService postService;
-    MediaService mediaService;
+//    MediaService mediaService;
 
     @PostMapping("/create")
     public Post savePost(@RequestBody PostDto postDto, Principal principal){

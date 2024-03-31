@@ -1,9 +1,8 @@
 package io.mountblue.reddit.redditClone.service;
 
+import io.mountblue.reddit.redditClone.dto.*;
+import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.repository.UserRepository;
-import io.mountblue.reddit.redditClone.dto.FlairDto;
-import io.mountblue.reddit.redditClone.dto.RuleDto;
-import io.mountblue.reddit.redditClone.dto.SubRedditDto;
 import io.mountblue.reddit.redditClone.exception.FlairNotFound;
 import io.mountblue.reddit.redditClone.exception.RuleNotFound;
 import io.mountblue.reddit.redditClone.exception.SubRedditNotFound;
@@ -17,7 +16,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -126,5 +128,53 @@ public class SubRedditManager implements SubRedditService{
         Flair flair = flairRepository.findById(flairId).orElseThrow(()->new FlairNotFound("Flair Not Found"));
         flairRepository.delete(flair);
         return "Successfully Deleted";
+    }
+
+    @Override
+    public SubRedditViewDto subRedditToSubRedditViewDto(SubReddit subReddit) {
+        List<Rule> rule = subReddit.getRules();
+        List<String> rules = new ArrayList<>();
+        for(Rule stringRule : rule) {
+            rules.add(stringRule.getRule());
+        }
+        List<Post> subRedditPosts = subReddit.getPosts();
+        List<SubRedditPostDto> subRedditPostDtos = new ArrayList<>();
+        for(Post post : subRedditPosts) {
+            Long votes = (long) post.getVotes().size();
+            Long comments = (long) post.getComments().size();
+            String createdAt = calculateTimeAgo(post.getCreatedAt());
+            subRedditPostDtos.add(SubRedditPostDto.builder()
+                    .body(post.getBody())
+                    .title(post.getTitle())
+                    .opUser(post.getOpUser())
+                    .postId(post.getPostId())
+                    .voteCount(votes)
+                    .commentCount(comments)
+                    .createdAt(createdAt)
+                    .build());
+
+        }
+        String avatar = subReddit.getAvatar();
+        String banner = subReddit.getBanner();
+        return SubRedditViewDto.builder()
+                    .subRedditId(subReddit.getSubRedditId())
+                    .subRedditDescription(subReddit.getDescription())
+                    .subRedditName(subReddit.getSubRedditName())
+                    .rules(rules)
+                    .subRedditPostDtos(subRedditPostDtos)
+                    .build();
+    }
+
+
+    public static String calculateTimeAgo(LocalDateTime creationDateTime) {
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(creationDateTime, now);
+        long hours = duration.toHours();
+        long days = duration.toDays();
+        if (hours < 24) {
+            return hours + " hours ago";
+        } else {
+            return days + " days ago";
+        }
     }
 }
