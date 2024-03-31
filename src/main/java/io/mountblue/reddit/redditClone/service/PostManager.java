@@ -31,10 +31,6 @@ public class PostManager implements PostService{
     public Post savePostFromDto(PostDto postDto) throws SubRedditNotFound{
         SubReddit subReddit = subRedditRepository.findSubRedditBySubRedditName(postDto.getSubRedditName())
                 .orElseThrow(() -> new SubRedditNotFound("Subreddit not found with name: " + postDto.getSubRedditName()));
-        List<Flair> flairs = postDto.getFlair().stream().map(
-                flair -> flairRepository.findFlairByFlairName(flair)
-                        .orElseThrow(() -> new FlairNotFound("no flair with name : " + flair))
-        ).toList();
 
         List<Topic> topics = topicRepository.findByNameInOrderByName(postDto.getTopics());
         return postRepository.save(Post.builder()
@@ -62,11 +58,6 @@ public class PostManager implements PostService{
         Post post = postRepository.findPostByPostId(postId)
                 .orElseThrow(()-> new PostNotFound("Post not found with id: " + postId));
         post.setUpdatedAt(LocalDateTime.now());
-
-        List<Flair> flairs = postDto.getFlair().stream().map(
-                flair -> flairRepository.findFlairByFlairName(flair)
-                        .orElseThrow(() -> new FlairNotFound("no flair with name : " + flair))
-        ).toList();
 
         List<Topic> topics = topicRepository.findByNameInOrderByName(postDto.getTopics());
         post.setBody(postDto.getBody());

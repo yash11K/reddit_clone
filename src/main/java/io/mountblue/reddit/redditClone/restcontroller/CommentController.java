@@ -3,9 +3,12 @@ package io.mountblue.reddit.redditClone.restcontroller;
 import io.mountblue.reddit.redditClone.dto.CommentDto;
 import io.mountblue.reddit.redditClone.model.Comment;
 import io.mountblue.reddit.redditClone.service.CommentService;
+import io.mountblue.reddit.redditClone.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -50,4 +53,5 @@ public class CommentController {
         commentService.delete(commentId);
         return "deleted successfully";
     }
+
 }
