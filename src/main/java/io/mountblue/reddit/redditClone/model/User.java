@@ -18,7 +18,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
-    @Column(name = "username", updatable = false)
+    @Column(name = "username", updatable = false, unique = true)
     private String username;
     @Column(name = "password")
     private String password;
@@ -27,6 +27,8 @@ public class User {
     private GENDER gender;
     @Column(name = "email")
     private String email;
+    @Column(name = "display_name")
+    private String displayName;
     @Column(name = "join_date")
     private LocalDateTime joinDate;
     @Column(name = "bio")
