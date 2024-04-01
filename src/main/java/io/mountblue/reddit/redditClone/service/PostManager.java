@@ -1,6 +1,7 @@
 package io.mountblue.reddit.redditClone.service;
 
 import io.mountblue.reddit.redditClone.dto.FlairDto;
+import io.mountblue.reddit.redditClone.dto.FullPostViewDto;
 import io.mountblue.reddit.redditClone.dto.PostDto;
 import io.mountblue.reddit.redditClone.exception.FlairNotFound;
 import io.mountblue.reddit.redditClone.exception.PostNotFound;
@@ -84,5 +85,21 @@ public class PostManager implements PostService{
         post.getFlairs().add(flairRepository.findFlairByFlairName(flairDto.getName())
                 .orElseThrow(()->new FlairNotFound("no flair with name: " + flairDto.getName())));
         return postRepository.save(post);
+    }
+
+    @Override
+    public FullPostViewDto postToFullViewPostDto(Post post) {
+        return FullPostViewDto.builder()
+                .postId(post.getPostId())
+                .subReddit(post.getSubReddit())
+                .createdAt(post.getCreatedAt())
+                .opUser(post.getOpUser())
+                .title(post.getTitle())
+                .flairs(post.getFlairs())
+                .body(post.getBody())
+                .post(post)
+//                .mediaUri(post.getMediaUri())
+                .comments(post.getComments())
+                .build();
     }
 }
