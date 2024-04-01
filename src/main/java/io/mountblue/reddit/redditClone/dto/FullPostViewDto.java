@@ -23,7 +23,7 @@ public class FullPostViewDto {
     private String body;
     private String mediaUri;
 //    private Long voteCount;
-//    private Long CommentCount;
+    private Long CommentCount;
     private List<Comment> comments;
 
 //    might be needed i don't know for now

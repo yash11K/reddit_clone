@@ -5,10 +5,7 @@ import io.mountblue.reddit.redditClone.dto.FullPostViewDto;
 import io.mountblue.reddit.redditClone.dto.PostDto;
 import io.mountblue.reddit.redditClone.exception.FlairNotFound;
 import io.mountblue.reddit.redditClone.exception.PostNotFound;
-import io.mountblue.reddit.redditClone.model.Flair;
-import io.mountblue.reddit.redditClone.model.Post;
-import io.mountblue.reddit.redditClone.model.SubReddit;
-import io.mountblue.reddit.redditClone.model.Topic;
+import io.mountblue.reddit.redditClone.model.*;
 import io.mountblue.reddit.redditClone.repository.FlairRepository;
 import io.mountblue.reddit.redditClone.repository.PostRepository;
 import io.mountblue.reddit.redditClone.repository.SubRedditRepository;
@@ -98,8 +95,14 @@ public class PostManager implements PostService{
                 .flairs(post.getFlairs())
                 .body(post.getBody())
                 .post(post)
+                .CommentCount((long) post.getComments().size())
 //                .mediaUri(post.getMediaUri())
                 .comments(post.getComments())
                 .build();
+    }
+
+    @Override
+    public List<Comment> findAllCommentsByPostId(Long postId) {
+        return postRepository.findAllCommentsByPostId(postId);
     }
 }
