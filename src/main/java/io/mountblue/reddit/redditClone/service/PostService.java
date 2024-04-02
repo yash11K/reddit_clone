@@ -1,7 +1,9 @@
 package io.mountblue.reddit.redditClone.service;
 
 import io.mountblue.reddit.redditClone.dto.FlairDto;
+import io.mountblue.reddit.redditClone.dto.FullPostViewDto;
 import io.mountblue.reddit.redditClone.dto.PostDto;
+import io.mountblue.reddit.redditClone.model.Comment;
 import io.mountblue.reddit.redditClone.model.Post;
 import org.springframework.stereotype.Service;
 
@@ -22,4 +24,8 @@ public interface PostService {
     Post save(Post post);
 
     List<Post> fetchAllPostByPublished(boolean isPublished);
+
+    FullPostViewDto postToFullViewPostDto(Post post);
+
+    List<Comment> findAllCommentsByPostId(Long postId);
 }

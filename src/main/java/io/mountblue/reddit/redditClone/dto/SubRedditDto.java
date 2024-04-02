@@ -7,12 +7,14 @@ import jakarta.validation.constraints.Min;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class SubRedditDto {
     @Max(value = 21, message = "/r is less than 21characters")
     @Min(value = 3, message = "/r name should be at least 3 characters")

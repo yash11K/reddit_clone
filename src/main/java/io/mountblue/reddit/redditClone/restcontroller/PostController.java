@@ -3,7 +3,7 @@ package io.mountblue.reddit.redditClone.restcontroller;
 import io.mountblue.reddit.redditClone.dto.FlairDto;
 import io.mountblue.reddit.redditClone.dto.PostDto;
 import io.mountblue.reddit.redditClone.model.Post;
-import io.mountblue.reddit.redditClone.service.MediaService;
+//import io.mountblue.reddit.redditClone.service.MediaService;
 import io.mountblue.reddit.redditClone.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

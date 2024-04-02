@@ -36,4 +36,8 @@ public interface SubRedditService {
     Optional<SubReddit> findSubRedditByName(String subRedditName);
 
     List<SubReddit> findSubRedditsByMod(String opUsername);
+
+    List<String> previousSubRedditNames();
+
+    Long ruleId(SubReddit subReddit, String rule);
 }

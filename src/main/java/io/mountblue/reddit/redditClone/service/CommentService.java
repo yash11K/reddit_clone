@@ -18,4 +18,5 @@ public interface CommentService {
     void delete(Long commentId);
 
     int getCommentCount(Post post);
+    void updateCommentByComment(Comment comment, String updatedComment);
 }

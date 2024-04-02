@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder
 public class SubRedditViewDto {
     private Long subRedditId;
@@ -17,5 +18,8 @@ public class SubRedditViewDto {
     MultipartFile banner;
     MultipartFile avatar;
     List<String> rules;
+    List<String> allSubReddits;
+    List <String> previousSubRedditNames;
+    private Long subscribedUsers;
     List<SubRedditPostDto> subRedditPostDtos;
 }
