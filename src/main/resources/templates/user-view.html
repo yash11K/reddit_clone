@@ -281,9 +281,11 @@
 
     </div>
     <div id="user-posts" class="tab-content">
-        <div th:if="${posts.isEmpty()}" style="height: calc(100vh - 260px); text-align: center;">
-            <p th:text=" ${user.username} + ' user hasn't posted yet'"></p>
-        </div>
+<!--        <div th:if="${posts.isEmpty()}" style="height: calc(100vh - 260px); text-align: center;">-->
+<!--            <p th:text="user.username + ' user hasn\\'t posted yet'"-->
+<!--            ></p>-->
+
+<!--        </div>-->
         <div th:each="post, postIndex : ${posts}" class="post" th:id="'post-' + ${postIndex}">
             <div>
                 <h4 th:text="${'r/' + post.subReddit.subRedditName}"></h4>
