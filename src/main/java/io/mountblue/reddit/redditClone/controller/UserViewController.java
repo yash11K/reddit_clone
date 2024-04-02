@@ -8,6 +8,8 @@ import io.mountblue.reddit.redditClone.service.PostService;
 import io.mountblue.reddit.redditClone.service.SubRedditService;
 import io.mountblue.reddit.redditClone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,6 +66,11 @@ public class UserViewController {
     }
     @GetMapping("/u/{userId}/edit")
     public String showEditProfilePage(@PathVariable Long userId, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInUsername = authentication.getName();
+        if (!userService.getUserById(userId).getUsername().equals(loggedInUsername)) {
+            return "access-denied";
+        }
         User user = userService.getUserById(userId);
         model.addAttribute("user", user);
         return "user-profile-edit";

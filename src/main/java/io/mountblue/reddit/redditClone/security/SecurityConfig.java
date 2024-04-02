@@ -1,0 +1,89 @@
+package io.mountblue.reddit.redditClone.security;
+
+import io.mountblue.reddit.redditClone.service.UserService;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+
+import javax.sql.DataSource;
+
+import static org.springframework.security.config.Customizer.withDefaults;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    private final UserService userService;
+
+    public SecurityConfig(UserService userService) {
+        this.userService = userService;
+    }
+
+
+    //    @Bean
+//    public UserDetailsManager userDetailsManager(DataSource dataSource){
+//        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+//
+//        jdbcUserDetailsManager.setUsersByUsernameQuery(
+//                "select username,password, true from user where username = ?"
+//        );
+//        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
+//                "select username , password from user where username=?"
+//        );
+//        return jdbcUserDetailsManager;
+//    }
+@Bean
+BCryptPasswordEncoder bCryptPasswordEncoder(){
+    return new BCryptPasswordEncoder();
+}
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(UserService userService) {
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+        auth.setUserDetailsService(userService);
+        auth.setPasswordEncoder(bCryptPasswordEncoder());
+        return auth;
+    }
+
+
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationSuccessHandler authenticationSuccessHandler,
+                                            AuthenticationProvider authenticationProvider)throws Exception {
+        http.authorizeHttpRequests(customizer ->
+                                customizer
+                                .requestMatchers("/customlogin", "/logout","/register","/user/new").permitAll() // Permit access to login and logout
+//                                .requestMatchers("/upload","/download","/delete").authenticated() // Permit access to login and logout
+                                .anyRequest().authenticated()
+                )
+                .formLogin(form->
+                        form.loginPage("/customlogin")
+                                .loginProcessingUrl("/authenticateTheUser").permitAll()
+//                                .defaultSuccessUrl("/user"))
+                )
+                .oauth2Login(oauth2Login ->
+                        oauth2Login
+                                .loginPage("/customlogin")
+                                .permitAll()
+                )
+                .logout(LogoutConfigurer::permitAll)
+                .exceptionHandling(configurer ->
+                        configurer.accessDeniedPage("/access-denied")
+                )
+                .httpBasic(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .authenticationProvider(authenticationProvider);
+        return http.build();
+    }
+
+}
