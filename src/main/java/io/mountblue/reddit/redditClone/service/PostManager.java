@@ -105,4 +105,9 @@ public class PostManager implements PostService{
     public List<Comment> findAllCommentsByPostId(Long postId) {
         return postRepository.findAllCommentsByPostId(postId);
     }
+    @Override
+    public List<Post> getAllPostsByUser(String username) {
+        return postRepository.findAllByOpUserUsername(username);
+    }
+
 }

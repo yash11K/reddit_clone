@@ -24,4 +24,6 @@ public interface PostService {
     FullPostViewDto postToFullViewPostDto(Post post);
 
     List<Comment> findAllCommentsByPostId(Long postId);
+
+    List<Post> getAllPostsByUser(String username);
 }

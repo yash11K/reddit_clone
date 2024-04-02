@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background-image: url("");
+            background-size: cover;
+            margin-right: 20px;
+        }
+
+        .search-bar {
+            display: inline-block;
+            width: calc(100% - 100px);
+            max-width: 400px;
+            margin-top: 10px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .search-bar input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-section img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .profile-section h1, .profile-section h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .tabs ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        .tabs ul li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .tabs ul li a {
+            text-decoration: none;
+            color: #333;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+
+        .tabs ul li:nth-child(1) a {
+            color: #333;
+        }
+
+
+        .tabs ul li:nth-child(1) a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .tabs ul li a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .tabs ul li a:hover {
+            background-color: #f0f0f0;
+        }
+
+        #overview {
+            background-color: #fff;
+        }
+
+
+
+        .post:hover {
+            background-color: #f0f0f0;
+        }
+
+
+        .comment:hover {
+            background-color: #f0f0f0;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            margin-top: 10px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+
+        .comment {
+          background-color: #fff;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 20px;
+        }
+
+        .comment h4 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .comment p {
+            margin: 5px 0;
+        }
+
+        .comment p.username {
+            color: #666;
+        }
+
+
+        .comment:hover {
+            background-color: #f0f0f0;
+        }
+
+
+        .post {
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .post h4 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .post h3 {
+            margin: 5px 0;
+        }
+
+        .post p {
+            margin: 5px 0;
+        }
+
+        .post a {
+            text-decoration: none;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .edit-profile {
+            position: absolute;
+            top: 80px;
+            right: 10px;
+        }
+
+        #user-posts {
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .post:hover {
+            background-color: #f0f0f0;
+        }
+
+        .post:not(:last-child) {
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="logo"></div>
+    <div class="search-bar">
+        <input type="text" placeholder="Search...">
+    </div>
+</div>
+<div class="container">
+    <div class="profile-section">
+        <img src="https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj" alt="Profile Picture">
+        <h1 th:text="${user.displayName != null ? user.displayName : user.username}"></h1>
+        <h2 th:text="${'u/' + user.username}"></h2>
+        <a th:href="@{/u/{userId}/edit(userId=${user.userId})}" class="edit-profile">
+            <img src="https://media.istockphoto.com/id/1161405325/vector/pencil-icon-isolated-of-flat-style.jpg?s=612x612&w=0&k=20&c=UvRnN79GjWPIT4o28k232_mG05G_-3GNxL8deiNqmyk=" alt="Edit Profile" style="width: 70px; height: 70px;">
+        </a>
+    </div>
+
+
+    <div class="tabs">
+        <ul>
+            <li><a href="#overview" onclick="showTab('overview')">Overview</a></li>
+            <li><a href="#posts" onclick="showTab('user-posts')">Posts</a></li>
+            <li><a href="#comments" onclick="showTab('comments')">Comments</a></li>
+            <li><a href="#upvoted" onclick="showTab('upvoted')">Upvoted</a></li>
+            <li><a href="#downvoted" onclick="showTab('downvoted')">Downvoted</a></li>
+        </ul>
+    </div>
+
+    <div id="overview" class="tab-content active">
+
+        <div th:each="item : ${postsAndComments}" class="post-comment">
+
+            <div th:if="${item instanceof T(io.mountblue.reddit.redditClone.model.Post)}" class="post">
+
+                <h4 th:text="${'r/' + item.subReddit.subRedditName}"></h4>
+                <h3 th:text="${item.title}"></h3>
+                <p th:text="${#strings.length(item.body) > 250 ? #strings.substring(item.body, 0, 250) + '...' : item.body}"></p>
+
+            </div>
+
+            <div th:if="${item instanceof T(io.mountblue.reddit.redditClone.model.Comment)}" class="comment">
+
+                <h4 th:text="${'r/' + item.post.subReddit.subRedditName + ' ' + '.' + ' ' + item.post.title}"></h4>
+                <p class="username" th:text="'u/' + ${item.user.username}"></p>
+                <p th:text="${item.comment}"></p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="comments" class="tab-content" style="background-color: #fff">
+        <div th:each="comment : ${comments}" class="comment">
+            <div>
+                <h4 th:text="${'r/' + comment.post.subReddit.subRedditName + ' ' + '.' + ' ' + comment.post.title}"></h4>
+                <p class="username" th:text="'u/' + ${comment.user.username}"></p>
+                <p th:text="${comment.comment}"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="upvoted" class="tab-content">
+
+    </div>
+    <div id="downvoted" class="tab-content">
+
+    </div>
+    <div id="user-posts" class="tab-content">
+<!--        <div th:if="${posts.isEmpty()}" style="height: calc(100vh - 260px); text-align: center;">-->
+<!--            <p th:text="user.username + ' user hasn\\'t posted yet'"-->
+<!--            ></p>-->
+
+<!--        </div>-->
+        <div th:each="post, postIndex : ${posts}" class="post" th:id="'post-' + ${postIndex}">
+            <div>
+                <h4 th:text="${'r/' + post.subReddit.subRedditName}"></h4>
+                <h3 th:text="${post.title}"></h3>
+                <p th:text="${#strings.length(post.body) > 250 ? #strings.substring(post.body, 0, 250) + '...' : post.body}"></p>
+                <!--                    <a th:href="@{/post/{postId}(postId=${post.postId})">Read More</a>-->
+            </div>
+            <div th:if="${#numbers.sequence(0, posts.size() - 1)}" ></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function showTab(tabId) {
+        var tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(function(tab) {
+            tab.classList.remove('active');
+        });
+        document.getElementById(tabId).classList.add('active');
+    }
+</script>
+</body>
+</html>
