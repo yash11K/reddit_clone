@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/view-comments.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <main>
+        <div id="container">
+            <div id="post-header">
+                <img src="https://banner2.cleanpng.com/20180623/iqh/kisspng-computer-icons-avatar-social-media-blog-font-aweso-avatar-icon-5b2e99c40ce333.6524068515297806760528.jpg"
+                     width="32px" height="32px"/>
+                <span th:text="'r/' + ${fullPostViewDto.subReddit.subRedditName}"/>
+                <span th:text="${fullPostViewDto.createdAt}"/>
+<!--                <p th:value="${fullPostViewDto.opUser.username"/>-->
+<!--                post created at-->
+<!--                owner of post (user)-->
+            </div>
+            <div id="post-title-text">
+                <div id="post-title">
+                    <h2 th:text="${fullPostViewDto.post.title}"/>
+                </div>
+                <div id="post-text">
+                    <p th:text="${fullPostViewDto.post.body}"/>
+                </div>
+            </div>
+<!--            <div id="post-media">-->
+
+<!--            </div>-->
+            <div id="post-actions">
+                <span>
+                    <button>
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <p id="voteCount">{voteCount}</p>
+                    <button>
+                        <i class="fas fa-arrow-down"></i>
+                    </button>
+                </span>
+                <span>
+                    <button>
+                        <i class="fas fa-comment"></i>
+                        <p th:text="${fullPostViewDto.commentCount}"/>
+                    </button>
+                </span>
+            </div>
+            <div id="comment-input">
+                <form th:action="@{'/r/comment/add/' + ${postId}}" method="post">
+                    <textarea id="input-comment" value="commentText" name="commentText" required></textarea>
+                    <input type="submit" value="Comment"/>
+                </form>
+            </div>
+            <div th:each="comment : ${fullPostViewDto.comments}">
+                <p th:text="${comment.comment}" />
+                <form th:action="@{'/r/update/comment/' + ${postId}}" method="post">
+                    <input type="hidden" name="commentId" th:value="${comment.commentId}">
+                    <input type="submit" value="Edit comment">
+                </form>
+                <form th:action="@{'/r/delete/comment/' + ${postId}}" method="post">
+                    <input type="hidden" name="commentId" th:value="${comment.commentId}">
+                    <input type="submit" value="Delete Comment">
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

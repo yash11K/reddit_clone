@@ -93,7 +93,6 @@ public class PostManager implements PostService{
                 .opUser(post.getOpUser())
                 .title(post.getTitle())
                 .flairs(post.getFlairs())
-                .voteCount(post.getVoteCount())
                 .body(post.getBody())
                 .post(post)
                 .CommentCount((long) post.getComments().size())
