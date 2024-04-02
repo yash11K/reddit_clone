@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+        }
+
+        .avatar-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #ccc; /* Placeholder color */
+            margin-bottom: 10px;
+            /* Add more styles if needed */
+        }
+
+        .change-avatar-button {
+            background-image: url("https://img.freepik.com/premium-vector/two-arrows-inside-blue-circle-logo-template-illustration-design-vector-eps-10_822766-9601.jpg");
+            width: 30px;
+            height: 30px;
+            background-size: cover;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Customize Profile</h2>
+    <div class="avatar-wrapper">
+        <!-- Placeholder avatar -->
+        <div class="avatar"></div>
+        <!-- Change avatar button -->
+        <button class="change-avatar-button"></button>
+    </div>
+    <form action="#" th:action="@{/u/{userId}/edit(userId=${user.userId})}" th:object="${user}" method="post">
+        <div>
+            <label for="displayName">Display Name:</label>
+            <input type="text" id="displayName" name="displayName" th:field="*{displayName}">
+        </div>
+        <div>
+            <label for="bio">About:</label>
+            <textarea id="bio" name="bio" th:field="*{bio}"></textarea>
+        </div>
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <div>
+        <h2>Delete Profile</h2>
+        <form action="#" th:action="@{/u/{userId}/delete(userId=${user.userId})}" method="post">
+            <button type="submit" class="delete-button">Delete Profile</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
