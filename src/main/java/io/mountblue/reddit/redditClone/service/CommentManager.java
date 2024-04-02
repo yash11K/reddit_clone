@@ -83,4 +83,9 @@ public class CommentManager implements CommentService{
 //                .mediaUri()
                 .build();
     }
+    @Override
+    public List<Comment> getAllCommentsByUser(String username) {
+        return commentRepository.findAllByUserUsername(username);
+    }
+
 }

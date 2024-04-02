@@ -85,4 +85,9 @@ public class PostManager implements PostService{
                 .orElseThrow(()->new FlairNotFound("no flair with name: " + flairDto.getName())));
         return postRepository.save(post);
     }
+    @Override
+    public List<Post> getAllPostsByUser(String username) {
+        return postRepository.findAllByOpUserUsername(username);
+    }
+
 }
