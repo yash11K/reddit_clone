@@ -7,6 +7,7 @@ import io.mountblue.reddit.redditClone.dto.SubRedditViewDto;
 import io.mountblue.reddit.redditClone.model.SubReddit;
 
 import java.security.Principal;
+import java.util.List;
 
 public interface SubRedditService {
     SubRedditDto save(SubRedditDto subRedditDto, Principal principal);
@@ -28,4 +29,8 @@ public interface SubRedditService {
     String deleteFlair(Long flairId);
 
     SubRedditViewDto subRedditToSubRedditViewDto(SubReddit subReddit);
+
+    List<String> previousSubRedditNames();
+
+    Long ruleId(SubReddit subReddit, String rule);
 }

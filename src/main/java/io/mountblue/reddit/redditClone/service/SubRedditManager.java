@@ -19,6 +19,7 @@ import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
@@ -141,10 +142,16 @@ public class SubRedditManager implements SubRedditService{
         List<SubRedditPostDto> subRedditPostDtos = new ArrayList<>();
         for(Post post : subRedditPosts) {
             Long votes = (long) post.getVotes().size();
+
+            String paragraph = post.getBody();
+            String[] words = paragraph.split("\\s+");
+            int maxLength = Math.min(words.length, 30);
+            String body = String.join(" ", Arrays.copyOf(words, maxLength));
+
             Long comments = (long) post.getComments().size();
             String createdAt = calculateTimeAgo(post.getCreatedAt());
             subRedditPostDtos.add(SubRedditPostDto.builder()
-                    .body(post.getBody())
+                    .body(body)
                     .title(post.getTitle())
                     .opUser(post.getOpUser())
                     .postId(post.getPostId())
@@ -156,15 +163,30 @@ public class SubRedditManager implements SubRedditService{
         }
         String avatar = subReddit.getAvatar();
         String banner = subReddit.getBanner();
+        Long subscriberUsers = (long)subReddit.getSubscribedUsers().size();
+        List<SubReddit> allSubReddits = subRedditRepository.findAll();
+        List<String> allSubRedditNames = new ArrayList<>();
+        for(SubReddit subReddit1 : allSubReddits) {
+            allSubRedditNames.add(subReddit1.getSubRedditName());
+        }
+
+        List<String> previousSubRedditUsernames = previousSubRedditNames();
+
         return SubRedditViewDto.builder()
                     .subRedditId(subReddit.getSubRedditId())
                     .subRedditDescription(subReddit.getDescription())
                     .subRedditName(subReddit.getSubRedditName())
                     .rules(rules)
+                    .previousSubRedditNames(previousSubRedditUsernames)
                     .subRedditPostDtos(subRedditPostDtos)
+                    .subscribedUsers(subscriberUsers)
+                    .allSubReddits(allSubRedditNames)
                     .build();
     }
 
+    public List<String> previousSubRedditNames() {
+        return subRedditRepository.findSubRedditNames();
+    }
 
     public static String calculateTimeAgo(LocalDateTime creationDateTime) {
         LocalDateTime now = LocalDateTime.now();
@@ -177,4 +199,10 @@ public class SubRedditManager implements SubRedditService{
             return days + " days ago";
         }
     }
+
+    public Long ruleId(SubReddit subReddit, String rule) {
+        Rule selectedRule = ruleRepository.findRuleBySubRedditAndRule(subReddit, rule);
+        return selectedRule.getRuleId();
+    }
+
 }
