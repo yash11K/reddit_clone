@@ -20,4 +20,7 @@ public interface UserService {
 
     void deleteUser(Long userId);
     ResponseEntity<String> updateUserTopics(Long userId, List<TopicDto> topicDtos);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
+    User findByUsername(String username);
 }

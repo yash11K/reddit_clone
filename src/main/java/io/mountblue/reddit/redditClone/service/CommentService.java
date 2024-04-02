@@ -15,4 +15,5 @@ public interface CommentService {
     Comment getCommentById(Long commentId);
 
     void delete(Long commentId);
+    List<Comment> getAllCommentsByUser(String username);
 }
