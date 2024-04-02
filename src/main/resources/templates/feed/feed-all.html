@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link rel="stylesheet" href="/style.css">
+
+    <!------------------LIght BOx for Gallery-------------->
+    <link rel="stylesheet" href="lightbox.min.css">
+    <script type="text/javascript" src="lightbox-plus-jquery.min.js"></script>
+    <script>
+        function votePost(postId, voteType) {
+            fetch('/posts/' + postId + '/vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ voteType: voteType })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the UI with the new vote count and user vote
+                    const voteCountSpan = document.querySelector(`[data-post-id="${postId}"] span`);
+                    const upvoteButton = document.querySelector(`[data-post-id="${postId}"] button:first-child`);
+                    const downvoteButton = document.querySelector(`[data-post-id="${postId}"] button:last-child`);
+
+                    voteCountSpan.textContent = data.voteCount;
+                    upvoteButton.classList.remove('voted');
+                    downvoteButton.classList.remove('voted');
+
+                    if (data.userVote === 'UPVOTE') {
+                        upvoteButton.classList.add('voted');
+                    } else if (data.userVote === 'DOWNVOTE') {
+                        downvoteButton.classList.add('voted');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error voting:', error);
+                });
+        }
+    </script>
+    <!------------------LIght BOx for Gallery-------------->
+    <title>Application-1</title>
+</head>
+<body>
+
+
+<!-------------------------------NAvigation Starts------------------>
+
+<nav class="navbar navbar-expand-md navbar-dark mb-4" style="background-color:#252525">
+    <a href="feed-all.html" class="navbar-brand"><img src="/redditlogo/reddit-seeklogo.svg" alt="logo" class="img-fluid" width="60px"
+                                                   height="80px"> <span style="padding-left:15px; font-size: 25px">Reddit</span></a>
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#responsive"><span
+            class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="responsive">
+        <ul class="navbar-nav mr-auto text-capitalize">
+<!--            <li class="nav-item"><a href="#modalview" class="nav-link" data-toggle="modal">messages</a></li>-->
+        </ul>
+        <form action="" class="form-inline ml-auto d-none d-md-block">
+            <input type="text" name="search" id="search" placeholder="Search" class="form-control form-control-sm">
+            <input type="submit" value="search" class="search-button">
+        </form>
+        <img src="/beanheads/beanhead-2.svg" alt="" class="rounded-circle ml-3 d-none d-md-block" width="70px" height="70px">
+    </div>
+</nav>
+
+<!--<div class="modal fade" id="modalview">-->
+<!--    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+
+<!-------------------------------------------Start Grids layout for lg-xl-3 columns and (xs-lg 1 columns)--------------------------------->
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-lg-3">
+
+            <div class="left-column">
+                <div class="card card-left1 mb-4">
+                    <div class="card-body text-center ">
+                        <img src="/beanheads/beanhead-2.svg" alt="img" width="120px" height="120px"
+                             class="rounded-circle mt-n5">
+                        <h5 class="card-title">u/October22</h5>
+                        <p class="card-text text-justify mb-2"></p>
+                        <ul class="list-unstyled nav justify-content-center">
+                            <p href="#" class="text-dark text-decoration-none">
+                                <li class="nav-item">joined : 12th september 1972<br>
+                                    <strong>karma : 12</strong>
+                                </li>
+                            </p>
+<!--                            <a href="#" class="text-dark text-decoration-none">-->
+<!--                                <li class="nav-item"><br> <strong></strong></li>-->
+<!--                            </a>-->
+                        </ul>
+                    </div>
+                </div>
+                <div class="card shadow-sm card-left2 mb-4">
+                    <div class="card-body">
+                        <h5 class="mb-3 card-title">SubReddits
+                            <small><a href="#" class="ml-1"></a></small></h5>
+                        <a th:href="@{/r/new}" class="new-subreddit-button"> + New SubReddit</a>
+                        <div th:each="subReddit : ${subReddits}" class="subreddit-container">
+                            <a class="card-text, subreddit-link" th:text="'r/'+${subReddit}" th:href="@{'/r/' + ${subReddit}}"
+                            ></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm card-left2 mb-4">
+                    <div class="card-body">
+                        <h5 class="mb-3 card-title">Moderation
+                            <small><a href="#" class="ml-1"></a></small></h5>
+                        <a th:href="@{/r/new}" class="new-subreddit-button"> + New SubReddit</a>
+                        <div th:each="subReddit : ${modSubReddits}" class="subreddit-container">
+                            <a class="card-text, subreddit-link" th:text="'r/'+${subReddit.getSubRedditName()}" th:href="@{'/r/' + ${subReddit.getSubRedditName()}}"
+                            ></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="middle-column">
+                <div class="card">
+                    <div class="card-header bg-transparent">
+                        <form class="form-inline">
+                            <div class="input-group w-100">
+                                <input type="text" name="message" id="message" placeholder="Message"
+                                       class="form-control form-control-md">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-camera"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card-body" th:each="postCard : ${postCards}">
+                        <div class="media">
+                            <img src="/beanheads/beanhead-19.svg" alt="img" width="55px" height="55px" class="rounded-circle mr-3">
+                            <div class="media-body">
+                                <div class="post-card">
+                                    <h5 th:text="'r/'+${postCard.subRedditName}"></h5>
+                                    <h4 th:text="${postCard.title}"></h4>
+                                    <small th:text="${postCard.createdAt}"></small>
+                                    <p class="card-text text-justify" th:text="*{postCard.body}"></p>
+                                    <div class="image-container">
+                                        <img th:src="${postCard.getMedia()}"  alt="Image"/>
+                                    </div>
+                                    <div class="row no-gutters mb-3"></div>
+                                </div>
+                                <div class="row no-gutters mb-3">
+                                    <button th:onclick="votePost([[${postCard.postId}]], 'UPVOTE')" th:classappend="${postCard.userVote == 'UPVOTE' ? 'voted' : ''}">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </button>
+                                    <span th:text="${postCard.voteCount}">0</span>
+                                    <button th:onclick="votePost([[${postCard.postId}]], 'DOWNVOTE')" th:classappend="${postCard.userVote == 'DOWNVOTE' ? 'voted' : ''}">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <br> <br> <br><br> <br> <br>
+<!--            <div class="right-column">-->
+<!--                <div class="card shadow-sm mb-4">-->
+<!--                    <div class="card-body">-->
+<!--                        <h6 class="card-title">Sponsored</h6>-->
+<!--                        <img src="img/right1.jpg" alt="card-img" class="card-img mb-3">-->
+<!--                        <p class="card-text text-justify"><span class="h6">It might be time to visit Iceland.</span>-->
+<!--                            Iceland is so chill, and everything looks cool here. Also, we heard the people are pretty-->
+<!--                            nice. What are you waiting for?</p>-->
+<!--                        <a href="#" class="btn btn-outline-info card-link btn-sm">Buy a ticket</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card shadow-sm mb-4">-->
+
+<!--                    <div class="card-body">-->
+
+<!--                        <h6 class="card-title ">Likes <a href="#" class="ml-1"><small>.View All</small> </a></h6>-->
+<!--                        <div class="row no-gutters d-none d-lg-flex">-->
+<!--                            <div class="col-6 p-1">-->
+<!--                                <img src="img/avatar-dhg.png" alt="img" width="80px" height="80px"-->
+<!--                                     class="rounded-circle mb-4">-->
+<!--                                <img src="img/avatar-fat.jpg" alt="img" width="80px" height="80px"-->
+<!--                                     class="rounded-circle">-->
+<!--                            </div>-->
+<!--                            <div class="col-6 p-1 text-left">-->
+<!--                                <h6>Jacob Thornton @fat</h6>-->
+<!--                                <a href="#" class="btn btn-outline-info btn-sm mb-3"><i class="fas fa-user-friends"></i>Follow-->
+<!--                                </a>-->
+
+<!--                                <h6>Mark otto</h6>-->
+<!--                                <a href="#" class="btn btn-outline-info  btn-sm"><i class="fas fa-user-friends"></i>Follow-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="card-footer">-->
+<!--                        <p class="lead" style="font-size:18px;">Dave really likes these nerds, no one knows why-->
+<!--                            though.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--        </div>-->
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

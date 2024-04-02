@@ -1,0 +1,121 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f6f7f8;
+}
+
+.container {
+    width: 50%;
+    margin: 50px auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    text-align: center;
+    color: #1a1a1b;
+}
+
+.post-form {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+.input-error {
+    border-color: #dc3545;
+}
+
+.alert {
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    color: #721c24;
+}
+
+.btn {
+    margin-top: 10px;
+    background-color: #0079d3;
+    color: #ffffff;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+.scrollable-checkbox-list {
+    max-height: 200px; /* Adjust as needed */
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+}
+.checkbox-label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.checkbox-container {
+    margin-top: 10px;
+}
+
+/* Style for the checkbox label */
+.checkbox-label {
+    margin-left: 5px;
+    font-size: 1em;
+    color: #333;
+}
+
+/* Style for the checkbox */
+.checkbox-input {
+    margin-right: 5px;
+    width: 20px;
+    height: 20px;
+}
+
+/* Style for the checkbox when checked */
+.checkbox-input:checked {
+    background-color: #007bff;
+}
+
+/* Style for post details */
+.post-details {
+    margin-bottom: 20px;
+}
+
+/* Style for subreddit name */
+.subreddit-name {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Style for post title */
+.post-title {
+    color: #666;
+}

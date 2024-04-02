@@ -1,0 +1,40 @@
+.post-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.post-card .title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.post-card .body {
+    color: #333;
+}
+.post-card .media {
+    margin-top: 10px;
+}
+.post-card .media img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+.post-card .flairs {
+    margin-top: 10px;
+}
+.post-card .flair {
+    background-color: #f0f0f0;
+    color: #666;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-right: 5px;
+    font-size: 12px;
+}
+.post-card .vote-count {
+    color: #999;
+}
+.post-card .comment-count {
+    color: #999;
+    margin-left: 10px;
+}

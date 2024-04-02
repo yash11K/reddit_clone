@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>new post</title>
+    <link rel="stylesheet" href="/createpost.css"/>
+</head>
+<body>
+<div class="post-details">
+    <p class="subreddit-name">Subreddit: <span th:text="${postDto.subRedditName}"></span></p>
+    <p class="post-title">Title: <span th:text="${postDto.title}"></span></p>
+    <p class="post-title">body: <span th:text="${postDto.body}"></span></p>
+</div>
+<form th:action="@{/submit/sides}" th:object="${postDto}" method="post" class="post-form" enctype="multipart/form-data">
+
+        <input type="file" name="media" accept="multipart/form-data">
+        <h4>Select Topics:</h4>
+        <div class="scrollable-checkbox-list">
+            <div th:each="topic : ${topics}">
+                <label class="checkbox-label">
+                    <input type="checkbox" th:value="${topic}" th:field="*{topics}" /> <span th:text="${topic}"></span>
+                </label>
+            </div>
+        </div>
+        <h4>Select Flairs:</h4>
+        <div class="scrollable-checkbox-list">
+            <div th:each="flair : ${flairs}">
+                <label class="checkbox-label">
+                    <input type="checkbox" th:value="${flair}" th:field="*{flairs}" /> <span th:text="${flair}"></span>
+                </label>
+            </div>
+        </div>
+    <br>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="isCommentMediaAllowed" th:field="*{commentMediaAllowed}" />
+            <label class="form-check-label" for="isCommentMediaAllowed">Allow media in comments</label>
+        </div>
+        <div>
+            <input type="hidden" th:value="${postDto.subRedditName}" th:field="*{subRedditName}">
+            <input type="hidden" th:value="${postDto.title}" th:field="*{title}">
+            <input type="hidden" th:value="${postDto.body}" th:field="*{body}">
+        </div>
+        <button type="submit" id="submitButton" class="btn btn-primary">Post</button>
+    </form>
+</body>
+</html>

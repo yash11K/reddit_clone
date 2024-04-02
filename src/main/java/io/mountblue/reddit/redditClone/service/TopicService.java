@@ -10,4 +10,7 @@ public interface TopicService {
     List<Topic> getAllTopics();
     Topic findById(Long id);
 
+    List<Topic> fetchAllTopics();
+
+    List<Topic> fetchSelectedTopic(List<String> topicNames);
 }

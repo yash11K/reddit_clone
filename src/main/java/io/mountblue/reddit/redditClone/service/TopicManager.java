@@ -40,4 +40,14 @@ public class TopicManager implements TopicService{
     public Topic findById(Long id) {
         return topicRepository.findById(id).orElse(null);
     }
+    @Override
+    public List<Topic> fetchAllTopics(){
+        return topicRepository.findAll();
+    }
+
+    @Override
+    public List<Topic> fetchSelectedTopic(List<String> topicNames){
+        return topicRepository.findByNameInOrderByName(topicNames);
+    }
+
 }

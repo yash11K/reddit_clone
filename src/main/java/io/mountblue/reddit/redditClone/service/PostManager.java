@@ -1,13 +1,14 @@
 package io.mountblue.reddit.redditClone.service;
 
 import io.mountblue.reddit.redditClone.dto.FlairDto;
+import io.mountblue.reddit.redditClone.dto.FullPostViewDto;
 import io.mountblue.reddit.redditClone.dto.PostDto;
 import io.mountblue.reddit.redditClone.exception.FlairNotFound;
 import io.mountblue.reddit.redditClone.exception.PostNotFound;
-import io.mountblue.reddit.redditClone.model.Flair;
 import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.model.SubReddit;
 import io.mountblue.reddit.redditClone.model.Topic;
+import io.mountblue.reddit.redditClone.model.*;
 import io.mountblue.reddit.redditClone.repository.FlairRepository;
 import io.mountblue.reddit.redditClone.repository.PostRepository;
 import io.mountblue.reddit.redditClone.repository.SubRedditRepository;
@@ -90,4 +91,36 @@ public class PostManager implements PostService{
         return postRepository.findAllByOpUserUsername(username);
     }
 
+
+    @Override
+    public Post save(Post post){
+        return postRepository.save(post);
+    }
+
+    @Override
+    public List<Post> fetchAllPostByPublished(boolean isPublished){
+        return postRepository.findPostsByIsPublished(isPublished);
+    }
+
+    public FullPostViewDto postToFullViewPostDto(Post post) {
+        return FullPostViewDto.builder()
+                .postId(post.getPostId())
+                .subReddit(post.getSubReddit())
+                .createdAt(post.getCreatedAt())
+                .opUser(post.getOpUser())
+                .title(post.getTitle())
+                .flairs(post.getFlairs())
+                .voteCount(post.getVoteCount())
+                .body(post.getBody())
+                .post(post)
+                .CommentCount((long) post.getComments().size())
+//                .mediaUri(post.getMediaUri())
+                .comments(post.getComments())
+                .build();
+    }
+
+    @Override
+    public List<Comment> findAllCommentsByPostId(Long postId) {
+        return postRepository.findAllCommentsByPostId(postId);
+    }
 }
