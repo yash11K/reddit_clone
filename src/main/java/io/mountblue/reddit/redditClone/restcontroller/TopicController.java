@@ -17,7 +17,7 @@ public class TopicController {
     private final TopicService topicService;
 
     @Value("${reddit.topics}")
-    private String[] topicsArray;
+    private List<String> topicsList;
 
     @Autowired
     public TopicController(TopicService topicService) {
@@ -26,7 +26,6 @@ public class TopicController {
 
     @PostMapping("/save")
     public String saveTopicsFromProperties() {
-        List<String> topicsList = Arrays.asList(topicsArray);
         for (String topic : topicsList) {
             topicService.saveTopic(topic);
         }

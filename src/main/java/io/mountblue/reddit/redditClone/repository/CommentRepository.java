@@ -1,6 +1,7 @@
 package io.mountblue.reddit.redditClone.repository;
 
 import io.mountblue.reddit.redditClone.model.Comment;
+import io.mountblue.reddit.redditClone.model.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,4 +11,6 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByUserUsername(String username);
 
+    List<Comment> findCommentByPost(Post post);
+    int countCommentByPost(Post post);
 }

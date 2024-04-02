@@ -105,12 +105,12 @@ public class UserManager implements UserService {
     }
     @Override
     public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username).get();
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> maybeUser = userRepository.findUserByUsername(username);
+        Optional<User> maybeUser = userRepository.findByUsername(username);
         if(maybeUser.isEmpty()){
             throw new UsernameNotFoundException("no such username exist");
         }

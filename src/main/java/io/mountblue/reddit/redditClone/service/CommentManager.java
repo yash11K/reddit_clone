@@ -61,6 +61,13 @@ public class CommentManager implements CommentService{
         commentRepository.deleteById(commentId);
     }
 
+    @Override
+    public void updateCommentByComment(Comment comment, String updatedComment) {
+        comment.setUpdatedAt(LocalDateTime.now());
+        comment.setComment(updatedComment);
+        commentRepository.save(comment);
+    }
+
     private Comment convertDtoToModel(CommentDto commentDto, Long postId) {
         Post post = postRepository.findPostByPostId(postId)
                 .orElseThrow(() -> new PostNotFound("Post not found for id : " + postId));
@@ -88,4 +95,9 @@ public class CommentManager implements CommentService{
         return commentRepository.findAllByUserUsername(username);
     }
 
+
+    @Override
+    public int getCommentCount(Post post){
+        return commentRepository.countCommentByPost(post);
+    }
 }

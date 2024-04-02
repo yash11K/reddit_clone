@@ -10,7 +10,7 @@ public interface MediaService {
 
     String uploadMediaToBucket(MultipartFile file, String fileNamePrefix);
 
-    ResponseEntity<Resource> fetchMediaFromUri(String filepath);
+    Resource fetchMediaFromUri(String filepath);
 
     public static String replaceWhiteSpaces(String str){
         return str.replaceAll("\\s+", "_");
