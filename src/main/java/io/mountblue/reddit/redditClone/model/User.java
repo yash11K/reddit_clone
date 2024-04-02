@@ -1,9 +1,11 @@
 package io.mountblue.reddit.redditClone.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -64,5 +66,10 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "topic_id")}
     )
     private List<Topic> topics;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonManagedReference
+    private Collection<Role> roles;
 
 }
