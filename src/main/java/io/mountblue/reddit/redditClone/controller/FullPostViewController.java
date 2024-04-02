@@ -32,6 +32,7 @@ public class FullPostViewController {
     ) {
         Post post = postService.fetchPostById(postId);
         FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
+        boolean updateCommentCheck = false;
 //        List<Comment> comments = postService.findAllCommentsByPostId(postId);
 //        for(Comment comment : comments) {
 //            Map.Entry<Comment, List<Comment>> entry = commentTree.getParentChildMap().entrySet().iterator().next();
@@ -42,7 +43,7 @@ public class FullPostViewController {
 //        }
         model.addAttribute("fullPostViewDto", fullPostViewDto);
 //        model.addAttribute("comments", comments);
-        return "view-comments";
+        return "view-post";
     }
 
     @PostMapping("/comment/add/{postId}")
@@ -57,31 +58,55 @@ public class FullPostViewController {
         commentDto.setText(commentText);
         commentService.save(commentDto, postId);
         FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
+        String subRedditName = post.getSubReddit().getSubRedditName();
         model.addAttribute("fullPostViewDto", fullPostViewDto);
-        return "view-comments";
+        return "redirect:/r/" + subRedditName + "/comments/" + postId;
     }
 
-    @PostMapping("/edit/comment/{postId}")
+    @GetMapping("/edit/comment/{postId}")
     public String editComment(
             @PathVariable("postId") Long postId,
-            @RequestParam("commentId") Long commentId
+            @RequestParam("editCommentId") Long editCommentId,
+            Model model
     ) {
-//        commentService.editComment(commentId, commentText);
-//        return "redirect:/your-redirect-url";
-        return "view-comments";
+        Post post = postService.fetchPostById(postId);
+        FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
+        model.addAttribute("editCommentId", editCommentId);
+        model.addAttribute("fullPostViewDto", fullPostViewDto);
+        model.addAttribute("editCommentId", editCommentId);
+        return "view-post";
+    }
+
+    @PostMapping("/comments/update/{postId}")
+    public String updateComment(
+            @PathVariable(name = "postId") Long postId,
+            @RequestParam(name = "commentIdToUpdate") Long commentIdToUpdate,
+            @RequestParam(name = "updatedComment") String updatedComment,
+            Model model
+    ) {
+        Comment comment = commentService.getCommentById(commentIdToUpdate);
+        commentService.updateCommentByComment(comment, updatedComment);
+        Post post = postService.fetchPostById(postId);
+        FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
+        String subRedditName = post.getSubReddit().getSubRedditName();
+//        Long voteCounts = post.getVoteCount();
+        model.addAttribute("fullPostViewDto", fullPostViewDto);
+//        model.addAttribute("votesCount", voteCounts);
+        return "redirect:/r/" + subRedditName + "/comments/" + postId;
     }
 
     @PostMapping("/delete/comment/{postId}")
     public String deleteComment(
-            @RequestParam("commentId") Long commentId,
+            @RequestParam("deleteCommentId") Long deleteCommentId,
             @PathVariable(name = "postId") Long postId,
             Model model
     ) {
-        commentService.delete(commentId);
+        commentService.delete(deleteCommentId);
         Post post = postService.fetchPostById(postId);
         FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
+        String subRedditName = post.getSubReddit().getSubRedditName();
         model.addAttribute("fullPostViewDto", fullPostViewDto);
-        return "view-comments";
+        return "redirect:/r/" + subRedditName + "/comments/" + postId;
     }
 
 }

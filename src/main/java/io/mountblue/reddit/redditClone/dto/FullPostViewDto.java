@@ -22,7 +22,7 @@ public class FullPostViewDto {
     private List<Flair> flairs;
     private String body;
     private String mediaUri;
-//    private Long voteCount;
+    private Long voteCount;
     private Long CommentCount;
     private List<Comment> comments;
 

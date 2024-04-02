@@ -37,6 +37,8 @@ public class Post {
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    @Column(name = "vote_count")
+    private Long voteCount;
 
     @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     @JoinTable(
@@ -68,4 +70,5 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Vote> votes;
+
 }
