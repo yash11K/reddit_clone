@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Express It SubReddit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Style for the fixed header */
+        body{
+            color : gray;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            border : 1px solid gray;
+            height: 50px; /* Adjust height as needed */
+            background-color: #0b1416; /* Default background color */
+            color: white;
+            padding: 10px;
+            display: flex; /* Use flexbox to align items */
+            align-items: center; /* Center items vertically */
+        }
+
+        .logo {
+            margin-right: -5px; /* Adjust spacing between logo and text */
+            width: 100px; /* Adjust the width of the logo */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        /* Style for the main content area */
+        .content {
+            margin-top: 50px; /* Ensure content does not overlap header */
+            display: flex;
+            flex-direction: row;
+        }
+
+        /* Style for the left div */
+        .left-div {
+            flex: 0 0 12%; /* Flexbox shorthand for flex-grow, flex-shrink, and flex-basis */
+            background-color: #0b1416;
+            padding: 20px;
+            position: relative;
+            border : 1px solid gray;
+            margin-left: -15px;
+            margin-top : 20px;
+            overflow: hidden;
+            z-index: 1; /* Ensure left div is above header */
+<!--            border-radius: 10px; /* Rounded corners */-->
+<!--            border: 1px solid #ddd; /* Lighter border color */-->
+        }
+
+        /* Style for the buttons */
+        .left-div a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 10px 0;
+            transition: background-color 0.3s;
+            border-bottom: 1px solid transparent; /* Remove border by default */
+        }
+
+        .left-div a:hover {
+            background-color: #ddd;
+        }
+
+        /* Style for the right div */
+        .right-div {
+            flex: 1; /* Take up remaining space */
+            background-color: #101214; /* ChatGPT background color */
+            padding: 1% 15% 1% 15%;
+            margin-top : 21px;
+            color : white;
+            margin-right : -15px;
+<!--            border-radius: 10px; /* Rounded corners */-->
+            border : 1px solid gray;
+<!--            border: 1px solid #ddd; /* Lighter border color */-->
+        }
+
+        .user-style {
+            font-weight: bold;
+            color: blue;
+        }
+
+        .date-style {
+            font-style: italic;
+            color: gray;
+        }
+
+        .vote-section {
+            display: inline-block;
+            margin-right: 20px; /* Adjust the spacing between vote and comment sections */
+        }
+
+        .comment-section {
+            display: inline-block;
+            margin-right: 20px; /* Adjust the spacing between comment section and share dropdown */
+        }
+
+        .comment-button.no-hover {
+            color: inherit;
+            text-decoration: none;
+        }
+        .comment-button.no-hover:hover {
+            background-color: transparent !important;
+        }
+
+        /* Style for the share button */
+        .share-button {
+            background-color: #f0f0f0; /* Lighter background color */
+            color: #333; /* Dark text color */
+            border: 1px solid #ddd; /* Lighter border color */
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 10px; /* Rounded corners */
+            transition: background-color 0.3s;
+        }
+        .share-button:hover {
+            background-color: #ddd; /* Darker background color on hover */
+        }
+
+        /* Style for the dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 10px; /* Rounded corners */
+            border: 1px solid #ddd; /* Lighter border color */
+        }
+        .dropdown-content button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            text-align: left;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .dropdown-content button:hover {
+            background-color: #ddd;
+        }
+
+        /* Style for the sub-reddit name container */
+        .sub-reddit-name {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Style for the buttons container */
+        .buttons {
+            display: flex;
+            align-items: center;
+            margin-left: auto; /* Push buttons to the right */
+        }
+
+        /* Style for the round buttons */
+        .round-button {
+            border: none;
+            border-radius: 20px; /* Make the buttons round */
+            padding: 8px 15px; /* Adjust padding as needed */
+            margin-left: 10px; /* Add spacing between buttons */
+            cursor: pointer;
+            color: #fff; /* Text color */
+            transition: background-color 0.3s;
+            text-decoration: none; /* Remove default text decoration */
+            display: flex;
+            align-items: center; /* Center the icon and text vertically */
+        }
+
+        /* Style for the icon inside buttons */
+        .round-button i {
+            margin-right: 5px; /* Add spacing between icon and text */
+        }
+
+        /* Style for the create button */
+        .create-button {
+            background-color: #007bff; /* Blue color for create button */
+        }
+
+        /* Style for the bell icon button */
+        .bell-icon {
+            border-radius: 50%; /* Make the button perfectly round */
+            padding: 10px; /* Adjust padding for roundness */
+            background-color: #28a745; /* Green color for bell icon button */
+        }
+
+        /* Style for the joined button */
+        .joined-button {
+            background-color: #dc3545; /* Red color for joined button */
+            text-decoration: none; /* Remove default text decoration */
+            display: inline-flex; /* Ensure button behaves like other inline elements */
+            align-items: center; /* Center content vertically */
+            padding: 8px 15px; /* Adjust padding as needed */
+            border: none; /* Remove border */
+            border-radius: 20px; /* Make the button round */
+            color: #fff; /* Text color */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            transition: background-color 0.3s; /* Smooth transition on hover */
+            margin-left: 10px; /* Add spacing between buttons */
+        }
+
+        /* Hover effect for the joined button */
+        .joined-button:hover {
+            opacity: 0.8; /* Reduce opacity on hover */
+        }
+
+        /* Hover effect for buttons */
+        .round-button:hover {
+            opacity: 0.8; /* Reduce opacity on hover */
+        }
+
+        .background-image {
+            width : 100%;
+            height : 20%;
+        }
+
+        .round-image {
+            height : 100px;
+            width : 100px;
+            border-radius: 50%;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .innerLeftContainer {
+            flex: 70%; /* Take up 70% of the width */
+        }
+
+        .subRedditDescriptionContainer{
+        background-color : #070809;
+            flex: 30%; /* Take up 30% of the width */
+        }
+
+        .strong-text {
+            color: gold;
+        }
+
+        .rules{
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        /* The Modal (background) */
+        .modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          padding-top: 100px; /* Location of the box */
+          left: 0;
+          top: 0;
+          color : white;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color : #0f1a1c;
+          background-color: rgba(15, 26, 28, 0.4); /* Black w/ opacity */
+<!--          background-color: rgb(0,0,0); /* Fallback color */-->
+<!--          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */-->
+        }
+
+        .modal-content {
+            background-color: #0f1a1c;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius : 20px;
+            width: 60%; /* Set width to 60% */
+            height : 40%;
+            max-width: 600px; /* Limit maximum width to 600px */
+        }
+
+        /* The Close Button */
+        .close {
+          color: #aaaaaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+          color: #000;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        .new-subreddit-submit-btn {
+            background-color: #0045ac;
+            width: 120px; /* Adjust width as needed */
+            height: 40px; /* Adjust height as needed */
+            font-size: 16px; /* Adjust font size as needed */
+            text-align: center;
+            line-height: 40px; /* Center text vertically */
+            border: none;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+
+        .new-subreddit-name-input {
+            height: 30px;
+            color : white;
+            font-size : 25px;
+            border-radius : 20px;
+            border : 1px solid gray;
+            width : 100%;
+            background-color :#0f1a1c;
+            text-align : center;
+        }
+
+        .action-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: #fff;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        /* Update button style */
+        .update-button {
+            background-color: #007bff;
+        }
+
+        /* Delete button style */
+        .delete-button {
+            background-color: #dc3545;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="header">
+<!--    <img src="../static/Reddit-Emblem.png" alt="Logo Image" class="logo">-->
+    <img src="https://logos-world.net/wp-content/uploads/2020/10/Reddit-Emblem.png" alt="Logo Image" class="logo">
+    <h2>express it</h2>
+</div>
+
+
+<div class="content">
+    <div class="left-div">
+        <a href="/home"><button><i class="fas fa-home"></i> Home</button></a>
+        <a href="/popular"><button><i class="fas fa-fire"></i> Popular</button></a>
+        <a href="/all"><button><i class="fas fa-list"></i> All</button></a>
+
+        <!-- btn to create new community -->
+        <button id="myBtn">Create Community</button>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3 style="color:#81dcbc;text-align:center;">Create a Community</h3>
+                <p>Build and grow a community about something you care about. We'll help you set things up.</p>
+                <form id="newSubRedditForm" action="/r/newsubreddit" method="post" onsubmit="return validateSubRedditName()">
+                    <input type="text" id="newSubRedditName" name="newSubRedditName" placeholder="Subreddit Name" class="new-subreddit-name-input" minlength="3" maxlength="30" required><br><br>
+
+                    <span id="subredditNameError" style="color: red;"></span>
+                    <strong>Some Rules for making a new community</strong>
+                    <ul>
+                        <li>SubReddit Name must be unique</li>
+                        <li>SubReddit Name must should only have alphabets</li>
+                        <li>Name should give some idea on what subreddit is about</li>
+                        <li>To share explicit content kindly contact the admin</li>
+                        <li>You can add other specifications once you enter your subreddit</li>
+                    </ul>
+                    <button class="new-subreddit-submit-btn" type="submit">Submit</button><br><br>
+                </form>
+            </div>
+        </div>
+        <br><br>
+        <strong class="strong-text">Communities</strong>
+        <div th:each="subreddits : ${subRedditViewDto.allSubReddits}">
+            <a th:href="@{'/r/'+${subreddits}}" th:text="${subreddits}"></a>
+        </div>
+
+    </div>
+
+    <div class="right-div">
+        <img src="https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg" alt="Background Image" class="background-image">
+
+        <div class="sub-reddit-name">
+            <img src="https://media.istockphoto.com/id/1322220448/photo/abstract-digital-futuristic-eye.jpg?s=612x612&w=0&k=20&c=oAMmGJxyTTNW0XcttULhkp5IxfW9ZTaoVdVwI2KwK5s=" alt="Round Image" class="round-image">
+            <h2 th:text="${subRedditViewDto.subRedditName}"></h2>
+            <div class="buttons">
+                <a href="#" class="round-button create-button">
+                    <i class="fas fa-plus-circle"></i> Create
+                </a>
+                <a href="#" class="round-button bell-icon">
+                    <i class="fas fa-bell"></i>
+                </a>
+                <a href="#" class="round-button joined-button">Joined</a>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="innerLeftContainer">
+                <div class="subRedditPostContainer" th:each="post : ${subRedditViewDto.subRedditPostDtos}">
+                    <p>
+                        <span th:text="${post.opUser != null ? post.opUser.username : 'Devesh'}" class="user-style"></span>
+                        <span> - </span>
+                        <span th:text="${post.createdAt}" class="date-style"></span>
+                    </p>
+                    <h3 th:text="${post.title}"></h3>
+                    <div th:if="${post.body != null}">
+                        <p th:text="${post.body}" class="body-style"></p>
+                        <a href="#" class="read-more" style="text-decoration: none; color: inherit;">Read more...</a>
+                    </div>
+                    <div th:if="${post.mediaUri != null}">
+                        <img th:src="${post.mediaUri}" alt="Media" class="media-style">
+                    </div>
+                    <div class="vote-section">
+                        <a th:href="@{/vote/up}" class="vote-button"><i class="fas fa-arrow-up"></i></a>
+                        <span th:text="${post.voteCount}" class="vote-count"></span>
+                        <a th:href="@{/vote/down}" class="vote-button"><i class="fas fa-arrow-down"></i></a>
+                    </div>
+
+                    <div class="comment-section">
+                        <a th:href="@{'/r/' + ${subRedditViewDto.subRedditName}+'/comments/' + ${post.postId}}" class="comment-button">
+                            <span class="comment-symbol"><i class="far fa-comment"></i></span>
+                            <span th:text="${post.commentCount}" class="comment-count"></span>
+                        </a>
+                    </div>
+
+                    <div class="dropdown">
+                        <button onclick="toggleDropdown(this)" class="share-button">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                        <div id="dropdownContent" class="dropdown-content">
+                            <button onclick="copyUrl(this, 'localhost8081://subreddit/post/${post.postId}')">Copy URL</button>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+
+            <div class="subRedditDescriptionContainer">
+                <strong class="strong-text">SubReddit Description</strong>
+                <p th:text="${subRedditViewDto.subRedditDescription}"></p>
+                <strong class="strong-text">Subscribed Users: </strong><span th:text="${subRedditViewDto.subscribedUsers}"></span><br><br>
+                <strong class="strong-text">SubReddit Rules</strong>
+                <div class="subRedditRules">
+                    <ul>
+                        <li th:each="rule : ${subRedditViewDto.rules}" th:text="${rule}" class="rules"></li>
+                    </ul>
+                </div>
+
+                <form th:action="@{'/r/update/' + ${subRedditViewDto.subRedditName}}" method="GET">
+                    <input type="hidden" id="updateSubRedditName" name="subRedditName">
+                    <button type="submit" class="action-button update-button">Update SubReddit</button>
+                </form>
+                <br><br>
+                <form th:action="@{'/r/delete/' + ${subRedditViewDto.subRedditName}}" method="POST">
+                    <input type="hidden" id="deleteSubRedditName" name="subRedditName">
+                    <button type="submit" class="action-button delete-button">Delete SubReddit</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function toggleDropdown(button) {
+        var dropdownContent = button.nextElementSibling;
+        dropdownContent.style.display = dropdownContent.style.display === "block" ? "none" : "block";
+    }
+
+    function copyUrl(button, url) {
+        navigator.clipboard.writeText(url)
+            .then(function() {
+                console.log('URL copied successfully');
+                var dropdownContent = button.parentNode.getElementsByClassName("dropdown-content")[0];
+                dropdownContent.style.display = "none";
+            })
+            .catch(function(error) {
+                console.error('Error copying URL: ', error);
+            });
+    }
+
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementsByClassName("close")[0];
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    /*<![CDATA[*/
+    var previousSubRedditNames = /*[[${subRedditViewDto.previousSubRedditNames}]]*/ [];
+
+    function validateSubRedditName() {
+        var newSubRedditName = document.getElementById("newSubRedditName").value;
+
+        if (previousSubRedditNames.includes(newSubRedditName)) {
+            document.getElementById("subredditNameError").innerText = "Subreddit name already exists!";
+            return false; // Prevent form submission
+        }
+        return true; // Allow form submission
+    }
+    /*]]>*/
+
+</script>
+</body>
+</html>

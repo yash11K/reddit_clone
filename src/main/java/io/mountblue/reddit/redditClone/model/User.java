@@ -1,8 +1,7 @@
 package io.mountblue.reddit.redditClone.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,6 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "\"user\"")
 public class User {
     @Id
@@ -21,10 +24,11 @@ public class User {
     @Column(name = "password")
     private String password;
     @Column(name = "gender", updatable = false)
+    @Enumerated(EnumType.STRING)
     private GENDER gender;
     @Column(name = "email")
     private String email;
-    @Column(name = "joinDate")
+    @Column(name = "join_date")
     private LocalDateTime joinDate;
     @Column(name = "bio")
     private String bio;

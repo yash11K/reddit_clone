@@ -16,8 +16,9 @@ import java.util.List;
 public class UserDto {
     @NotEmpty(message = "username is required")
     private String username; //Cac be prePopulated with redditApi
-    @Min(value = 4, message = "more than 3 characters")
+//    @Min(value = 4, message = "more than 3 characters")
     private String password;
     private GENDER gender; //can be skipped
     private List<Topic> interests;
+    private String email;
 }

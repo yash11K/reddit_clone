@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update your SubReddit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #101214;
+            color: black;
+        }
+        .container {
+            width: 50%;
+            margin-top : 50px;
+            margin: 0 auto;
+            padding: 20px;
+<!--            text-align: center;-->
+            border : 2px gray;
+            border-radius: 20px;
+            background-color: white;
+        }
+        form {
+            margin-bottom: 10px;
+        }
+        form strong {
+            font-size: 18px;
+            color: black;
+        }
+        form input[type="file"], form textarea, form input[type="text"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: white;
+            color: black;
+        }
+        form button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        form button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .subRedditRules {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: none; /* Remove the border between rows */
+        }
+
+        .ruleText {
+            margin: 0;
+            color: black;
+        }
+
+        .deleteButton {
+            background-color: transparent !important;
+            border: none;
+            cursor: pointer;
+            padding: 0; /* Remove padding to make the button smaller */
+        }
+
+        .deleteButton i {
+            color: red;
+            font-size: 18px;
+        }
+
+        .deleteButton:hover i {
+            color: darkred;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 th:text="${subRedditName}"></h2><br>
+
+    <!-- Banner Form -->
+    <form action="/r/update/banner" th:object="${subRedditDto}" method="post">
+        <strong>Banner</strong><br>
+        <input type="hidden" name="subRedditName" th:value="${subRedditName}" />
+        <img th:if="${subRedditDto.banner != null}" th:src="data:image/png;base64,${subRedditDto.banner}" alt="Current Banner" /><br>
+        <input type="file" name="banner" /><br>
+        <button type="submit">Save Banner</button>
+    </form>
+
+    <!-- Avatar Form -->
+    <form action="/r/update/avatar" th:object="${subRedditDto}" method="post">
+        <strong>Avatar</strong><br>
+        <input type="hidden" name="subRedditName" th:value="${subRedditName}" />
+        <img th:if="${subRedditDto.avatar != null}" th:src="data:image/png;base64,${subRedditDto.avatar}" alt="Current Avatar" /><br>
+        <input type="file" name="avatar" /><br>
+        <button type="submit">Save Avatar</button>
+    </form>
+
+
+    <!-- Description Form -->
+    <form action="/r/update/description" th:object="${subRedditDto}" method="post">
+        <strong>Description</strong><br>
+        <input type="hidden" name="subRedditName" th:value="${subRedditName}" />
+        <textarea th:field="*{subRedditDescription}" rows="5"></textarea><br>
+        <button type="submit">Update Description</button>
+    </form>
+
+    <div class="subRedditRules">
+        <table>
+            <tbody>
+            <tr th:each="rule : ${subRedditDto.rules}">
+                <td>
+                    <p th:text="${rule}" class="ruleText"></p>
+                </td>
+                <td>
+                    <form th:action="@{/r/delete/rule}" method="post">
+                        <input type="hidden" name="rule" th:value="${rule}" />
+                        <input type="hidden" name="subRedditName" th:value="${subRedditName}" />
+                        <button type="submit" class="deleteButton"><i class="fas fa-times"></i></button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+    <!-- Rules Form -->
+    <form action="/r/update/rules" th:object="${ruleDto}" method="post">
+        <input type="hidden" name="subRedditName" th:value="${subRedditName}" />
+        <strong>Rules</strong><br>
+        <input type="text" th:field="*{rule}" placeholder="Enter new rule">
+        <button type="submit">Add Rules</button>
+    </form>
+</div>
+</body>
+</html>

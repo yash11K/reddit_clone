@@ -1,13 +1,17 @@
 package io.mountblue.reddit.redditClone.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "rule")
 public class Rule {
@@ -20,7 +24,8 @@ public class Rule {
     @Column(name = "created_at")
     private LocalDateTime created_at;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     @JoinColumn(name = "sub_reddit_id")
     private SubReddit subReddit;
 }

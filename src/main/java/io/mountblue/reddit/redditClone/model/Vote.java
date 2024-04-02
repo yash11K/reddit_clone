@@ -13,7 +13,7 @@ public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long voteId;
-    private VoteType voteType;
+    private VOTE_TYPE voteType;
 
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     @JoinColumn(name = "post_id")

@@ -1,5 +1,6 @@
 package io.mountblue.reddit.redditClone.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,9 +20,11 @@ public class Topic {
     private String name;
     private LocalDateTime createdAt;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "topics",cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     private List<Post> relatedPosts;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "topics",cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE})
     private List<User> users;
 }
