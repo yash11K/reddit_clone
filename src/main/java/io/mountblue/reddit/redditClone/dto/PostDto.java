@@ -18,12 +18,25 @@ public class PostDto {
     private String title;
     @Max(value = 4000, message = "post body cannot exceed 4000 characters")
     private String body;
-    private List<MultipartFile> media; //multiple media
-    private List<String> flair; //pre-populated dropdown
+    private List<String> flairs; //pre-populated dropdown
     private List<SubReddit> subRedditSubscribed; //for giving r/ options
     private List<String> topics;
     private boolean isCommentMediaAllowed;
     private boolean isPublished;
+
+    @Override
+    public String toString() {
+        return "PostDto{" +
+                "subRedditName='" + subRedditName + '\'' +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", flair=" + flairs +
+                ", subRedditSubscribed=" + subRedditSubscribed +
+                ", topics=" + topics +
+                ", isCommentMediaAllowed=" + isCommentMediaAllowed +
+                ", isPublished=" + isPublished +
+                '}';
+    }
 }
 
 // Body might be an <html> instead of String

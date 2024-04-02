@@ -7,6 +7,8 @@ import io.mountblue.reddit.redditClone.dto.SubRedditViewDto;
 import io.mountblue.reddit.redditClone.model.SubReddit;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
 
 public interface SubRedditService {
     SubRedditDto save(SubRedditDto subRedditDto, Principal principal);
@@ -28,4 +30,10 @@ public interface SubRedditService {
     String deleteFlair(Long flairId);
 
     SubRedditViewDto subRedditToSubRedditViewDto(SubReddit subReddit);
+
+    List<String> fetchAllSubRedditNames();
+
+    Optional<SubReddit> findSubRedditByName(String subRedditName);
+
+    List<SubReddit> findSubRedditsByMod(String opUsername);
 }

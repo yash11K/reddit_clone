@@ -5,6 +5,8 @@ import io.mountblue.reddit.redditClone.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TopicManager implements TopicService{
     TopicRepository topicRepository;
@@ -28,6 +30,16 @@ public class TopicManager implements TopicService{
     @Override
     public Topic findByName(String name) {
         return topicRepository.findByName(name);
+    }
+
+    @Override
+    public List<Topic> fetchAllTopics(){
+        return topicRepository.findAll();
+    }
+
+    @Override
+    public List<Topic> fetchSelectedTopic(List<String> topicNames){
+        return topicRepository.findByNameInOrderByName(topicNames);
     }
 
 }

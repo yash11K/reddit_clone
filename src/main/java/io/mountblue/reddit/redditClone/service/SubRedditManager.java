@@ -1,17 +1,15 @@
 package io.mountblue.reddit.redditClone.service;
 
 import io.mountblue.reddit.redditClone.dto.*;
-import io.mountblue.reddit.redditClone.model.Post;
-import io.mountblue.reddit.redditClone.repository.UserRepository;
+import io.mountblue.reddit.redditClone.exception.UserNotFound;
+import io.mountblue.reddit.redditClone.model.*;
 import io.mountblue.reddit.redditClone.exception.FlairNotFound;
 import io.mountblue.reddit.redditClone.exception.RuleNotFound;
 import io.mountblue.reddit.redditClone.exception.SubRedditNotFound;
-import io.mountblue.reddit.redditClone.model.Flair;
-import io.mountblue.reddit.redditClone.model.Rule;
-import io.mountblue.reddit.redditClone.model.SubReddit;
 import io.mountblue.reddit.redditClone.repository.FlairRepository;
 import io.mountblue.reddit.redditClone.repository.RuleRepository;
 import io.mountblue.reddit.redditClone.repository.SubRedditRepository;
+import io.mountblue.reddit.redditClone.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +18,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -28,6 +27,8 @@ public class SubRedditManager implements SubRedditService{
     private final SubRedditRepository subRedditRepository;
     private final FlairRepository flairRepository;
     private final RuleRepository ruleRepository;
+    private final UserRepository userRepository;
+
     @Override
     public SubRedditDto save(SubRedditDto subRedditDto, Principal principal) {
         subRedditRepository.save(
@@ -176,5 +177,29 @@ public class SubRedditManager implements SubRedditService{
         } else {
             return days + " days ago";
         }
+    }
+
+    @Override
+    public List<String> fetchAllSubRedditNames(){
+        List<String> allSubRedditNames = new ArrayList<>();
+        subRedditRepository.findAll().forEach(
+                subReddit -> {
+                    allSubRedditNames.add(subReddit.getSubRedditName());
+                }
+        );
+        return allSubRedditNames;
+    }
+
+    @Override
+    public Optional<SubReddit> findSubRedditByName(String subRedditName){
+        return subRedditRepository.findSubRedditBySubRedditName(subRedditName);
+    }
+
+    @Override
+    public List<SubReddit> findSubRedditsByMod(String opUsername){
+        User mod = userRepository.findByUsername(opUsername)
+                .orElseThrow(()->new UserNotFound("no username exists as : " + opUsername));
+
+        return subRedditRepository.findSubRedditByModUser(mod);
     }
 }

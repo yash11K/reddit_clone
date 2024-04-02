@@ -5,6 +5,8 @@ import io.mountblue.reddit.redditClone.dto.PostDto;
 import io.mountblue.reddit.redditClone.model.Post;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface PostService {
     Post savePostFromDto(PostDto postDto);
@@ -16,4 +18,8 @@ public interface PostService {
     String deletePostById(Long postId);
 
     Post saveFlairToPostFromDto(FlairDto flairDto, Long postId);
+
+    Post save(Post post);
+
+    List<Post> fetchAllPostByPublished(boolean isPublished);
 }

@@ -4,7 +4,6 @@ import io.mountblue.reddit.redditClone.dto.FlairDto;
 import io.mountblue.reddit.redditClone.dto.PostDto;
 import io.mountblue.reddit.redditClone.exception.FlairNotFound;
 import io.mountblue.reddit.redditClone.exception.PostNotFound;
-import io.mountblue.reddit.redditClone.model.Flair;
 import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.model.SubReddit;
 import io.mountblue.reddit.redditClone.model.Topic;
@@ -84,5 +83,15 @@ public class PostManager implements PostService{
         post.getFlairs().add(flairRepository.findFlairByFlairName(flairDto.getName())
                 .orElseThrow(()->new FlairNotFound("no flair with name: " + flairDto.getName())));
         return postRepository.save(post);
+    }
+
+    @Override
+    public Post save(Post post){
+        return postRepository.save(post);
+    }
+
+    @Override
+    public List<Post> fetchAllPostByPublished(boolean isPublished){
+        return postRepository.findPostsByIsPublished(isPublished);
     }
 }
