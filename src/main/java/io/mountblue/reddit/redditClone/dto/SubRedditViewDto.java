@@ -1,5 +1,6 @@
 package io.mountblue.reddit.redditClone.dto;
 
+import io.mountblue.reddit.redditClone.model.User;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +16,8 @@ public class SubRedditViewDto {
     private Long subRedditId;
     private String subRedditName;
     String subRedditDescription;
+    User opUser;
+    boolean isSubscribed;
     MultipartFile banner;
     MultipartFile avatar;
     List<String> rules;

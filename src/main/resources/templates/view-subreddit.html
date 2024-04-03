@@ -402,7 +402,14 @@
                 <a href="#" class="round-button bell-icon">
                     <i class="fas fa-bell"></i>
                 </a>
-                <a href="#" class="round-button joined-button">Joined</a>
+<!--                <a href="#" class="round-button joined-button">Joined</a>-->
+                <form th:action="@{'/r/updatejoinstatus' + ${subRedditViewDto.subRedditName}}" method="post">
+                    <button type="submit"
+                            class="round-button joined-button"
+                            th:text="${subRedditViewDto.isSubscribed ? 'Joined' : 'Join'}">
+                    </button>
+                </form>
+
             </div>
         </div>
 
@@ -440,7 +447,7 @@
                             <i class="fas fa-share"></i> Share
                         </button>
                         <div id="dropdownContent" class="dropdown-content">
-                            <button onclick="copyUrl(this, 'localhost8081://subreddit/post/${post.postId}')">Copy URL</button>
+                            <button onclick="copyUrl(this, '${post.shareLink}')">Copy URL</button>
                         </div>
                     </div>
                     <hr>
@@ -467,6 +474,20 @@
                     <input type="hidden" id="deleteSubRedditName" name="subRedditName">
                     <button type="submit" class="action-button delete-button">Delete SubReddit</button>
                 </form>
+
+                <!-- Code to show the update and delete button only to the subreddit owner -->
+
+<!--                <div th:if="${#authentication.name == subRedditViewDto.opUser.username}">-->
+<!--                    <form th:action="@{'/r/update/' + ${subRedditViewDto.subRedditName}}" method="GET">-->
+<!--                        <input type="hidden" id="updateSubRedditName" name="subRedditName">-->
+<!--                        <button type="submit" class="action-button update-button">Update SubReddit</button>-->
+<!--                    </form>-->
+<!--                    <br><br>-->
+<!--                    <form th:action="@{'/r/delete/' + ${subRedditViewDto.subRedditName}}" method="POST">-->
+<!--                        <input type="hidden" id="deleteSubRedditName" name="subRedditName">-->
+<!--                        <button type="submit" class="action-button delete-button">Delete SubReddit</button>-->
+<!--                    </form>-->
+<!--                </div>-->
 
             </div>
         </div>

@@ -25,9 +25,9 @@ public class SubRedditViewController {
     private final SubRedditService subRedditService;
 
     @GetMapping("/{subRedditName}")
-    public String viewSubReddit(@PathVariable String subRedditName, Model model) {
+    public String viewSubReddit(@PathVariable String subRedditName, Model model, Principal principal) {
         SubReddit subReddit = subRedditService.show(subRedditName);
-        SubRedditViewDto subRedditViewDto =  subRedditService.subRedditToSubRedditViewDto(subReddit);
+        SubRedditViewDto subRedditViewDto =  subRedditService.subRedditToSubRedditViewDto(subReddit, principal);
         model.addAttribute("subRedditViewDto", subRedditViewDto);
         return "view-subreddit";
     }
@@ -103,5 +103,13 @@ public class SubRedditViewController {
         Long ruleId = subRedditService.ruleId(subReddit, rule);
         subRedditService.deleteRule(ruleId);
         return "redirect:/r/update/" + subRedditName;
+    }
+
+    @PostMapping("/updatejoinstatus/{subRedditName}")
+    public String updateJoinStatus(@PathVariable String subRedditName, Principal principal) {
+        String username = principal.getName();
+        subRedditService.updateJoinStatus(subRedditName, username);
+
+        return "redirect:/r/" + subRedditName;
     }
 }
