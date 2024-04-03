@@ -5,10 +5,13 @@ import io.mountblue.reddit.redditClone.exception.CommentNotFound;
 import io.mountblue.reddit.redditClone.exception.PostNotFound;
 import io.mountblue.reddit.redditClone.model.Comment;
 import io.mountblue.reddit.redditClone.model.Post;
+import io.mountblue.reddit.redditClone.model.User;
 import io.mountblue.reddit.redditClone.repository.CommentRepository;
 import io.mountblue.reddit.redditClone.repository.PostRepository;
 import io.mountblue.reddit.redditClone.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -65,6 +68,10 @@ public class CommentManager implements CommentService{
     public void updateCommentByComment(Comment comment, String updatedComment) {
         comment.setUpdatedAt(LocalDateTime.now());
         comment.setComment(updatedComment);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String user = authentication.getName();
+        User currentLoggedInUser = userRepository.findByUsername(user).orElseThrow();
+        comment.setUser(currentLoggedInUser);
         commentRepository.save(comment);
     }
 
@@ -79,13 +86,15 @@ public class CommentManager implements CommentService{
                     () -> new CommentNotFound("Comment not found for parent id: " + commentDto.getParentCommentId().get())
             );
         }
-
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String user = authentication.getName();
+        User currentLoggedInUser = userRepository.findByUsername(user).orElseThrow();
         return Comment.builder()
                 .comment(commentBody)
                 .createdAt(LocalDateTime.now())
                 .parentComment(parentComment)
                 .post(post)
-//                .user()
+                .user(currentLoggedInUser)
 //                .votes()
 //                .mediaUri()
                 .build();

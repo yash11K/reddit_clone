@@ -206,22 +206,23 @@
                                         <div>
                                             <div class="comment-actions">
                                                 <div th:unless="${editCommentId==comment.commentId}" class="comment-content">
+                                                    <strong><p th:text="${comment.user.username}"></p></strong>
                                                     <p th:text="${comment.comment}" class="comment-text"></p>
                                                 </div>
-                                                <!--                            <div th:if="${#authorization.expression('isAuthenticated()')}">-->
-                                                <!--                                <div th:if="${#authentication.principal.username == comment.author.username}" class="comment-actions-buttons">-->
-                                                <div class="actions">
-                                                    <form th:action="@{'/r/delete/comment/' + ${postId}}" method="post">
-                                                        <input type="hidden" name="deleteCommentId" th:value="${comment.commentId}">
-                                                        <input type="submit" value="delete" name="deleteComment" class="comment-delete-button">
-                                                    </form>
-                                                    <form th:unless="${editCommentId==comment.commentId}" th:action="@{'/r/edit/comment/' + ${postId}}">
-                                                        <input type="hidden" name="editCommentId" th:value="${comment.commentId}">
-                                                        <input type="submit" value="update" class="comment-update-button">
-                                                    </form>
+                                                <div th:if="${#authorization.expression('isAuthenticated()')}">
+                                                    <div th:if="${#authentication.principal.username.equals(comment.user.username)}" class="comment-actions-buttons">
+                                                        <div class="actions">
+                                                            <form th:action="@{'/r/delete/comment/' + ${postId}}" method="post">
+                                                                <input type="hidden" name="deleteCommentId" th:value="${comment.commentId}">
+                                                                <input type="submit" value="delete" name="deleteComment" class="comment-delete-button">
+                                                            </form>
+                                                            <form th:unless="${editCommentId==comment.commentId}" th:action="@{'/r/edit/comment/' + ${postId}}">
+                                                                <input type="hidden" name="editCommentId" th:value="${comment.commentId}">
+                                                                <input type="submit" value="update" class="comment-update-button">
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <!--                                </div>-->
-                                                <!--                            </div>-->
                                             </div>
                                         </div>
                                     </div>
