@@ -52,13 +52,13 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form->
-                        form.loginPage("/customlogin")
+                        form.loginPage("/login-page")
                                 .loginProcessingUrl("/authenticateTheUser").permitAll()
                                 .successHandler(authenticationSuccessHandler)
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login
-                                .loginPage("/customlogin")
+                                .loginPage("/login-page")
                                 .permitAll()
                 )
                 .logout(LogoutConfigurer::permitAll)

@@ -1,14 +1,11 @@
 package io.mountblue.reddit.redditClone.controller;
 
-import io.mountblue.reddit.redditClone.dto.FlairDto;
-import io.mountblue.reddit.redditClone.dto.RuleDto;
-import io.mountblue.reddit.redditClone.dto.SubRedditDto;
-import io.mountblue.reddit.redditClone.dto.SubRedditViewDto;
-import io.mountblue.reddit.redditClone.model.Flair;
+import io.mountblue.reddit.redditClone.dto.*;
+import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.model.Rule;
 import io.mountblue.reddit.redditClone.model.SubReddit;
-import io.mountblue.reddit.redditClone.service.MediaService;
-import io.mountblue.reddit.redditClone.service.SubRedditService;
+import io.mountblue.reddit.redditClone.model.User;
+import io.mountblue.reddit.redditClone.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,9 +23,19 @@ public class SubRedditViewController {
 
     private final SubRedditService subRedditService;
     private final MediaService mediaService;
+    private final UserService userService;
+    private final PostService postService;
+    private final CommentService commentService;
+    private final VoteService voteService;
 
     @GetMapping("/{subRedditName}")
     public String viewSubReddit(@PathVariable String subRedditName, Model model, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        UserDto userDto = UserDto.builder().username(user.getUsername()).mediaUri("/beanheads/"+user.getProfilePic())
+                .karma(postService.getPostCountByUser(user) + commentService.getUserCommentCount(user))
+                .joined(user.getJoinDate())
+                .build();
+        model.addAttribute("userDto", userDto);
         SubReddit subReddit = subRedditService.show(subRedditName);
         SubRedditViewDto subRedditViewDto =  subRedditService.subRedditToSubRedditViewDto(subReddit, principal);
         model.addAttribute("subRedditViewDto", subRedditViewDto);
@@ -79,7 +86,7 @@ public class SubRedditViewController {
     public String updateAvatar(@ModelAttribute("subRedditDto") SubRedditDto subRedditDto, @RequestPart(name = "media") MultipartFile media) {
         String uri = mediaService.uploadMediaToBucket(media, subRedditDto.getSubRedditName());
         SubReddit subReddit = subRedditService.findSubRedditByName(subRedditDto.getSubRedditName()).orElseThrow();
-        subReddit.setBanner(uri);
+        subReddit.setAvatar(uri);
         subRedditService.saveDirectSubReddit(subReddit);
         return "redirect:/r/" + subRedditDto.getSubRedditName(); // Redirect to homepage or appropriate page
     }
@@ -119,6 +126,21 @@ public class SubRedditViewController {
         String username = principal.getName();
         subRedditService.updateJoinStatus(subRedditName, username);
 
+        return "redirect:/r/" + subRedditName;
+    }
+    @PostMapping("/voting")
+    public String voting(
+            @RequestParam(name = "postId") Long postId,
+            @RequestParam(name = "votetype") String voteType,
+            Model model
+    ) {
+        Post post = postService.fetchPostById(postId);
+        voteService.votes(post, voteType);
+        FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
+        String subRedditName = post.getSubReddit().getSubRedditName();
+        Long voteCounts = post.getVoteCount();
+        model.addAttribute("fullPostViewDto", fullPostViewDto);
+        model.addAttribute("votesCount", voteCounts);
         return "redirect:/r/" + subRedditName;
     }
 }

@@ -6,10 +6,7 @@ import io.mountblue.reddit.redditClone.model.*;
 import io.mountblue.reddit.redditClone.exception.FlairNotFound;
 import io.mountblue.reddit.redditClone.exception.RuleNotFound;
 import io.mountblue.reddit.redditClone.exception.SubRedditNotFound;
-import io.mountblue.reddit.redditClone.repository.FlairRepository;
-import io.mountblue.reddit.redditClone.repository.RuleRepository;
-import io.mountblue.reddit.redditClone.repository.SubRedditRepository;
-import io.mountblue.reddit.redditClone.repository.UserRepository;
+import io.mountblue.reddit.redditClone.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +26,7 @@ public class SubRedditManager implements SubRedditService{
     private final FlairRepository flairRepository;
     private final RuleRepository ruleRepository;
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
     @Override
     public SubRedditDto save(SubRedditDto subRedditDto, Principal principal) {
@@ -139,10 +137,9 @@ public class SubRedditManager implements SubRedditService{
         for(Rule stringRule : rule) {
             rules.add(stringRule.getRule());
         }
-        List<Post> subRedditPosts = subReddit.getPosts();
+        List<Post> subRedditPosts =  postRepository.findPostsBySubRedditOrderByCreatedAtDesc(subReddit);
         List<SubRedditPostDto> subRedditPostDtos = new ArrayList<>();
         for(Post post : subRedditPosts) {
-            Long votes = (long) post.getVotes().size();
 
             String paragraph = post.getBody();
             String[] words = paragraph.split("\\s+");
@@ -158,7 +155,7 @@ public class SubRedditManager implements SubRedditService{
                     .title(post.getTitle())
                     .opUser(post.getOpUser())
                     .postId(post.getPostId())
-                    .voteCount(votes)
+                    .voteCount(post.getVoteCount())
                     .commentCount(comments)
                     .createdAt(createdAt)
                     .shareLink(shareLink)

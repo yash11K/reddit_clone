@@ -99,7 +99,7 @@ public class PostManager implements PostService{
 
     @Override
     public List<Post> fetchAllPostByPublished(boolean isPublished){
-        return postRepository.findPostsByIsPublishedOrderByCreatedAt(isPublished);
+        return postRepository.findPostsByIsPublishedOrderByCreatedAtDesc(isPublished);
     }
 
     public FullPostViewDto postToFullViewPostDto(Post post) {
@@ -127,5 +127,10 @@ public class PostManager implements PostService{
     @Override
     public int getPostCountByUser(User user){
         return postRepository.countByOpUser(user);
+    }
+
+    @Override
+    public List<Post> getPostBySubReddit(SubReddit subReddit){
+        return postRepository.findPostsBySubRedditOrderByCreatedAtDesc(subReddit);
     }
 }

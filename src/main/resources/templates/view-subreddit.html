@@ -6,7 +6,8 @@
     <style>
         /* Style for the fixed header */
         body{
-            color : gray;
+            color : black; /* Change text color to black */
+            background-color: white; /* Change background color to white */
         }
         .header {
             position: fixed;
@@ -15,8 +16,8 @@
             width: 100%;
             border : 1px solid gray;
             height: 50px; /* Adjust height as needed */
-            background-color: #0b1416; /* Default background color */
-            color: white;
+            background-color: #e9ecef; /* Default background color */
+            color: black;
             padding: 10px;
             display: flex; /* Use flexbox to align items */
             align-items: center; /* Center items vertically */
@@ -38,7 +39,7 @@
         /* Style for the left div */
         .left-div {
             flex: 0 0 12%; /* Flexbox shorthand for flex-grow, flex-shrink, and flex-basis */
-            background-color: #0b1416;
+            background-color: #e9ecef; /* Change background color to light gray */
             padding: 20px;
             position: relative;
             border : 1px solid gray;
@@ -46,14 +47,12 @@
             margin-top : 20px;
             overflow: hidden;
             z-index: 1; /* Ensure left div is above header */
-<!--            border-radius: 10px; /* Rounded corners */-->
-<!--            border: 1px solid #ddd; /* Lighter border color */-->
         }
 
         /* Style for the buttons */
         .left-div a {
             display: block;
-            color: white;
+            color: black; /* Change button text color to black */
             text-decoration: none;
             padding: 10px 0;
             transition: background-color 0.3s;
@@ -61,20 +60,17 @@
         }
 
         .left-div a:hover {
-            background-color: #ddd;
+            background-color: #ddd; /* Lighten background color on hover */
         }
 
         /* Style for the right div */
         .right-div {
             flex: 1; /* Take up remaining space */
-            background-color: #101214; /* ChatGPT background color */
+            background-color: #f8f9fa; /* Change background color to off-white */
             padding: 1% 15% 1% 15%;
             margin-top : 21px;
-            color : white;
+            color : black;
             margin-right : -15px;
-<!--            border-radius: 10px; /* Rounded corners */-->
-            border : 1px solid gray;
-<!--            border: 1px solid #ddd; /* Lighter border color */-->
         }
 
         .user-style {
@@ -238,7 +234,7 @@
         }
 
         .subRedditDescriptionContainer{
-        background-color : #070809;
+            background-color : #ffffff; /* Change background color to white */
             flex: 30%; /* Take up 30% of the width */
         }
 
@@ -253,24 +249,22 @@
 
         /* The Modal (background) */
         .modal {
-          display: none; /* Hidden by default */
-          position: fixed; /* Stay in place */
-          z-index: 1; /* Sit on top */
-          padding-top: 100px; /* Location of the box */
-          left: 0;
-          top: 0;
-          color : white;
-          width: 100%; /* Full width */
-          height: 100%; /* Full height */
-          overflow: auto; /* Enable scroll if needed */
-          background-color : #0f1a1c;
-          background-color: rgba(15, 26, 28, 0.4); /* Black w/ opacity */
-<!--          background-color: rgb(0,0,0); /* Fallback color */-->
-<!--          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */-->
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            color : white;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color : #ffffff; /* Change background color to white */
+            background-color: rgba(255, 255, 255, 0.4); /* White w/ opacity */
         }
 
         .modal-content {
-            background-color: #0f1a1c;
+            background-color: #ffffff; /* Change background color to white */
             margin: auto;
             padding: 20px;
             border: 1px solid #888;
@@ -282,17 +276,17 @@
 
         /* The Close Button */
         .close {
-          color: #aaaaaa;
-          float: right;
-          font-size: 28px;
-          font-weight: bold;
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
         }
 
         .close:hover,
         .close:focus {
-          color: #000;
-          text-decoration: none;
-          cursor: pointer;
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         .new-subreddit-submit-btn {
@@ -312,12 +306,12 @@
 
         .new-subreddit-name-input {
             height: 30px;
-            color : white;
+            color : black;
             font-size : 25px;
             border-radius : 20px;
             border : 1px solid gray;
             width : 100%;
-            background-color :#0f1a1c;
+            background-color :#ffffff; /* Change background color to white */
             text-align : center;
         }
 
@@ -341,7 +335,6 @@
         .delete-button {
             background-color: #dc3545;
         }
-
     </style>
 </head>
 <body>
@@ -394,7 +387,7 @@
         <img th:src="@{'/feed/image/' + ${subRedditViewDto.getBanner()}}" class="background-image" alt="set banner">
 
         <div class="sub-reddit-name">
-            <img src="https://media.istockphoto.com/id/1322220448/photo/abstract-digital-futuristic-eye.jpg?s=612x612&w=0&k=20&c=oAMmGJxyTTNW0XcttULhkp5IxfW9ZTaoVdVwI2KwK5s=" alt="Round Image" class="round-image">
+            <img th:src="@{'/feed/image/' + ${subRedditViewDto.getAvatar()}}" alt="Round Image" class="round-image">
             <h2 th:text="${subRedditViewDto.subRedditName}"></h2>
             <div class="buttons">
                 <a href="#" class="round-button create-button">
@@ -404,13 +397,12 @@
                     <i class="fas fa-bell"></i>
                 </a>
 <!--                <a href="#" class="round-button joined-button">Joined</a>-->
-                <form th:action="@{'/r/updatejoinstatus' + ${subRedditViewDto.subRedditName}}" method="post">
+                <form th:action="@{'/r/updatejoinstatus/' + ${subRedditViewDto.subRedditName}}" method="post">
                     <button type="submit"
                             class="round-button joined-button"
                             th:text="${subRedditViewDto.isSubscribed ? 'Joined' : 'Join'}">
                     </button>
                 </form>
-
             </div>
         </div>
 
@@ -425,19 +417,29 @@
                     <h3 th:text="${post.title}"></h3>
                     <div th:if="${post.body != null}">
                         <p th:text="${post.body}" class="body-style"></p>
-                        <a href="#" class="read-more" style="text-decoration: none; color: inherit;">Read more...</a>
+                        <a th:href="@{'/r/'+${subRedditViewDto.subRedditName}+'/comments/'+${post.postId}}" class="read-more" style="text-decoration: none; color: inherit;">Read more...</a>
                     </div>
                     <div th:if="${post.mediaUri != null}">
                         <img th:src="${post.mediaUri}" alt="Media" class="media-style">
                     </div>
                     <div class="vote-section">
-                        <a th:href="@{/vote/up}" class="vote-button"><i class="fas fa-arrow-up"></i></a>
-                        <span th:text="${post.voteCount}" class="vote-count"></span>
-                        <a th:href="@{/vote/down}" class="vote-button"><i class="fas fa-arrow-down"></i></a>
+                        <div class="post-actions">
+                            <form th:action="@{/r/voting}" method="post" class="vote-btn">
+                                <input type="hidden" name="votetype" th:value="UPVOTE">
+                                <input type="hidden" name="postId" th:value="${post.postId}">
+                                <button type="submit"><i class="fas fa-arrow-up"></i></button>
+                            </form>
+                            <p id="voteCount" th:text="${post.voteCount}"/>
+                            <form th:action="@{/r/voting}" method="post" class="vote-btn">
+                                <input type="hidden" name="votetype" th:value="DOWNVOTE">
+                                <input type="hidden" name="postId" th:value="${post.postId}">
+                                <button><i class="fas fa-arrow-down"></i></button>
+                            </form>
+                        </div>
                     </div>
 
                     <div class="comment-section">
-                        <a th:href="@{'/r/' + ${subRedditViewDto.subRedditName}+'/comments/' + ${post.postId}}" class="comment-button">
+                        <a th:href="@{'/r/'+${subRedditViewDto.subRedditName}+'/comments/'+${post.postId}}" class="comment-button">
                             <span class="comment-symbol"><i class="far fa-comment"></i></span>
                             <span th:text="${post.commentCount}" class="comment-count"></span>
                         </a>

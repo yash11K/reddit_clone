@@ -177,7 +177,7 @@
                                             <button type="submit"><i class="fas fa-arrow-up"></i></button>
                                         </form>
                                         <p id="voteCount" th:text="${postCard.voteCount}"/>
-                                        <form th:action="@{/voting}" method="post" class="vote-btn">
+                                        <form th:action="@{/feed/voting}" method="post" class="vote-btn">
                                             <input type="hidden" name="votetype" th:value="DOWNVOTE">
                                             <input type="hidden" name="postId" th:value="${postCard.id}">
                                             <button><i class="fas fa-arrow-down"></i></button>

@@ -1,6 +1,7 @@
 package io.mountblue.reddit.redditClone.repository;
 
 import io.mountblue.reddit.redditClone.model.Flair;
+import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.model.SubReddit;
 import io.mountblue.reddit.redditClone.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
