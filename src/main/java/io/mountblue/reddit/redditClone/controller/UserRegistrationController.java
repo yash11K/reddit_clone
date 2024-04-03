@@ -1,8 +1,10 @@
 package io.mountblue.reddit.redditClone.controller;
 
 import io.mountblue.reddit.redditClone.dto.UserDto;
+import io.mountblue.reddit.redditClone.model.Role;
 import io.mountblue.reddit.redditClone.model.Topic;
 import io.mountblue.reddit.redditClone.model.User;
+import io.mountblue.reddit.redditClone.service.RoleService;
 import io.mountblue.reddit.redditClone.service.TopicService;
 import io.mountblue.reddit.redditClone.service.UserService;
 import jakarta.validation.Valid;
@@ -27,6 +29,7 @@ public class UserRegistrationController {
 
     private final UserService userService;
     private final TopicService topicService;
+    private final RoleService roleService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
@@ -71,6 +74,16 @@ public class UserRegistrationController {
         int randomNumber = random.nextInt(29) + 1;
         userDto.setInterests(interests);
         User user = userService.mapDtoToEntity(userDto);
+        Role role = roleService.findRoleById(1L);
+        System.out.println(role);
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        System.out.println(users);
+        List<Role> roles = new ArrayList<>();
+        roles.add(role);
+        System.out.println(roles);
+        user.setRoles(roles);
+        roleService.save(role);
         user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         user.setProfilePic("beanhead-"+randomNumber+".svg");
         userService.createUser(user);
