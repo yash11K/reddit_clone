@@ -50,8 +50,8 @@
 
 <!-------------------------------NAvigation Starts------------------>
 
-<nav class="navbar navbar-expand-md navbar-dark mb-4" style="background-color:#252525">
-    <a href="feed-all.html" class="navbar-brand"><img src="/redditlogo/reddit-seeklogo.svg" alt="logo" class="img-fluid" width="60px"
+<nav class="navbar navbar-expand-md navbar-dark mb-4" style="background-color:black">
+    <a href="feed-all.html" class="navbar-brand"><img src="/redditlogo/lol.png" alt="logo" class="img-fluid" width="60px"
                                                    height="80px"> <span style="padding-left:15px; font-size: 25px">Reddit</span></a>
     <button class="navbar-toggler" data-toggle="collapse" data-target="#responsive"><span
             class="navbar-toggler-icon"></span></button>
@@ -63,7 +63,10 @@
             <input type="text" name="search" id="search" placeholder="Search" class="form-control form-control-sm">
             <input type="submit" value="search" class="search-button">
         </form>
-        <img src="/beanheads/beanhead-2.svg" alt="" class="rounded-circle ml-3 d-none d-md-block" width="70px" height="70px">
+        <a th:href="@{'/u/' + ${userDto.username}}">
+            <img th:src="${userDto.getMediaUri()}" alt="" class="rounded-circle ml-3 d-none d-md-block" width="70px" height="70px">
+        </a>
+
     </div>
 </nav>
 
@@ -89,14 +92,15 @@
             <div class="left-column">
                 <div class="card card-left1 mb-4">
                     <div class="card-body text-center ">
-                        <img src="/beanheads/beanhead-2.svg" alt="img" width="120px" height="120px"
+                        <img th:src="${userDto.getMediaUri()}" alt="img" width="120px" height="120px"
                              class="rounded-circle mt-n5">
-                        <h5 class="card-title">u/October22</h5>
+                        <h5 class="card-title" th:text="'u/'+${userDto.username}"></h5>
                         <p class="card-text text-justify mb-2"></p>
                         <ul class="list-unstyled nav justify-content-center">
                             <p href="#" class="text-dark text-decoration-none">
-                                <li class="nav-item">joined : 12th september 1972<br>
-                                    <strong>karma : 12</strong>
+                                <li class="nav-item"><br>
+                            <p href="#" class="text-dark text-decoration-none" th:text="'joined on '+${userDto.joined.getMonth()}+' ' + ${userDto.joined.getYear()}"></p>
+                                    <strong th:text="'karma: '+${userDto.karma}"></strong>
                                 </li>
                             </p>
 <!--                            <a href="#" class="text-dark text-decoration-none">-->
@@ -135,41 +139,54 @@
             <div class="middle-column">
                 <div class="card">
                     <div class="card-header bg-transparent">
-                        <form class="form-inline">
-                            <div class="input-group w-100">
-                                <input type="text" name="message" id="message" placeholder="Message"
-                                       class="form-control form-control-md">
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-camera"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+<!--                        <form class="form-inline">-->
+<!--                            <div class="input-group w-100">-->
+<!--                                <input type="text" name="message" id="message" placeholder="Message"-->
+<!--                                       class="form-control form-control-md">-->
+<!--                                <div class="input-group-append">-->
+<!--                                    <div class="input-group-text">-->
+<!--                                        <i class="fas fa-camera"></i>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                        </form>-->
                     </div>
 
                     <div class="card-body" th:each="postCard : ${postCards}">
                         <div class="media">
-                            <img src="/beanheads/beanhead-19.svg" alt="img" width="55px" height="55px" class="rounded-circle mr-3">
+                            <img th:src="'/beanheads/'+${postCard.getOp().getProfilePic()}" alt="img" width="55px" height="55px" class="rounded-circle mr-3">
                             <div class="media-body">
                                 <div class="post-card">
-                                    <h5 th:text="'r/'+${postCard.subRedditName}"></h5>
-                                    <h4 th:text="${postCard.title}"></h4>
-                                    <small th:text="${postCard.createdAt}"></small>
-                                    <p class="card-text text-justify" th:text="*{postCard.body}"></p>
-                                    <div class="image-container">
-                                        <img th:src="${postCard.getMedia()}"  alt="Image"/>
-                                    </div>
-                                    <div class="row no-gutters mb-3"></div>
+                                    <a th:href="'/r/' + ${postCard.getSubRedditName()} + '/comments/' + ${postCard.getId()}" style="text-decoration: none; color: black">
+                                        <h5 th:text="'r/'+${postCard.subRedditName}" ></h5>
+                                        <h4 th:text="${postCard.title}"></h4>
+                                        <small th:text="${postCard.createdAt}"></small>
+                                        <p class="card-text text-justify" th:text="*{postCard.body}"></p>
+                                        <div class="image-container" th:if="${postCard.media != null}">
+                                            <img th:src="${'/feed/image/'+postCard.getMedia()}"  alt="Image"/>
+                                        </div>
+                                        <div class="row no-gutters mb-3"></div>
+                                    </a>
                                 </div>
                                 <div class="row no-gutters mb-3">
-                                    <button th:onclick="votePost([[${postCard.postId}]], 'UPVOTE')" th:classappend="${postCard.userVote == 'UPVOTE' ? 'voted' : ''}">
-                                        <i class="fas fa-arrow-up"></i>
-                                    </button>
-                                    <span th:text="${postCard.voteCount}">0</span>
-                                    <button th:onclick="votePost([[${postCard.postId}]], 'DOWNVOTE')" th:classappend="${postCard.userVote == 'DOWNVOTE' ? 'voted' : ''}">
-                                        <i class="fas fa-arrow-down"></i>
-                                    </button>
+                                    <div class="post-actions">
+                                        <form th:action="@{/feed/voting}" method="post" class="vote-btn">
+                                            <input type="hidden" name="votetype" th:value="UPVOTE">
+                                            <input type="hidden" name="postId" th:value="${postCard.id}">
+                                            <button type="submit"><i class="fas fa-arrow-up"></i></button>
+                                        </form>
+                                        <p id="voteCount" th:text="${postCard.voteCount}"/>
+                                        <form th:action="@{/voting}" method="post" class="vote-btn">
+                                            <input type="hidden" name="votetype" th:value="DOWNVOTE">
+                                            <input type="hidden" name="postId" th:value="${postCard.id}">
+                                            <button><i class="fas fa-arrow-down"></i></button>
+                                        </form>
+                                        <button>
+                                            <i class="fas fa-comment"></i>
+                                            <span th:text="${postCard.commentCount}"></span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

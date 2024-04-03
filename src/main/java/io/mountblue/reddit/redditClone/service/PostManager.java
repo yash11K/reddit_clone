@@ -99,7 +99,7 @@ public class PostManager implements PostService{
 
     @Override
     public List<Post> fetchAllPostByPublished(boolean isPublished){
-        return postRepository.findPostsByIsPublished(isPublished);
+        return postRepository.findPostsByIsPublishedOrderByCreatedAt(isPublished);
     }
 
     public FullPostViewDto postToFullViewPostDto(Post post) {
@@ -114,7 +114,7 @@ public class PostManager implements PostService{
                 .body(post.getBody())
                 .post(post)
                 .CommentCount((long) post.getComments().size())
-//                .mediaUri(post.getMediaUri())
+                .mediaUri(post.getOpUser().getProfilePic())
                 .comments(post.getComments())
                 .build();
     }
@@ -122,5 +122,10 @@ public class PostManager implements PostService{
     @Override
     public List<Comment> findAllCommentsByPostId(Long postId) {
         return postRepository.findAllCommentsByPostId(postId);
+    }
+
+    @Override
+    public int getPostCountByUser(User user){
+        return postRepository.countByOpUser(user);
     }
 }

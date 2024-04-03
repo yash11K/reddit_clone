@@ -15,8 +15,8 @@ public class SubRedditViewDto {
     private Long subRedditId;
     private String subRedditName;
     String subRedditDescription;
-    MultipartFile banner;
-    MultipartFile avatar;
+    String banner;
+    String avatar;
     List<String> rules;
     List<String> allSubReddits;
     List <String> previousSubRedditNames;

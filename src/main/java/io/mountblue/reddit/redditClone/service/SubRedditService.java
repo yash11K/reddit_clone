@@ -40,4 +40,6 @@ public interface SubRedditService {
     List<String> previousSubRedditNames();
 
     Long ruleId(SubReddit subReddit, String rule);
+
+    void saveDirectSubReddit(SubReddit subReddit);
 }

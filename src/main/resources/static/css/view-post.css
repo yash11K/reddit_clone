@@ -181,3 +181,7 @@ body{
 .post-actions {
     display: flex;
 }
+
+.vote-btn{
+    display: flex;
+}

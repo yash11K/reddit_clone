@@ -182,6 +182,8 @@ public class SubRedditManager implements SubRedditService{
                     .subRedditPostDtos(subRedditPostDtos)
                     .subscribedUsers(subscriberUsers)
                     .allSubReddits(allSubRedditNames)
+                    .banner(subReddit.getBanner())
+                    .avatar(subReddit.getAvatar())
                     .build();
     }
 
@@ -228,5 +230,11 @@ public class SubRedditManager implements SubRedditService{
     public Long ruleId(SubReddit subReddit, String rule) {
         Rule selectedRule = ruleRepository.findRuleBySubRedditAndRule(subReddit, rule);
         return selectedRule.getRuleId();
+    }
+
+    @Override
+    public void saveDirectSubReddit(SubReddit subReddit){
+        subReddit.setUpdatedAt(LocalDateTime.now());
+        subRedditRepository.save(subReddit);
     }
 }

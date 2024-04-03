@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,9 +66,8 @@ public class UserViewController {
 
     }
     @GetMapping("/u/{userId}/edit")
-    public String showEditProfilePage(@PathVariable Long userId, Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String loggedInUsername = authentication.getName();
+    public String showEditProfilePage(@PathVariable Long userId, Model model, Principal principal) {
+        String loggedInUsername = userService.findByUsername(principal.getName()).getUsername() ;
         if (!userService.getUserById(userId).getUsername().equals(loggedInUsername)) {
             return "access-denied";
         }
@@ -77,10 +77,9 @@ public class UserViewController {
     }
 
     @PostMapping("/u/{userId}/edit")
-    public String editProfile(@PathVariable Long userId, @ModelAttribute User user) {
-        User user1=userService.findByUsername("October22");
+    public String editProfile(@PathVariable Long userId, @ModelAttribute User user, Principal principal) {
+        User user1=userService.findByUsername(principal.getName());
         userService.updateUser(user);
-        System.out.println(user.getUsername());
         return "redirect:/u/" + user1.getUsername(); //slight error check
     }
 

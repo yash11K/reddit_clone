@@ -5,6 +5,7 @@ import io.mountblue.reddit.redditClone.exception.CommentNotFound;
 import io.mountblue.reddit.redditClone.exception.PostNotFound;
 import io.mountblue.reddit.redditClone.model.Comment;
 import io.mountblue.reddit.redditClone.model.Post;
+import io.mountblue.reddit.redditClone.model.User;
 import io.mountblue.reddit.redditClone.repository.CommentRepository;
 import io.mountblue.reddit.redditClone.repository.PostRepository;
 import io.mountblue.reddit.redditClone.repository.UserRepository;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -99,5 +99,10 @@ public class CommentManager implements CommentService{
     @Override
     public int getCommentCount(Post post){
         return commentRepository.countCommentByPost(post);
+    }
+
+    @Override
+    public int getUserCommentCount(User user){
+        return commentRepository.countByUser(user);
     }
 }

@@ -1,11 +1,10 @@
 package io.mountblue.reddit.redditClone.controller;
 
+import io.mountblue.reddit.redditClone.dto.FullPostViewDto;
 import io.mountblue.reddit.redditClone.dto.PostCardDto;
-import io.mountblue.reddit.redditClone.dto.VoteRequest;
-import io.mountblue.reddit.redditClone.dto.VoteResponse;
+import io.mountblue.reddit.redditClone.dto.UserDto;
 import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.model.User;
-import io.mountblue.reddit.redditClone.model.Vote;
 import io.mountblue.reddit.redditClone.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -34,22 +33,30 @@ public class FeedViewController {
     MediaService mediaService;
 
     @GetMapping("/all")
-    public String viewAllPostFeed(Model model){
+    public String viewAllPostFeed(Model model, Principal principal){
         List<PostCardDto> postCardDtos =  postService.fetchAllPostByPublished(true).
                 stream().map(
                         post ->
                         PostCardDto.builder()
+                                .id(post.getPostId())
+                                .op(post.getOpUser())
                                 .postId(post.getPostId())
                                 .subRedditName(post.getSubReddit().getSubRedditName())
                                 .title(post.getTitle())
                                 .body(post.getBody())
                                 .flairs(post.getFlairs())
-                                .media("/feed/image/" + post.getMediaUri())
+                                .media(post.getMediaUri())
                                 .commentCount(commentService.getCommentCount(post))
-//                                .voteCount()
+                                .voteCount(post.getVoteCount())
                                 .createdAt(SubRedditManager.calculateTimeAgo(post.getCreatedAt()))
                                 .build()
                 ).toList();
+        User user = userService.findByUsername(principal.getName());
+        UserDto userDto = UserDto.builder().username(user.getUsername()).mediaUri("/beanheads/"+user.getProfilePic())
+                .karma(postService.getPostCountByUser(user) + commentService.getUserCommentCount(user))
+                .joined(user.getJoinDate())
+                .build();
+        model.addAttribute("userDto", userDto);
         model.addAttribute("postCards", postCardDtos);
         model.addAttribute("subReddits", subRedditService.fetchAllSubRedditNames());
         model.addAttribute("modSubReddits", subRedditService.findSubRedditsByMod("October22"));
@@ -68,4 +75,19 @@ public class FeedViewController {
                 .body(resource);
     }
 
+    @PostMapping("/voting")
+    public String voting(
+            @RequestParam(name = "postId") Long postId,
+            @RequestParam(name = "votetype") String voteType,
+            Model model
+    ) {
+        Post post = postService.fetchPostById(postId);
+        voteService.votes(post, voteType);
+        FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
+        String subRedditName = post.getSubReddit().getSubRedditName();
+        Long voteCounts = post.getVoteCount();
+        model.addAttribute("fullPostViewDto", fullPostViewDto);
+        model.addAttribute("votesCount", voteCounts);
+        return "redirect:/feed/all";
+    }
 }
