@@ -29,7 +29,7 @@ public interface SubRedditService {
 
     String deleteFlair(Long flairId);
 
-    SubRedditViewDto subRedditToSubRedditViewDto(SubReddit subReddit);
+    SubRedditViewDto subRedditToSubRedditViewDto(SubReddit subReddit, Principal principal);
 
     List<String> fetchAllSubRedditNames();
 
@@ -42,4 +42,6 @@ public interface SubRedditService {
     Long ruleId(SubReddit subReddit, String rule);
 
     void saveDirectSubReddit(SubReddit subReddit);
+
+    void updateJoinStatus(String subRedditName, String username);
 }

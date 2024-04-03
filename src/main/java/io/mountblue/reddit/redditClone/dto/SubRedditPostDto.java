@@ -21,4 +21,5 @@ public class SubRedditPostDto {
     private String createdAt;
     private Long voteCount;
     private Long commentCount;
+    private String shareLink;
 }

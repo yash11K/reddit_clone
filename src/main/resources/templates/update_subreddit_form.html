@@ -87,6 +87,19 @@
             color: darkred;
         }
 
+        .backbtn {
+            background-color : #007bff;
+            padding : 10px;
+            color: white;
+            border-radius : 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .backbtn:hover {
+            background-color: #0056b3;
+        }
 
     </style>
 </head>
@@ -141,9 +154,6 @@
         </table>
     </div>
 
-
-
-
     <!-- Rules Form -->
     <form action="/r/update/rules" th:object="${ruleDto}" method="post">
         <input type="hidden" name="subRedditName" th:value="${subRedditName}" />
@@ -151,6 +161,9 @@
         <input type="text" th:field="*{rule}" placeholder="Enter new rule">
         <button type="submit">Add Rules</button>
     </form>
+
+    <a th:href="@{'/r/' + ${subRedditName}}" class="backbtn">Back to SubReddit</a>
+
 </div>
 </body>
 </html>
