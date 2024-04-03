@@ -198,6 +198,8 @@ public class SubRedditManager implements SubRedditService{
                     .subRedditPostDtos(subRedditPostDtos)
                     .subscribedUsers(subscriberUsers)
                     .allSubReddits(allSubRedditNames)
+                    .banner(subReddit.getBanner())
+                    .avatar(subReddit.getAvatar())
                     .build();
     }
 
@@ -247,6 +249,10 @@ public class SubRedditManager implements SubRedditService{
     }
 
     @Override
+    public void saveDirectSubReddit(SubReddit subReddit){
+        subReddit.setUpdatedAt(LocalDateTime.now());
+        subRedditRepository.save(subReddit);
+    }
     public void updateJoinStatus(String subRedditName, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(()->new UserNotFound("User not found with name: " + username));
         SubReddit subReddit = subRedditRepository.findSubRedditBySubRedditName(subRedditName).orElseThrow(()->new SubRedditNotFound("SubReddit not found with name: " + subRedditName));

@@ -26,7 +26,7 @@ public class LoginAuthenticationSuccess implements AuthenticationSuccessHandler 
         User user = userService.findByUsername(userName);
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
-        response.sendRedirect(request.getContextPath() + "/home");
+        response.sendRedirect(request.getContextPath() + "/feed/all");
     }
 
 }

@@ -2,18 +2,22 @@ package io.mountblue.reddit.redditClone.controller;
 
 import io.mountblue.reddit.redditClone.dto.CommentDto;
 import io.mountblue.reddit.redditClone.dto.FullPostViewDto;
+import io.mountblue.reddit.redditClone.dto.UserDto;
 import io.mountblue.reddit.redditClone.model.Comment;
 import io.mountblue.reddit.redditClone.model.CommentTree;
 import io.mountblue.reddit.redditClone.model.Post;
+import io.mountblue.reddit.redditClone.model.User;
 import io.mountblue.reddit.redditClone.service.CommentManager;
 import io.mountblue.reddit.redditClone.service.CommentService;
 import io.mountblue.reddit.redditClone.service.PostService;
+import io.mountblue.reddit.redditClone.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Path;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -24,25 +28,21 @@ public class FullPostViewController {
     private final PostService postService;
     private CommentTree commentTree;
     private CommentService commentService;
+    private UserService userService;
 
     @GetMapping("/{subRedditName}/comments/{postId}")
     public String viewComments(
             @PathVariable Long postId,
-            Model model
+            Model model,
+            Principal principal
     ) {
         Post post = postService.fetchPostById(postId);
         FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
         boolean updateCommentCheck = false;
-//        List<Comment> comments = postService.findAllCommentsByPostId(postId);
-//        for(Comment comment : comments) {
-//            Map.Entry<Comment, List<Comment>> entry = commentTree.getParentChildMap().entrySet().iterator().next();
-//            List<Comment> values = entry.getValue();
-//            for(Comment value : values) {
-//                commentTree.fetchComment(comment);
-//            }
-//        }
+        User user = userService.findByUsername(principal.getName());
+        UserDto userDto = UserDto.builder().username(user.getUsername()).mediaUri("/beanheads/"+user.getProfilePic()).build();
+        model.addAttribute("userDto", userDto);
         model.addAttribute("fullPostViewDto", fullPostViewDto);
-//        model.addAttribute("comments", comments);
         return "view-post";
     }
 

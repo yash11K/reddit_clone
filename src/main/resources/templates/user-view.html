@@ -222,7 +222,7 @@
 </div>
 <div class="container">
     <div class="profile-section">
-        <img src="https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj" alt="Profile Picture">
+        <img th:src="'/beanheads/'+${user.getProfilePic()}" alt="Profile Picture">
         <h1 th:text="${user.displayName != null ? user.displayName : user.username}"></h1>
         <h2 th:text="${'u/' + user.username}"></h2>
         <a th:href="@{/u/{userId}/edit(userId=${user.userId})}" class="edit-profile">

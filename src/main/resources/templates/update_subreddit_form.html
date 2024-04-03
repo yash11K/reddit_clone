@@ -108,20 +108,21 @@
     <h2 th:text="${subRedditName}"></h2><br>
 
     <!-- Banner Form -->
-    <form action="/r/update/banner" th:object="${subRedditDto}" method="post">
+    <form action="/r/update/banner" th:object="${subRedditDto}" method="post" enctype="multipart/form-data">
         <strong>Banner</strong><br>
         <input type="hidden" name="subRedditName" th:value="${subRedditName}" />
         <img th:if="${subRedditDto.banner != null}" th:src="data:image/png;base64,${subRedditDto.banner}" alt="Current Banner" /><br>
-        <input type="file" name="banner" /><br>
+        <input type="file" name="media" accept="multipart/form-data">
+        <br>
         <button type="submit">Save Banner</button>
     </form>
 
     <!-- Avatar Form -->
-    <form action="/r/update/avatar" th:object="${subRedditDto}" method="post">
+    <form action="/r/update/avatar" th:object="${subRedditDto}" method="post" enctype="multipart/form-data">
         <strong>Avatar</strong><br>
         <input type="hidden" name="subRedditName" th:value="${subRedditName}" />
+        <input type="file" name="media" accept="multipart/form-data">
         <img th:if="${subRedditDto.avatar != null}" th:src="data:image/png;base64,${subRedditDto.avatar}" alt="Current Avatar" /><br>
-        <input type="file" name="avatar" /><br>
         <button type="submit">Save Avatar</button>
     </form>
 

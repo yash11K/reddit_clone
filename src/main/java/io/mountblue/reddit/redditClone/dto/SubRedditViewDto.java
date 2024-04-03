@@ -16,10 +16,10 @@ public class SubRedditViewDto {
     private Long subRedditId;
     private String subRedditName;
     String subRedditDescription;
+    String banner;
+    String avatar;
     User opUser;
     boolean isSubscribed;
-    MultipartFile banner;
-    MultipartFile avatar;
     List<String> rules;
     List<String> allSubReddits;
     List <String> previousSubRedditNames;
