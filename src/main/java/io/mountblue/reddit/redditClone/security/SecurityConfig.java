@@ -22,7 +22,6 @@ import javax.sql.DataSource;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
     private final UserService userService;
 
@@ -30,23 +29,10 @@ public class SecurityConfig {
         this.userService = userService;
     }
 
-
-    //    @Bean
-//    public UserDetailsManager userDetailsManager(DataSource dataSource){
-//        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-//
-//        jdbcUserDetailsManager.setUsersByUsernameQuery(
-//                "select username,password, true from user where username = ?"
-//        );
-//        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
-//                "select username , password from user where username=?"
-//        );
-//        return jdbcUserDetailsManager;
-//    }
-@Bean
-BCryptPasswordEncoder bCryptPasswordEncoder(){
+    @Bean
+    BCryptPasswordEncoder bCryptPasswordEncoder(){
     return new BCryptPasswordEncoder();
-}
+    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserService userService) {
@@ -56,20 +42,19 @@ BCryptPasswordEncoder bCryptPasswordEncoder(){
         return auth;
     }
 
-
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationSuccessHandler authenticationSuccessHandler,
                                             AuthenticationProvider authenticationProvider)throws Exception {
         http.authorizeHttpRequests(customizer ->
                                 customizer
-                                .requestMatchers("/customlogin", "/logout","/register","/user/new").permitAll() // Permit access to login and logout
+                                .requestMatchers("/login-page", "/logout","/register","/user/new").permitAll() // Permit access to login and logout
 //                                .requestMatchers("/upload","/download","/delete").authenticated() // Permit access to login and logout
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form->
                         form.loginPage("/customlogin")
                                 .loginProcessingUrl("/authenticateTheUser").permitAll()
-//                                .defaultSuccessUrl("/user"))
+                                .successHandler(authenticationSuccessHandler)
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login
@@ -85,5 +70,4 @@ BCryptPasswordEncoder bCryptPasswordEncoder(){
                 .authenticationProvider(authenticationProvider);
         return http.build();
     }
-
 }

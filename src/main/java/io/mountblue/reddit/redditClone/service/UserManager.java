@@ -45,6 +45,7 @@ public class UserManager implements UserService {
                 .gender(userDto.getGender())
                 .topics(userDto.getInterests())
                 .email(userDto.getEmail())
+                .profilePic(userDto.getMediaUri())
                 .build();
     }
     @Override

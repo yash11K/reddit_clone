@@ -7,11 +7,13 @@ import io.mountblue.reddit.redditClone.dto.SubRedditViewDto;
 import io.mountblue.reddit.redditClone.model.Flair;
 import io.mountblue.reddit.redditClone.model.Rule;
 import io.mountblue.reddit.redditClone.model.SubReddit;
+import io.mountblue.reddit.redditClone.service.MediaService;
 import io.mountblue.reddit.redditClone.service.SubRedditService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -23,11 +25,12 @@ import java.util.List;
 public class SubRedditViewController {
 
     private final SubRedditService subRedditService;
+    private final MediaService mediaService;
 
     @GetMapping("/{subRedditName}")
-    public String viewSubReddit(@PathVariable String subRedditName, Model model) {
+    public String viewSubReddit(@PathVariable String subRedditName, Model model, Principal principal) {
         SubReddit subReddit = subRedditService.show(subRedditName);
-        SubRedditViewDto subRedditViewDto =  subRedditService.subRedditToSubRedditViewDto(subReddit);
+        SubRedditViewDto subRedditViewDto =  subRedditService.subRedditToSubRedditViewDto(subReddit, principal);
         model.addAttribute("subRedditViewDto", subRedditViewDto);
         return "view-subreddit";
     }
@@ -64,15 +67,21 @@ public class SubRedditViewController {
     }
 
     @PostMapping("/update/banner")
-    public String updateBanner(@ModelAttribute("subRedditDto") SubRedditDto subRedditDto) {
-        // Logic to update banner
-        return "redirect:/"; // Redirect to homepage or appropriate page
+    public String updateBanner(@ModelAttribute("subRedditDto") SubRedditDto subRedditDto, @RequestPart(name = "media") MultipartFile media) {
+        String uri = mediaService.uploadMediaToBucket(media, subRedditDto.getSubRedditName());
+        SubReddit subReddit = subRedditService.findSubRedditByName(subRedditDto.getSubRedditName()).orElseThrow();
+        subReddit.setBanner(uri);
+        subRedditService.saveDirectSubReddit(subReddit);
+        return "redirect:/r/" + subRedditDto.getSubRedditName(); // Redirect to homepage or appropriate page
     }
 
     @PostMapping("/update/avatar")
-    public String updateAvatar(@ModelAttribute("subRedditDto") SubRedditDto subRedditDto) {
-        // Logic to update avatar
-        return "redirect:/"; // Redirect to homepage or appropriate page
+    public String updateAvatar(@ModelAttribute("subRedditDto") SubRedditDto subRedditDto, @RequestPart(name = "media") MultipartFile media) {
+        String uri = mediaService.uploadMediaToBucket(media, subRedditDto.getSubRedditName());
+        SubReddit subReddit = subRedditService.findSubRedditByName(subRedditDto.getSubRedditName()).orElseThrow();
+        subReddit.setBanner(uri);
+        subRedditService.saveDirectSubReddit(subReddit);
+        return "redirect:/r/" + subRedditDto.getSubRedditName(); // Redirect to homepage or appropriate page
     }
 
     @PostMapping("/update/description")
@@ -103,5 +112,13 @@ public class SubRedditViewController {
         Long ruleId = subRedditService.ruleId(subReddit, rule);
         subRedditService.deleteRule(ruleId);
         return "redirect:/r/update/" + subRedditName;
+    }
+
+    @PostMapping("/updatejoinstatus/{subRedditName}")
+    public String updateJoinStatus(@PathVariable String subRedditName, Principal principal) {
+        String username = principal.getName();
+        subRedditService.updateJoinStatus(subRedditName, username);
+
+        return "redirect:/r/" + subRedditName;
     }
 }

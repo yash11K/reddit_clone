@@ -3,6 +3,7 @@ package io.mountblue.reddit.redditClone.service;
 import io.mountblue.reddit.redditClone.dto.CommentDto;
 import io.mountblue.reddit.redditClone.model.Comment;
 import io.mountblue.reddit.redditClone.model.Post;
+import io.mountblue.reddit.redditClone.model.User;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface CommentService {
 
     int getCommentCount(Post post);
     void updateCommentByComment(Comment comment, String updatedComment);
+
+    int getUserCommentCount(User user);
 }

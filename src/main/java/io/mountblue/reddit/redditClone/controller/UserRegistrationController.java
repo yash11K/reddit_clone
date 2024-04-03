@@ -10,6 +10,7 @@ import io.mountblue.reddit.redditClone.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Controller
@@ -28,6 +30,8 @@ public class UserRegistrationController {
     private final UserService userService;
     private final TopicService topicService;
     private final RoleService roleService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -59,10 +63,15 @@ public class UserRegistrationController {
             return "user-registration";
         }
 
-        List<Topic> interests = userDto.getInterestIds().stream()
-                .map(topicId -> topicService.findById(topicId))
-                .collect(Collectors.toList());
+        List<Topic> interests = new ArrayList<>();
+        if(userDto.getInterestIds()!=null){
+             interests= userDto.getInterestIds().stream()
+                    .map(topicService::findById)
+                    .toList();
+        }
 
+        Random random = new Random();
+        int randomNumber = random.nextInt(29) + 1;
         userDto.setInterests(interests);
         User user = userService.mapDtoToEntity(userDto);
         Role role = roleService.findRoleById(1L);
@@ -75,7 +84,9 @@ public class UserRegistrationController {
         System.out.println(roles);
         user.setRoles(roles);
         roleService.save(role);
+        user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        user.setProfilePic("beanhead-"+randomNumber+".svg");
         userService.createUser(user);
-        return "user-registration";
+        return "redirect:/login-page";
     }
 }

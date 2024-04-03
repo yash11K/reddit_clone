@@ -87,6 +87,19 @@
             color: darkred;
         }
 
+        .backbtn {
+            background-color : #007bff;
+            padding : 10px;
+            color: white;
+            border-radius : 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .backbtn:hover {
+            background-color: #0056b3;
+        }
 
     </style>
 </head>
@@ -95,20 +108,21 @@
     <h2 th:text="${subRedditName}"></h2><br>
 
     <!-- Banner Form -->
-    <form action="/r/update/banner" th:object="${subRedditDto}" method="post">
+    <form action="/r/update/banner" th:object="${subRedditDto}" method="post" enctype="multipart/form-data">
         <strong>Banner</strong><br>
         <input type="hidden" name="subRedditName" th:value="${subRedditName}" />
         <img th:if="${subRedditDto.banner != null}" th:src="data:image/png;base64,${subRedditDto.banner}" alt="Current Banner" /><br>
-        <input type="file" name="banner" /><br>
+        <input type="file" name="media" accept="multipart/form-data">
+        <br>
         <button type="submit">Save Banner</button>
     </form>
 
     <!-- Avatar Form -->
-    <form action="/r/update/avatar" th:object="${subRedditDto}" method="post">
+    <form action="/r/update/avatar" th:object="${subRedditDto}" method="post" enctype="multipart/form-data">
         <strong>Avatar</strong><br>
         <input type="hidden" name="subRedditName" th:value="${subRedditName}" />
+        <input type="file" name="media" accept="multipart/form-data">
         <img th:if="${subRedditDto.avatar != null}" th:src="data:image/png;base64,${subRedditDto.avatar}" alt="Current Avatar" /><br>
-        <input type="file" name="avatar" /><br>
         <button type="submit">Save Avatar</button>
     </form>
 
@@ -140,9 +154,6 @@
         </table>
     </div>
 
-
-
-
     <!-- Rules Form -->
     <form action="/r/update/rules" th:object="${ruleDto}" method="post">
         <input type="hidden" name="subRedditName" th:value="${subRedditName}" />
@@ -150,6 +161,9 @@
         <input type="text" th:field="*{rule}" placeholder="Enter new rule">
         <button type="submit">Add Rules</button>
     </form>
+
+    <a th:href="@{'/r/' + ${subRedditName}}" class="backbtn">Back to SubReddit</a>
+
 </div>
 </body>
 </html>

@@ -27,6 +27,5 @@ public interface UserService extends UserDetailsService {
     User findByUsername(String username);
     boolean existsByUsername(String username);
 
-
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 }

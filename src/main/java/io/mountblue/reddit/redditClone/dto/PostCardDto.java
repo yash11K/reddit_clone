@@ -1,6 +1,7 @@
 package io.mountblue.reddit.redditClone.dto;
 
 import io.mountblue.reddit.redditClone.model.Flair;
+import io.mountblue.reddit.redditClone.model.User;
 import io.mountblue.reddit.redditClone.model.VOTE_TYPE;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,8 @@ import java.util.List;
 @Setter
 @Builder
 public class PostCardDto {
+    private Long id;
+    private User op;
     private Long postId;
     private String subRedditName; // selected subRedditName for post
     private String title;
@@ -20,7 +23,7 @@ public class PostCardDto {
     private String media; //multiple media
     private List<Flair> flairs; //pre-populated dropdown
     private String createdAt;
-    private int voteCount;
+    private Long voteCount;
     private int commentCount;
     private VOTE_TYPE userVote;
 }
