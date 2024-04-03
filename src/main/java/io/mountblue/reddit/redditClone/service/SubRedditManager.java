@@ -36,7 +36,7 @@ public class SubRedditManager implements SubRedditService{
                 SubReddit.builder()
                         .subRedditName(subRedditDto.getSubRedditName())
                         .createdAt(LocalDateTime.now())
-//                        .modUser(userRepository.findByUsername(principal.getName()))
+//                        .modUser(userRepository.findByUsername(principal.getName()).orElseThrow())
                         .build()
         );
         String subRedditName = subRedditDto.getSubRedditName();
@@ -133,7 +133,7 @@ public class SubRedditManager implements SubRedditService{
     }
 
     @Override
-    public SubRedditViewDto subRedditToSubRedditViewDto(SubReddit subReddit) {
+    public SubRedditViewDto subRedditToSubRedditViewDto(SubReddit subReddit, Principal principal) {
         List<Rule> rule = subReddit.getRules();
         List<String> rules = new ArrayList<>();
         for(Rule stringRule : rule) {
@@ -149,6 +149,8 @@ public class SubRedditManager implements SubRedditService{
             int maxLength = Math.min(words.length, 30);
             String body = String.join(" ", Arrays.copyOf(words, maxLength));
 
+            String shareLink = "http://localhost:8081/r/"+subReddit.getSubRedditName();
+
             Long comments = (long) post.getComments().size();
             String createdAt = calculateTimeAgo(post.getCreatedAt());
             subRedditPostDtos.add(SubRedditPostDto.builder()
@@ -159,9 +161,21 @@ public class SubRedditManager implements SubRedditService{
                     .voteCount(votes)
                     .commentCount(comments)
                     .createdAt(createdAt)
+                    .shareLink(shareLink)
                     .build());
 
         }
+
+        boolean isSubscribed = false;
+
+        if(principal != null) {
+            User user = userRepository.findByUsername(principal.getName()).orElseThrow(()->new UserNotFound("User not found with name: " + principal.getName()));
+            if(user.getSubscribedSubReddits().contains(subReddit)) {
+                isSubscribed = true;
+            }
+        }
+
+
         String avatar = subReddit.getAvatar();
         String banner = subReddit.getBanner();
         Long subscriberUsers = (long)subReddit.getSubscribedUsers().size();
@@ -177,7 +191,9 @@ public class SubRedditManager implements SubRedditService{
                     .subRedditId(subReddit.getSubRedditId())
                     .subRedditDescription(subReddit.getDescription())
                     .subRedditName(subReddit.getSubRedditName())
+                    .opUser(subReddit.getModUser())
                     .rules(rules)
+                    .isSubscribed(isSubscribed)
                     .previousSubRedditNames(previousSubRedditUsernames)
                     .subRedditPostDtos(subRedditPostDtos)
                     .subscribedUsers(subscriberUsers)
@@ -228,5 +244,18 @@ public class SubRedditManager implements SubRedditService{
     public Long ruleId(SubReddit subReddit, String rule) {
         Rule selectedRule = ruleRepository.findRuleBySubRedditAndRule(subReddit, rule);
         return selectedRule.getRuleId();
+    }
+
+    @Override
+    public void updateJoinStatus(String subRedditName, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(()->new UserNotFound("User not found with name: " + username));
+        SubReddit subReddit = subRedditRepository.findSubRedditBySubRedditName(subRedditName).orElseThrow(()->new SubRedditNotFound("SubReddit not found with name: " + subRedditName));
+        if(user.getSubscribedSubReddits().contains(subReddit)) {
+            user.getSubscribedSubReddits().remove(subReddit);
+        }
+        else {
+            user.getSubscribedSubReddits().add(subReddit);
+        }
+        userRepository.save(user);
     }
 }
