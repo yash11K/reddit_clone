@@ -1,5 +1,6 @@
 package io.mountblue.reddit.redditClone.service;
 
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.spring.storage.GoogleStorageResource;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
@@ -22,8 +25,12 @@ import java.util.UUID;
 public class MediaManager implements MediaService{
     private final Storage storage;
     @Autowired
-    public MediaManager(Storage storage) {
-        this.storage = storage;
+    public MediaManager(Storage storage) throws IOException {
+        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("src/main/resources/gcsAuth.json"));
+        StorageOptions storageOptions =  StorageOptions.getDefaultInstance().toBuilder()
+                .setCredentials(credentials)
+                .build();
+        this.storage = storageOptions.getService();
     }
 
     @Value("${gcs-resource-test-bucket}")
