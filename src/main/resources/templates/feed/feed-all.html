@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,11 +51,12 @@
 <!-------------------------------NAvigation Starts------------------>
 
 <nav class="navbar navbar-expand-md navbar-dark mb-4" style="background-color:black">
-    <a href="feed-all.html" class="navbar-brand"><img src="/redditlogo/lol.png" alt="logo" class="img-fluid" width="60px"
-                                                   height="80px"> <span style="padding-left:15px; font-size: 25px">Reddit</span></a>
+    <a href="/feed/all" class="navbar-brand">
+        <img src="/redditlogo/lol.png" alt="logo" class="img-fluid" width="60px"
+             height="80px"> <span style="padding-left:15px; font-size: 25px">Reddit</span></a>
     <button class="navbar-toggler" data-toggle="collapse" data-target="#responsive"><span
             class="navbar-toggler-icon"></span></button>
-    <div class="collapse navbar-collapse" id="responsive">
+        <div class="collapse navbar-collapse" id="responsive">
         <ul class="navbar-nav mr-auto text-capitalize">
 <!--            <li class="nav-item"><a href="#modalview" class="nav-link" data-toggle="modal">messages</a></li>-->
         </ul>
@@ -63,11 +64,12 @@
             <input type="text" name="search" id="search" placeholder="Search" class="form-control form-control-sm">
             <input type="submit" value="search" class="search-button">
         </form>
-        <a th:href="@{'/u/' + ${userDto.username}}">
-            <img th:src="${userDto.getMediaUri()}" alt="" class="rounded-circle ml-3 d-none d-md-block" width="70px" height="70px">
-        </a>
-
-    </div>
+            <div class="button-container">
+                <div sec:authorize="isAuthenticated()">
+                    <a th:href="@{'/u/' + ${userDto.username}}">
+                        <img th:src="${userDto.getMediaUri()}" alt="" class="rounded-circle ml-3 d-none d-md-block" width="70px" height="70px">
+                    </a>
+            </div>
 </nav>
 
 <!--<div class="modal fade" id="modalview">-->
@@ -88,24 +90,28 @@
 <div class="container">
     <div class="row">
         <div class="col-12 col-lg-3">
-
             <div class="left-column">
                 <div class="card card-left1 mb-4">
                     <div class="card-body text-center ">
-                        <img th:src="${userDto.getMediaUri()}" alt="img" width="120px" height="120px"
-                             class="rounded-circle mt-n5">
+                        <img th:src="${userDto.getMediaUri()}" alt="img" width="120px" height="120px" class="rounded-circle mt-n5">
                         <h5 class="card-title" th:text="'u/'+${userDto.username}"></h5>
                         <p class="card-text text-justify mb-2"></p>
                         <ul class="list-unstyled nav justify-content-center">
                             <p href="#" class="text-dark text-decoration-none">
-                                <li class="nav-item"><br>
+                            <li class="nav-item"><br>
                             <p href="#" class="text-dark text-decoration-none" th:text="'joined on '+${userDto.joined.getMonth()}+' ' + ${userDto.joined.getYear()}"></p>
-                                    <strong th:text="'karma: '+${userDto.karma}"></strong>
-                                </li>
-                            </p>
-<!--                            <a href="#" class="text-dark text-decoration-none">-->
-<!--                                <li class="nav-item"><br> <strong></strong></li>-->
-<!--                            </a>-->
+                            <strong th:text="'karma: '+${userDto.karma}"></strong>
+                            <div class="button-container">
+                                <div sec:authorize="isAuthenticated()">
+                                    <form action="#" th:action="@{/logout}" method="post">
+                                        <input type="submit" class="button" value="Logout">
+                                    </form>
+                                </div>
+                                <div sec:authorize="!isAuthenticated()">
+                                    <a th:href="@{/login}" class="button">Login</a>
+                                </div>
+                            </div>
+                            <a th:href="@{/post/new}" class="button">Create</a>
                         </ul>
                     </div>
                 </div>
@@ -113,128 +119,78 @@
                     <div class="card-body">
                         <h5 class="mb-3 card-title">SubReddits
                             <small><a href="#" class="ml-1"></a></small></h5>
-                        <a th:href="@{/r/new}" class="new-subreddit-button"> + New SubReddit</a>
+                        <a th:href="@{/r/form/new}" class="new-subreddit-button" style="margin-bottom: 10px"> + New SubReddit</a>
                         <div th:each="subReddit : ${subReddits}" class="subreddit-container">
-                            <a class="card-text, subreddit-link" th:text="'r/'+${subReddit}" th:href="@{'/r/' + ${subReddit}}"
-                            ></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card shadow-sm card-left2 mb-4">
-                    <div class="card-body">
-                        <h5 class="mb-3 card-title">Moderation
-                            <small><a href="#" class="ml-1"></a></small></h5>
-                        <a th:href="@{/r/new}" class="new-subreddit-button"> + New SubReddit</a>
-                        <div th:each="subReddit : ${modSubReddits}" class="subreddit-container">
-                            <a class="card-text, subreddit-link" th:text="'r/'+${subReddit.getSubRedditName()}" th:href="@{'/r/' + ${subReddit.getSubRedditName()}}"
-                            ></a>
+                            <img th:src="'/feed/image/'+${subReddit.avatar}" alt="img" width="55px" height="55px" style="object-fit: cover" class="rounded-circle mr-3">
+                            <a class="card-text, subreddit-link" th:text="'r/'+${subReddit.subRedditName}" th:href="@{'/r/' + ${subReddit.subRedditName}}"
+                            style="font-size: 24px"></a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+                <div class="card shadow-sm card-left2 mb-4">
+                    <div class="card-body">
+                        <h5 class="mb-3 card-title">SubReddits
+                            <small><a href="#" class="ml-1"></a></small></h5>
+                        <a th:href="@{/r/form/new}" class="new-subreddit-button" style="margin-bottom: 10px"> + New SubReddit</a>
+                        <div th:each="subReddit : ${modSubReddits}" class="subreddit-container">
+                            <img th:src="'/feed/image/'+${subReddit.avatar}" alt="img" width="55px" height="55px" style="object-fit: cover" class="rounded-circle mr-3">
+                            <a class="card-text, subreddit-link" th:text="'r/'+${subReddit.subRedditName}" th:href="@{'/r/' + ${subReddit.subRedditName}}"
+                               style="font-size: 24px"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <div class="col-12 col-lg-6">
             <div class="middle-column">
                 <div class="card">
                     <div class="card-header bg-transparent">
-<!--                        <form class="form-inline">-->
-<!--                            <div class="input-group w-100">-->
-<!--                                <input type="text" name="message" id="message" placeholder="Message"-->
-<!--                                       class="form-control form-control-md">-->
-<!--                                <div class="input-group-append">-->
-<!--                                    <div class="input-group-text">-->
-<!--                                        <i class="fas fa-camera"></i>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </form>-->
-<!--                        </form>-->
-                    </div>
-
-                    <div class="card-body" th:each="postCard : ${postCards}">
-                        <div class="media">
-                            <img th:src="'/beanheads/'+${postCard.getOp().getProfilePic()}" alt="img" width="55px" height="55px" class="rounded-circle mr-3">
-                            <div class="media-body">
-                                <div class="post-card">
-                                    <a th:href="'/r/' + ${postCard.getSubRedditName()} + '/comments/' + ${postCard.getId()}" style="text-decoration: none; color: black">
-                                        <h5 th:text="'r/'+${postCard.subRedditName}" ></h5>
-                                        <h4 th:text="${postCard.title}"></h4>
-                                        <small th:text="${postCard.createdAt}"></small>
-                                        <p class="card-text text-justify" th:text="*{postCard.body}"></p>
-                                        <div class="image-container" th:if="${postCard.media != null}">
-                                            <img th:src="${'/feed/image/'+postCard.getMedia()}"  alt="Image"/>
+                        <div class="card-body" th:each="postCard : ${postCards}">
+                            <div class="media">
+                                <img th:src="'/feed/image/'+${postCard.subReddit.avatar}" alt="img" width="55px" height="55px" style="object-fit: cover" class="rounded-circle mr-3">
+                                <div class="media-body">
+                                    <div class="post-card">
+                                        <a th:href="'/r/' + ${postCard.getSubRedditName()} + '/comments/' + ${postCard.getId()}" style="text-decoration: none; color: black">
+                                            <h5 th:text="'r/'+${postCard.subRedditName}" ></h5>
+                                            <h4 th:text="${postCard.title}"></h4>
+                                            <small th:text="${postCard.createdAt}"></small>
+                                            <p class="card-text text-justify" th:utext="*{postCard.body}"></p>
+                                            <div th:if="${postCard.getMedia() == ''}" style="display: none">
+                                                <img th:src="${'/feed/image/'+postCard.getMedia()}"  alt="Image"/>
+                                            </div>
+                                            <div th:if="${postCard.getMedia() != ''}">
+                                                <img th:src="${'/feed/image/'+postCard.getMedia()}"  alt="Image"/>
+                                            </div>
+                                            <div class="row no-gutters mb-3"></div>
+                                        </a>
+                                    </div>
+                                    <div class="row no-gutters mb-3">
+                                        <div class="post-actions">
+                                            <form th:action="@{/feed/voting}" method="post" class="vote-btn">
+                                                <input type="hidden" name="votetype" th:value="UPVOTE">
+                                                <input type="hidden" name="postId" th:value="${postCard.id}">
+                                                <button type="submit"><i class="fas fa-arrow-up upvote"></i></button>
+                                            </form>
+                                            <p id="voteCount" th:text="${postCard.voteCount}"/>
+                                            <form th:action="@{/feed/voting}" method="post" class="vote-btn">
+                                                <input type="hidden" name="votetype" th:value="DOWNVOTE">
+                                                <input type="hidden" name="postId" th:value="${postCard.id}">
+                                                <button><i class="fas fa-arrow-down downvote"></i></button>
+                                            </form>
+                                            <button>
+                                                <i class="fas fa-comment"></i>
+                                                <span th:text="${postCard.commentCount}"></span>
+                                            </button>
                                         </div>
-                                        <div class="row no-gutters mb-3"></div>
-                                    </a>
-                                </div>
-                                <div class="row no-gutters mb-3">
-                                    <div class="post-actions">
-                                        <form th:action="@{/feed/voting}" method="post" class="vote-btn">
-                                            <input type="hidden" name="votetype" th:value="UPVOTE">
-                                            <input type="hidden" name="postId" th:value="${postCard.id}">
-                                            <button type="submit"><i class="fas fa-arrow-up"></i></button>
-                                        </form>
-                                        <p id="voteCount" th:text="${postCard.voteCount}"/>
-                                        <form th:action="@{/feed/voting}" method="post" class="vote-btn">
-                                            <input type="hidden" name="votetype" th:value="DOWNVOTE">
-                                            <input type="hidden" name="postId" th:value="${postCard.id}">
-                                            <button><i class="fas fa-arrow-down"></i></button>
-                                        </form>
-                                        <button>
-                                            <i class="fas fa-comment"></i>
-                                            <span th:text="${postCard.commentCount}"></span>
-                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
-        <br> <br> <br><br> <br> <br>
-<!--            <div class="right-column">-->
-<!--                <div class="card shadow-sm mb-4">-->
-<!--                    <div class="card-body">-->
-<!--                        <h6 class="card-title">Sponsored</h6>-->
-<!--                        <img src="img/right1.jpg" alt="card-img" class="card-img mb-3">-->
-<!--                        <p class="card-text text-justify"><span class="h6">It might be time to visit Iceland.</span>-->
-<!--                            Iceland is so chill, and everything looks cool here. Also, we heard the people are pretty-->
-<!--                            nice. What are you waiting for?</p>-->
-<!--                        <a href="#" class="btn btn-outline-info card-link btn-sm">Buy a ticket</a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="card shadow-sm mb-4">-->
-
-<!--                    <div class="card-body">-->
-
-<!--                        <h6 class="card-title ">Likes <a href="#" class="ml-1"><small>.View All</small> </a></h6>-->
-<!--                        <div class="row no-gutters d-none d-lg-flex">-->
-<!--                            <div class="col-6 p-1">-->
-<!--                                <img src="img/avatar-dhg.png" alt="img" width="80px" height="80px"-->
-<!--                                     class="rounded-circle mb-4">-->
-<!--                                <img src="img/avatar-fat.jpg" alt="img" width="80px" height="80px"-->
-<!--                                     class="rounded-circle">-->
-<!--                            </div>-->
-<!--                            <div class="col-6 p-1 text-left">-->
-<!--                                <h6>Jacob Thornton @fat</h6>-->
-<!--                                <a href="#" class="btn btn-outline-info btn-sm mb-3"><i class="fas fa-user-friends"></i>Follow-->
-<!--                                </a>-->
-
-<!--                                <h6>Mark otto</h6>-->
-<!--                                <a href="#" class="btn btn-outline-info  btn-sm"><i class="fas fa-user-friends"></i>Follow-->
-<!--                                </a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="card-footer">-->
-<!--                        <p class="lead" style="font-size:18px;">Dave really likes these nerds, no one knows why-->
-<!--                            though.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--        </div>-->
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

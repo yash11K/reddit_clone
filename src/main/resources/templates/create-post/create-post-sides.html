@@ -12,7 +12,7 @@
 <div class="post-details">
     <p class="subreddit-name">Subreddit: <span th:text="${postDto.subRedditName}"></span></p>
     <p class="post-title">Title: <span th:text="${postDto.title}"></span></p>
-    <p class="post-title">body: <span th:text="${postDto.body}"></span></p>
+    <p class="post-title">body: <span th:utext="${postDto.body}"></span></p>
 </div>
 <form th:action="@{/submit/sides}" th:object="${postDto}" method="post" class="post-form" enctype="multipart/form-data">
 

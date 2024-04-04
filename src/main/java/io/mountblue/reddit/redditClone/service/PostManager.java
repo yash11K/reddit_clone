@@ -114,7 +114,7 @@ public class PostManager implements PostService{
                 .body(post.getBody())
                 .post(post)
                 .CommentCount((long) post.getComments().size())
-                .mediaUri(post.getOpUser().getProfilePic())
+                .mediaUri(post.getMediaUri())
                 .comments(post.getComments())
                 .build();
     }

@@ -65,7 +65,7 @@ public class Post {
     @JoinColumn(name = "sub_reddit_id", updatable = false)
     private SubReddit subReddit;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)

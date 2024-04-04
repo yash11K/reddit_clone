@@ -1,6 +1,7 @@
 package io.mountblue.reddit.redditClone.dto;
 
 import io.mountblue.reddit.redditClone.model.SubReddit;
+import io.mountblue.reddit.redditClone.model.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class PostDto {
     private List<String> topics;
     private boolean isCommentMediaAllowed;
     private boolean isPublished;
-
+    private User op;
     @Override
     public String toString() {
         return "PostDto{" +

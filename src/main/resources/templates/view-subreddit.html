@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Express It SubReddit</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link rel="stylesheet" href="/style.css">
     <style>
         /* Style for the fixed header */
         body{
@@ -223,6 +226,7 @@
             height : 100px;
             width : 100px;
             border-radius: 50%;
+            object-fit: cover;
         }
 
         .container {
@@ -239,7 +243,7 @@
         }
 
         .strong-text {
-            color: gold;
+            color: black;
         }
 
         .rules{
@@ -255,7 +259,7 @@
             padding-top: 100px; /* Location of the box */
             left: 0;
             top: 0;
-            color : white;
+            color : black;
             width: 100%; /* Full width */
             height: 100%; /* Full height */
             overflow: auto; /* Enable scroll if needed */
@@ -335,15 +339,39 @@
         .delete-button {
             background-color: #dc3545;
         }
+
+        .modal{
+            background-color: rgb(59 56 56 / 85%);
+        }
+
     </style>
 </head>
 <body>
 
-<div class="header">
-<!--    <img src="../static/Reddit-Emblem.png" alt="Logo Image" class="logo">-->
-    <img src="https://logos-world.net/wp-content/uploads/2020/10/Reddit-Emblem.png" alt="Logo Image" class="logo">
-    <h2>express it</h2>
-</div>
+<nav class="navbar navbar-expand-md navbar-dark mb-4" style="background-color:black">
+    <a href="/feed/all" class="navbar-brand">
+        <img src="/redditlogo/lol.png" alt="logo" class="img-fluid" width="60px"
+             height="80px"> <span style="padding-left:15px; font-size: 25px">Reddit</span></a>
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#responsive"><span
+            class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="responsive">
+        <ul class="navbar-nav mr-auto text-capitalize">
+            <!--            <li class="nav-item"><a href="#modalview" class="nav-link" data-toggle="modal">messages</a></li>-->
+        </ul>
+        <form action="" class="form-inline ml-auto d-none d-md-block">
+            <input type="text" name="search" id="search" placeholder="Search" class="form-control form-control-sm">
+            <input type="submit" value="search" class="search-button">
+        </form>
+        <div class="button-container">
+            <div sec:authorize="isAuthenticated()">
+                <a th:href="@{'/u/' + ${userDto.username}}">
+                    <img th:src="${userDto.getMediaUri()}" alt="" class="rounded-circle ml-3 d-none d-md-block" width="70px" height="70px">
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
 
 
 <div class="content">
@@ -359,7 +387,7 @@
                 <span class="close">&times;</span>
                 <h3 style="color:#81dcbc;text-align:center;">Create a Community</h3>
                 <p>Build and grow a community about something you care about. We'll help you set things up.</p>
-                <form id="newSubRedditForm" action="/r/newsubreddit" method="post" onsubmit="return validateSubRedditName()">
+                <form id="newSubRedditForm" action="/r/sub/new" method="post" onsubmit="return validateSubRedditName()">
                     <input type="text" id="newSubRedditName" name="newSubRedditName" placeholder="Subreddit Name" class="new-subreddit-name-input" minlength="3" maxlength="30" required><br><br>
 
                     <span id="subredditNameError" style="color: red;"></span>
@@ -378,7 +406,7 @@
         <br><br>
         <strong class="strong-text">Communities</strong>
         <div th:each="subreddits : ${subRedditViewDto.allSubReddits}">
-            <a th:href="@{'/r/'+${subreddits}}" th:text="${subreddits}"></a>
+            <a th:href="@{'/r/'+${subreddits}}" th:text="'r/'+${subreddits}"></a>
         </div>
 
     </div>
@@ -390,7 +418,7 @@
             <img th:src="@{'/feed/image/' + ${subRedditViewDto.getAvatar()}}" alt="Round Image" class="round-image">
             <h2 th:text="${subRedditViewDto.subRedditName}"></h2>
             <div class="buttons">
-                <a href="#" class="round-button create-button">
+                <a href="/post/new" class="round-button create-button">
                     <i class="fas fa-plus-circle"></i> Create
                 </a>
                 <a href="#" class="round-button bell-icon">
@@ -410,7 +438,7 @@
             <div class="innerLeftContainer">
                 <div class="subRedditPostContainer" th:each="post : ${subRedditViewDto.subRedditPostDtos}">
                     <p>
-                        <span th:text="${post.opUser != null ? post.opUser.username : 'Devesh'}" class="user-style"></span>
+                        <span th:text="'u/'+${post.opUser != null ? post.opUser.username : 'Devesh'}" class="user-style"></span>
                         <span> - </span>
                         <span th:text="${post.createdAt}" class="date-style"></span>
                     </p>

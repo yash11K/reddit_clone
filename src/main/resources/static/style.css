@@ -207,3 +207,33 @@ body{
     width: 100%; /* Make the image fill its container */
     height: auto; /* Maintain aspect ratio */
 }
+
+.post-actions {
+    display: flex;
+    align-items: center;
+}
+
+.post-actions form {
+    margin-right: 10px; /* Adjust as needed */
+}
+
+.post-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.post-actions button i {
+    font-size: 16px; /* Adjust icon size as needed */
+    color: #888; /* Default color */
+}
+
+.post-actions button i:hover {
+    color: #333; /* Hover color */
+}
+
+.post-actions p {
+    margin: 0 5px; /* Adjust spacing between icon and count */
+    font-size: 14px; /* Adjust count font size */
+    color: #555; /* Count text color */
+}

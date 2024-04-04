@@ -10,7 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
+
+import static java.util.Collections.replaceAll;
 
 @AllArgsConstructor
 @Controller
@@ -21,6 +24,7 @@ public class PostViewController {
     FlairService flairService;
     PostMapper postMapper;
     MediaService mediaService;
+    UserService userService;
 
     @Value("${reddit.topics}")
     List<String> topics;
@@ -39,6 +43,7 @@ public class PostViewController {
         if(postDto.getTitle()==null){
             return "redirect:/post/new";
         }
+        postDto.setBody(postDto.getBody().replaceAll("\\r?\\n", "<br>"));
         model.addAttribute("postDto", postDto);
         model.addAttribute("topics", topics);
         model.addAttribute("flairs", flairService.fetchSubredditFlairNames(postDto.getSubRedditName()));
@@ -46,11 +51,15 @@ public class PostViewController {
     }
 
     @PostMapping("/submit/sides")
-    public String submitPostSides(@ModelAttribute PostDto postDto, @RequestPart(name = "media") MultipartFile media){
+    public String submitPostSides(@ModelAttribute PostDto postDto, @RequestPart(name = "media") MultipartFile media, Principal principal){
         postDto.setPublished(true);
-        String uri = mediaService.uploadMediaToBucket(media, postDto.getSubRedditName());
+        String uri = null;
+        if(media!=null){
+            uri = mediaService.uploadMediaToBucket(media, postDto.getSubRedditName());
+        }
+        postDto.setOp(userService.findByUsername(principal.getName()));
         postService.save(postMapper.newPostMapper(postDto, uri));
         System.out.println(postDto.toString());
-        return "redirect:/post/new";
+        return "redirect:/feed/all";
     }
 }

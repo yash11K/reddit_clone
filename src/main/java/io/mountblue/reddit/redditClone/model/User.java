@@ -56,7 +56,7 @@ public class User {
     @JoinTable(
             name = "sub_reddit_subscription",
             joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "post_id")}
+            inverseJoinColumns = {@JoinColumn(name = "sub_reddit_id")}
     )
     private List<SubReddit> subscribedSubReddits;
 

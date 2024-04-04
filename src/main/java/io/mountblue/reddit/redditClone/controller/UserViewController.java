@@ -1,12 +1,16 @@
 package io.mountblue.reddit.redditClone.controller;
 
+import io.mountblue.reddit.redditClone.dto.UserDto;
 import io.mountblue.reddit.redditClone.model.Comment;
 import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.model.User;
+import io.mountblue.reddit.redditClone.repository.UserRepository;
 import io.mountblue.reddit.redditClone.service.CommentService;
 import io.mountblue.reddit.redditClone.service.PostService;
 import io.mountblue.reddit.redditClone.service.SubRedditService;
 import io.mountblue.reddit.redditClone.service.UserService;
+import lombok.AllArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,19 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@AllArgsConstructor
 public class UserViewController {
     private final UserService userService;
     private final PostService postService;
     private final SubRedditService subRedditService;
     private final CommentService commentService;
-
-    @Autowired
-    public UserViewController(UserService userService, PostService postService, SubRedditService subRedditService, CommentService commentService) {
-        this.userService = userService;
-        this.postService = postService;
-        this.subRedditService = subRedditService;
-        this.commentService=commentService;
-    }
+    private final UserRepository userRepository;
 
     @GetMapping("/u/{username}")
     public String getUserView(@PathVariable String username, Model model) {
@@ -67,6 +65,7 @@ public class UserViewController {
     }
     @GetMapping("/u/{userId}/edit")
     public String showEditProfilePage(@PathVariable Long userId, Model model, Principal principal) {
+
         String loggedInUsername = userService.findByUsername(principal.getName()).getUsername() ;
         if (!userService.getUserById(userId).getUsername().equals(loggedInUsername)) {
             return "access-denied";
@@ -78,14 +77,16 @@ public class UserViewController {
 
     @PostMapping("/u/{userId}/edit")
     public String editProfile(@PathVariable Long userId, @ModelAttribute User user, Principal principal) {
-        User user1=userService.findByUsername(principal.getName());
-        userService.updateUser(user);
-        return "redirect:/u/" + user1.getUsername(); //slight error check
+        User updateUser = userService.getUserById(userId);
+        updateUser.setDisplayName(user.getDisplayName());
+        updateUser.setBio(user.getBio());
+        userRepository.save(updateUser);
+        return "redirect:/u/"+ updateUser.getUsername();
     }
 
     @PostMapping("/u/{userId}/delete")
     public String deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
-        return "user-registration";  //redirect to home
+        return "redirect:/feed/all";
     }
 }

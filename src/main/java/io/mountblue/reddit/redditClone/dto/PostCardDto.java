@@ -1,6 +1,7 @@
 package io.mountblue.reddit.redditClone.dto;
 
 import io.mountblue.reddit.redditClone.model.Flair;
+import io.mountblue.reddit.redditClone.model.SubReddit;
 import io.mountblue.reddit.redditClone.model.User;
 import io.mountblue.reddit.redditClone.model.VOTE_TYPE;
 import lombok.Builder;
@@ -26,4 +27,5 @@ public class PostCardDto {
     private Long voteCount;
     private int commentCount;
     private VOTE_TYPE userVote;
+    private SubReddit subReddit;
 }

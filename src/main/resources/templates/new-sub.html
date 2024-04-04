@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        /* Style for the form container */
+        #newSubRedditForm {
+            width: 60%; /* Increased width */
+            margin: 0 auto;
+            padding: 30px; /* Increased padding */
+            background-color: #f2f2f2;
+            border-radius: 8px; /* Increased border radius */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Increased box shadow */
+        }
+
+        /* Style for the input fields */
+        input[type="text"] {
+            width: 100%;
+            padding: 15px; /* Increased padding */
+            margin-bottom: 15px; /* Increased margin bottom */
+            border: 2px solid #ccc; /* Increased border thickness */
+            border-radius: 6px; /* Increased border radius */
+            font-size: 16px; /* Increased font size */
+        }
+
+        /* Style for the submit button */
+        .new-subreddit-submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 25px; /* Increased padding */
+            border: none;
+            border-radius: 6px; /* Increased border radius */
+            cursor: pointer;
+            font-size: 18px; /* Increased font size */
+        }
+
+        .new-subreddit-submit-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Style for the error message */
+        #subredditNameError {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px; /* Increased font size */
+        }
+
+        /* Style for the rules list */
+        ul {
+            margin-top: 15px; /* Increased margin top */
+        }
+
+        /* Style for the strong tag */
+        strong {
+            display: block;
+            margin-top: 15px; /* Increased margin top */
+            font-weight: bold;
+            font-size: 18px; /* Increased font size */
+        }
+
+    </style>
+</head>
+<body>
+<form id="newSubRedditForm"  method="post" th:object="${subRedditDto}" th:action="@{/r/submit/r}">
+    <input type="text" th:field="*{subRedditName}" id="newSubRedditName" placeholder="Subreddit Name" class="new-subreddit-name-input" minlength="3" maxlength="30" required>
+    <input type="text" id="newSubRedditBio" th:field="*{subRedditDescription}" placeholder="Talk about your Community">
+    <span id="subredditNameError" style="color: red;"></span>
+    <strong>Some Rules for making a new community</strong>
+    <ul>
+        <li>SubReddit Name must be unique</li>
+        <li>SubReddit Name must should only have alphabets</li>
+        <li>Name should give some idea on what subreddit is about</li>
+        <li>You can add other specifications once you enter your subreddit</li>
+    </ul>
+    <button class="new-subreddit-submit-btn" type="submit">Submit</button><br><br>
+</form>
+</body>
+</html>

@@ -3,6 +3,7 @@ package io.mountblue.reddit.redditClone.security;
 import io.mountblue.reddit.redditClone.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -47,8 +48,9 @@ public class SecurityConfig {
                                             AuthenticationProvider authenticationProvider)throws Exception {
         http.authorizeHttpRequests(customizer ->
                                 customizer
-                                .requestMatchers("/login-page", "/logout","/register","/user/new").permitAll() // Permit access to login and logout
-//                                .requestMatchers("/upload","/download","/delete").authenticated() // Permit access to login and logout
+//                                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
+//                                        .requestMatchers(HttpMethod.POST, "/**").hasRole("REDDITOR")
+                                .requestMatchers("/login-page", "/logout","/register","/user/new").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form->

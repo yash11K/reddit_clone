@@ -71,17 +71,14 @@ public class UserRegistrationController {
         }
 
         Random random = new Random();
-        int randomNumber = random.nextInt(29) + 1;
-        userDto.setInterests(interests);
+        int randomNumber = random.nextInt(25) + 1;
+        userDto.setInterests(interests);//PostView
         User user = userService.mapDtoToEntity(userDto);
         Role role = roleService.findRoleById(1L);
-        System.out.println(role);
         List<User> users = new ArrayList<>();
         users.add(user);
-        System.out.println(users);
         List<Role> roles = new ArrayList<>();
         roles.add(role);
-        System.out.println(roles);
         user.setRoles(roles);
         roleService.save(role);
         user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));

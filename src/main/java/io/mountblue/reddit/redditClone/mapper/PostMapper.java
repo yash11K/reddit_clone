@@ -32,7 +32,8 @@ public class PostMapper {
                 .isPublished(postDto.isPublished())
                 .isCommentsMediaAllowed(postDto.isCommentMediaAllowed())
                 .createdAt(LocalDateTime.now())
-                .opUser(userService.getUserById(22L))
+                .opUser(postDto.getOp())
+                .voteCount(0L)
                 .popularityScore(0.0)
                 .mediaUri(mediaUri)
                 .build();

@@ -261,4 +261,14 @@ public class SubRedditManager implements SubRedditService{
         }
         userRepository.save(user);
     }
+
+    @Override
+    public void saveSub(SubReddit subReddit){
+        subRedditRepository.save(subReddit);
+    }
+
+    @Override
+    public List<SubReddit> fetchAllSubReddit(){
+        return subRedditRepository.findAll();
+    }
 }

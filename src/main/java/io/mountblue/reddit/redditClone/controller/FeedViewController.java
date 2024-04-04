@@ -2,6 +2,7 @@ package io.mountblue.reddit.redditClone.controller;
 
 import io.mountblue.reddit.redditClone.dto.FullPostViewDto;
 import io.mountblue.reddit.redditClone.dto.PostCardDto;
+import io.mountblue.reddit.redditClone.dto.SubRedditViewDto;
 import io.mountblue.reddit.redditClone.dto.UserDto;
 import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.model.User;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Controller
@@ -46,9 +47,10 @@ public class FeedViewController {
                                 .body(post.getBody())
                                 .flairs(post.getFlairs())
                                 .media(post.getMediaUri())
-                                .commentCount(commentService.getCommentCount(post))
+                                .commentCount(post.getComments().size())
                                 .voteCount(post.getVoteCount())
                                 .createdAt(SubRedditManager.calculateTimeAgo(post.getCreatedAt()))
+                                .subReddit(post.getSubReddit())
                                 .build()
                 ).toList();
         User user = userService.findByUsername(principal.getName());
@@ -56,10 +58,11 @@ public class FeedViewController {
                 .karma(postService.getPostCountByUser(user) + commentService.getUserCommentCount(user))
                 .joined(user.getJoinDate())
                 .build();
+        postCardDtos.forEach(postCardDto -> System.out.println(postCardDto.getMedia()));
         model.addAttribute("userDto", userDto);
         model.addAttribute("postCards", postCardDtos);
-        model.addAttribute("subReddits", subRedditService.fetchAllSubRedditNames());
-        model.addAttribute("modSubReddits", subRedditService.findSubRedditsByMod("October22"));
+        model.addAttribute("subReddits", subRedditService.fetchAllSubReddit());
+        model.addAttribute("modSubReddits", subRedditService.findSubRedditsByMod(principal.getName()));
         return "feed/feed-all";
     }
 

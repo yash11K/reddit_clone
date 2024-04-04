@@ -28,17 +28,6 @@ public class SubRedditController {
         return subRedditService.update(subRedditDto, subRedditName);
     }
 
-//    @GetMapping("/{subRedditName}")
-//    public SubRedditViewDto showSubReddit(@PathVariable(value = "subRedditName" ) String subRedditName) {
-//        SubReddit subReddit =  subRedditService.show(subRedditName);
-//        return subRedditService.subRedditToSubRedditViewDto(subReddit);
-//    }
-
-//    @GetMapping("/create")
-//    public SubRedditDto newSubRedditForm() {
-//        return new SubRedditDto();
-//    }
-
     @DeleteMapping("delete/{subRedditId}")
     public void deleteSubReddit(@PathVariable(value = "subRedditId" ) Long subRedditId) {
         subRedditService.delete(subRedditId);

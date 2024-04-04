@@ -40,7 +40,7 @@ public class FullPostViewController {
         FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
         boolean updateCommentCheck = false;
         User user = userService.findByUsername(principal.getName());
-        UserDto userDto = UserDto.builder().username(user.getUsername()).mediaUri("/beanheads/"+user.getProfilePic()).build();
+        UserDto userDto = UserDto.builder().username(user.getUsername()).mediaUri(user.getProfilePic()).build();
         model.addAttribute("userDto", userDto);
         model.addAttribute("fullPostViewDto", fullPostViewDto);
         return "view-post";
@@ -50,7 +50,8 @@ public class FullPostViewController {
     public String addComment(
             @PathVariable Long postId,
             @RequestParam(name = "commentText") String commentText,
-            Model model
+            Model model,
+            Principal principal
     ) {
         Post post = postService.fetchPostById(postId);
         CommentDto commentDto = new CommentDto();
@@ -59,6 +60,9 @@ public class FullPostViewController {
         commentService.save(commentDto, postId);
         FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
         String subRedditName = post.getSubReddit().getSubRedditName();
+        User user = userService.findByUsername(principal.getName());
+        UserDto userDto = UserDto.builder().username(user.getUsername()).mediaUri(user.getProfilePic()).build();
+        model.addAttribute("userDto", userDto);
         model.addAttribute("fullPostViewDto", fullPostViewDto);
         return "redirect:/r/" + subRedditName + "/comments/" + postId;
     }
@@ -67,10 +71,14 @@ public class FullPostViewController {
     public String editComment(
             @PathVariable("postId") Long postId,
             @RequestParam("editCommentId") Long editCommentId,
-            Model model
+            Model model,
+            Principal principal
     ) {
         Post post = postService.fetchPostById(postId);
         FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
+        User user = userService.findByUsername(principal.getName());
+        UserDto userDto = UserDto.builder().username(user.getUsername()).mediaUri(user.getProfilePic()).build();
+        model.addAttribute("userDto", userDto);
         model.addAttribute("editCommentId", editCommentId);
         model.addAttribute("fullPostViewDto", fullPostViewDto);
         model.addAttribute("editCommentId", editCommentId);

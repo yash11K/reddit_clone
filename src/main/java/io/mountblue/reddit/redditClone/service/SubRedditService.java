@@ -44,4 +44,8 @@ public interface SubRedditService {
     void saveDirectSubReddit(SubReddit subReddit);
 
     void updateJoinStatus(String subRedditName, String username);
+
+    void saveSub(SubReddit subReddit);
+
+    List<SubReddit> fetchAllSubReddit();
 }

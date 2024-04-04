@@ -185,3 +185,81 @@ body{
 .vote-btn{
     display: flex;
 }
+
+.post-actions {
+    display: flex;
+    align-items: center;
+}
+
+.post-actions form {
+    margin-right: 10px; /* Adjust as needed */
+}
+
+.post-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.post-actions button i {
+    font-size: 16px; /* Adjust icon size as needed */
+    color: #888; /* Default color */
+}
+
+.post-actions button i:hover {
+    color: #333; /* Hover color */
+}
+
+.post-actions p {
+    margin: 0 5px; /* Adjust spacing between icon and count */
+    font-size: 14px; /* Adjust count font size */
+    color: #555; /* Count text color */
+}
+.media-body {
+    padding: 20px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+}
+
+.comment-content{
+    display: flex;
+}
+
+.comment-form {
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.comment-content-update {
+    width: calc(100% - 100px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.comment-content-update:focus {
+    border-color: #66afe9;
+    outline: none;
+}
+
+#comment-form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#comment-form input[type="submit"]:hover {
+    background-color: #45a049;
+}

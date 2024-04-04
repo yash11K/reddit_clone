@@ -42,7 +42,22 @@ public class SubRedditViewController {
         return "view-subreddit";
     }
 
-    @PostMapping("/newsubreddit")
+    @GetMapping("/form/new")
+    public String showCreateSubForm(SubRedditViewDto subRedditDto, Model model){
+        model.addAttribute("subRedditDto", subRedditDto);
+        return "new-sub";
+    }
+
+    @PostMapping("/submit/r")
+    public String createSubredditPlain(@ModelAttribute SubRedditViewDto subRedditViewDto, Principal principal){
+        subRedditService.saveSub(SubReddit.builder().subRedditName(subRedditViewDto.getSubRedditName())
+                .description(subRedditViewDto.getSubRedditDescription())
+                .modUser(userService.findByUsername(principal.getName()))
+                .build());
+        return "redirect:/r/" + subRedditViewDto.getSubRedditName();
+    }
+
+    @PostMapping("/sub/new")
     public String createSubReddit(@RequestParam String newSubRedditName, Principal principal) {
         SubRedditDto subRedditDto = new SubRedditDto();
         subRedditDto.setSubRedditName(newSubRedditName);
@@ -110,7 +125,7 @@ public class SubRedditViewController {
     public String deleteSubReddit(@PathVariable String subRedditName) {
         SubReddit subReddit = subRedditService.show(subRedditName);
         subRedditService.delete(subReddit.getSubRedditId());
-        return "redirect:/r/microsoft"; // Redirect to Home Page or something
+        return "redirect:/feed/all"; // Redirect to Home Page or somethingC
     }
 
     @PostMapping("/delete/rule")
