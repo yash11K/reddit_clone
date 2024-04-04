@@ -54,7 +54,7 @@ public class PostViewController {
     public String submitPostSides(@ModelAttribute PostDto postDto, @RequestPart(name = "media") MultipartFile media, Principal principal){
         postDto.setPublished(true);
         String uri = null;
-        if(media!=null){
+        if(!media.isEmpty()){
             uri = mediaService.uploadMediaToBucket(media, postDto.getSubRedditName());
         }
         postDto.setOp(userService.findByUsername(principal.getName()));

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Create New Post</title>
     <link rel="stylesheet" href="/createpost.css"/>
+
 </head>
 <body>
 <div class="container">
@@ -11,7 +12,7 @@
     <form th:action="@{/submit/post}" th:object="${postDto}" method="post" class="post-form">
         <h4>SubReddit:</h4>
         <div class="form-group">
-            <select class="form-control" id="subreddit" name="subreddit" th:field="*{subRedditName}">
+            <label for="subreddit"></label><select class="form-control" id="subreddit" name="subreddit" th:field="*{subRedditName}">
                 <option th:each="subredditName : ${subRedditNames}" th:text="'r/'+${subredditName}" th:value="${subredditName}"></option>
             </select>
         </div>

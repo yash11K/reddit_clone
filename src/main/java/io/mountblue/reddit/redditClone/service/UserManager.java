@@ -2,6 +2,7 @@ package io.mountblue.reddit.redditClone.service;
 
 import io.mountblue.reddit.redditClone.dto.TopicDto;
 import io.mountblue.reddit.redditClone.dto.UserDto;
+import io.mountblue.reddit.redditClone.exception.UserNotFound;
 import io.mountblue.reddit.redditClone.model.Role;
 import io.mountblue.reddit.redditClone.model.Topic;
 import io.mountblue.reddit.redditClone.model.User;
@@ -67,6 +68,8 @@ public class UserManager implements UserService {
     }
     @Override
     public void deleteUser(Long userId) {
+        userRepository.findById(userId).orElseThrow(()->new UserNotFound("no user with id: "+ userId))
+                        .getSubscribedSubReddits().clear();
         userRepository.deleteById(userId);
     }
     @Override

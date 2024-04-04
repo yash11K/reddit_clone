@@ -4,6 +4,7 @@ import io.mountblue.reddit.redditClone.dto.UserDto;
 import io.mountblue.reddit.redditClone.model.Comment;
 import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.model.User;
+import io.mountblue.reddit.redditClone.repository.RoleRepository;
 import io.mountblue.reddit.redditClone.repository.UserRepository;
 import io.mountblue.reddit.redditClone.service.CommentService;
 import io.mountblue.reddit.redditClone.service.PostService;
@@ -34,9 +35,10 @@ public class UserViewController {
     private final SubRedditService subRedditService;
     private final CommentService commentService;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     @GetMapping("/u/{username}")
-    public String getUserView(@PathVariable String username, Model model) {
+    public String getUserView(@PathVariable String username, Model model, Principal principal) {
         User user = userService.findByUsername(username);
         if (user == null) {
             return "error";
@@ -55,7 +57,8 @@ public class UserViewController {
             LocalDateTime timeB = (b instanceof Post) ? ((Post) b).getCreatedAt() : ((Comment) b).getCreatedAt();
             return timeB.compareTo(timeA);
         });
-
+        UserDto userDto = UserDto.builder().username(user.getUsername()).mediaUri(user.getProfilePic()).build();
+        model.addAttribute("userDto", userDto);
         model.addAttribute("user", user);
         model.addAttribute("posts", postService.getAllPostsByUser(username));
         model.addAttribute("comments", commentService.getAllCommentsByUser(username));
@@ -86,6 +89,7 @@ public class UserViewController {
 
     @PostMapping("/u/{userId}/delete")
     public String deleteUser(@PathVariable Long userId) {
+        userService.getUserById(userId).getRoles().clear();
         userService.deleteUser(userId);
         return "redirect:/feed/all";
     }

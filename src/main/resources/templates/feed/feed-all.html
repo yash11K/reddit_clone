@@ -64,12 +64,14 @@
             <input type="text" name="search" id="search" placeholder="Search" class="form-control form-control-sm">
             <input type="submit" value="search" class="search-button">
         </form>
-            <div class="button-container">
-                <div sec:authorize="isAuthenticated()">
-                    <a th:href="@{'/u/' + ${userDto.username}}">
-                        <img th:src="${userDto.getMediaUri()}" alt="" class="rounded-circle ml-3 d-none d-md-block" width="70px" height="70px">
-                    </a>
+        <div class="button-container">
+            <div sec:authorize="isAuthenticated()">
+                <a th:href="@{'/u/' + ${userDto.username}}">
+                    <img th:src="${userDto.getMediaUri()}" alt="" class="rounded-circle ml-3 d-none d-md-block" width="70px" height="70px">
+                </a>
             </div>
+        </div>
+        </div>
 </nav>
 
 <!--<div class="modal fade" id="modalview">-->
@@ -99,7 +101,7 @@
                         <ul class="list-unstyled nav justify-content-center">
                             <p href="#" class="text-dark text-decoration-none">
                             <li class="nav-item"><br>
-                            <p href="#" class="text-dark text-decoration-none" th:text="'joined on '+${userDto.joined.getMonth()}+' ' + ${userDto.joined.getYear()}"></p>
+                            <p class="text-dark text-decoration-none" th:text="'joined on '+${userDto.joined.getMonth()}+' ' + ${userDto.joined.getYear()}" style="font-weight: bold"></p>
                             <strong th:text="'karma: '+${userDto.karma}"></strong>
                             <div class="button-container">
                                 <div sec:authorize="isAuthenticated()">
@@ -129,19 +131,19 @@
                 </div>
             </div>
 
-                <div class="card shadow-sm card-left2 mb-4">
-                    <div class="card-body">
-                        <h5 class="mb-3 card-title">SubReddits
-                            <small><a href="#" class="ml-1"></a></small></h5>
-                        <a th:href="@{/r/form/new}" class="new-subreddit-button" style="margin-bottom: 10px"> + New SubReddit</a>
-                        <div th:each="subReddit : ${modSubReddits}" class="subreddit-container">
-                            <img th:src="'/feed/image/'+${subReddit.avatar}" alt="img" width="55px" height="55px" style="object-fit: cover" class="rounded-circle mr-3">
-                            <a class="card-text, subreddit-link" th:text="'r/'+${subReddit.subRedditName}" th:href="@{'/r/' + ${subReddit.subRedditName}}"
-                               style="font-size: 24px"></a>
-                        </div>
+            <div class="card shadow-sm card-left2 mb-4">
+                <div class="card-body">
+                    <h5 class="mb-3 card-title">SubReddits
+                        <small><a href="#" class="ml-1"></a></small></h5>
+                    <a th:href="@{/r/form/new}" class="new-subreddit-button" style="margin-bottom: 10px"> + New SubReddit</a>
+                    <div th:each="subReddit : ${modSubReddits}" class="subreddit-container">
+                        <img th:src="'/feed/image/'+${subReddit.avatar}" alt="img" width="55px" height="55px" style="object-fit: cover" class="rounded-circle mr-3">
+                        <a class="card-text, subreddit-link" th:text="'r/'+${subReddit.subRedditName}" th:href="@{'/r/' + ${subReddit.subRedditName}}"
+                           style="font-size: 24px"></a>
                     </div>
                 </div>
             </div>
+        </div>
         <div class="col-12 col-lg-6">
             <div class="middle-column">
                 <div class="card">
@@ -159,7 +161,7 @@
                                             <div th:if="${postCard.getMedia() == ''}" style="display: none">
                                                 <img th:src="${'/feed/image/'+postCard.getMedia()}"  alt="Image"/>
                                             </div>
-                                            <div th:if="${postCard.getMedia() != ''}">
+                                            <div th:if="${postCard.getMedia() != null}">
                                                 <img th:src="${'/feed/image/'+postCard.getMedia()}"  alt="Image"/>
                                             </div>
                                             <div class="row no-gutters mb-3"></div>

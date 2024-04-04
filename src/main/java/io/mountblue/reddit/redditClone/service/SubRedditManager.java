@@ -34,7 +34,9 @@ public class SubRedditManager implements SubRedditService{
                 SubReddit.builder()
                         .subRedditName(subRedditDto.getSubRedditName())
                         .createdAt(LocalDateTime.now())
-//                        .modUser(userRepository.findByUsername(principal.getName()).orElseThrow())
+                        .avatar("default_avatar.png")
+                        .banner("reddit_header.png")
+                        .modUser(userRepository.findByUsername(principal.getName()).orElseThrow(()-> new UserNotFound("no user")))
                         .build()
         );
         String subRedditName = subRedditDto.getSubRedditName();

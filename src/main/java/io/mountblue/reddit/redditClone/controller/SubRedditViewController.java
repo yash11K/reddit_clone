@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class SubRedditViewController {
         model.addAttribute("userDto", userDto);
         SubReddit subReddit = subRedditService.show(subRedditName);
         SubRedditViewDto subRedditViewDto =  subRedditService.subRedditToSubRedditViewDto(subReddit, principal);
+        model.addAttribute("subReddits", subRedditService.fetchAllSubReddit());
         model.addAttribute("subRedditViewDto", subRedditViewDto);
         return "view-subreddit";
     }
@@ -52,6 +54,9 @@ public class SubRedditViewController {
     public String createSubredditPlain(@ModelAttribute SubRedditViewDto subRedditViewDto, Principal principal){
         subRedditService.saveSub(SubReddit.builder().subRedditName(subRedditViewDto.getSubRedditName())
                 .description(subRedditViewDto.getSubRedditDescription())
+                .createdAt(LocalDateTime.now())
+                        .banner("reddit_header.png")
+                        .avatar("default_avatar.png")
                 .modUser(userService.findByUsername(principal.getName()))
                 .build());
         return "redirect:/r/" + subRedditViewDto.getSubRedditName();
@@ -124,6 +129,7 @@ public class SubRedditViewController {
     @PostMapping("/delete/{subRedditName}")
     public String deleteSubReddit(@PathVariable String subRedditName) {
         SubReddit subReddit = subRedditService.show(subRedditName);
+
         subRedditService.delete(subReddit.getSubRedditId());
         return "redirect:/feed/all"; // Redirect to Home Page or somethingC
     }
