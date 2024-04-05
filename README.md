@@ -1,8 +1,8 @@
-#DO NOT DIRECTLY CLONE THIS 
+# DO NOT DIRECTLY CLONE THIS 
 
 Create a Fork, Clone the copy which is your own repository
 
-##To start working on an issue: 
+## To start working on an issue: 
 - ask in the issue discussion if it can be assigned to you. Once assigned, 
 - `git checkout -b <branch_name_according_to_issue>` 
 - commit and push your changes
