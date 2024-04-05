@@ -10,3 +10,7 @@ Create a Fork, Clone the copy which is your own repository
 - DO NOT CREATE A PULL REQUEST TO MERGE IN THE MAIN BRANCH. you will see an option to change your branches on where to submit PR. choose your branch
 - mention the #issue_number which your PR solves so that it automatically links to the issue.
 - submit the PR 
+
+
+## The App Currently uses Postgres DataBase. Connect it to your DB by giving credentials in the Application.properties 
+## Do not add Application.properites in the commit. Commit only the changes required to fix that issue. 
