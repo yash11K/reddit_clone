@@ -83,7 +83,6 @@ public class SubRedditViewController {
             }
         }
         subRedditDto.setRules(subRedditRules);
-        System.out.println(subRedditDto);
         RuleDto ruleDto = new RuleDto();
         FlairDto flairDto = new FlairDto();
         model.addAttribute("subRedditName" , subReddit.getSubRedditName());
@@ -115,21 +114,20 @@ public class SubRedditViewController {
     public String updateDescription(@ModelAttribute("subRedditDto") SubRedditDto subRedditDto, @RequestParam String subRedditName) {
         subRedditDto.setSubRedditName(subRedditName);
         subRedditService.update(subRedditDto, subRedditName);
-        System.out.println(subRedditDto);
         return "redirect:/r/update/" + subRedditName; // Redirect to homepage or appropriate page
     }
 
     @PostMapping("/update/rules")
     public String addRules(@ModelAttribute("ruleDto") RuleDto ruleDto, @RequestParam String subRedditName) {
         subRedditService.saveRule(ruleDto,subRedditName);
-        System.out.println(ruleDto);
         return "redirect:/r/update/" + subRedditName; // Redirect to homepage or appropriate page
     }
 
     @PostMapping("/delete/{subRedditName}")
     public String deleteSubReddit(@PathVariable String subRedditName) {
         SubReddit subReddit = subRedditService.show(subRedditName);
-
+//        subReddit.getPosts().clear();
+//        subReddit.getSubscribedUsers().clear();
         subRedditService.delete(subReddit.getSubRedditId());
         return "redirect:/feed/all"; // Redirect to Home Page or somethingC
     }

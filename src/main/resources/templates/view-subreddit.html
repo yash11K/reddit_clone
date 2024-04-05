@@ -196,7 +196,19 @@
         }
 
         .body-style {
+            color: black;
+            text-decoration: none;
             margin-bottom: 10px;
+        }
+        .body-style:hover{
+            text-decoration: none;
+        }
+
+        .body-a{
+            text-decoration: none;
+        }
+        .body-a:hover{
+            text-decoration: none;
         }
 
         .media-style {
@@ -371,9 +383,9 @@
 
 <div class="content">
     <div class="left-div">
-        <a href="/home"><button><i class="fas fa-home"></i> Home</button></a>
-        <a href="/popular"><button><i class="fas fa-fire"></i> Popular</button></a>
-        <a href="/all"><button><i class="fas fa-list"></i> All</button></a>
+        <a href="/feed/all"><button><i class="fas fa-home"></i> Home</button></a>
+        <a href="/feed/all"><button><i class="fas fa-fire"></i> Popular</button></a>
+        <a href="/feed/all"><button><i class="fas fa-list"></i> All</button></a>
 
         <!-- btn to create new community -->
         <button id="myBtn">Create Community</button>
@@ -478,7 +490,7 @@
         <div class="sub-reddit-name">
             <div class="subreddit-top">
                 <img th:src="@{'/feed/image/' + ${subRedditViewDto.getAvatar()}}" alt="Round Image" class="round-image">
-                <h2 th:text="${subRedditViewDto.subRedditName}"></h2>
+                <h2 th:text="'r/'+${subRedditViewDto.subRedditName}"></h2>
             </div>
             <div class="buttons">
                 <a href="/post/new" class="round-button create-button">
@@ -506,10 +518,11 @@
                         <span th:text="${post.createdAt}" class="date-style"></span>
                     </p>
                     <h3 th:text="${post.title}"></h3>
-                    <div th:if="${post.body != null}">
-                        <p th:text="${post.body}" class="body-style"></p>
-                        <a th:href="@{'/r/'+${subRedditViewDto.subRedditName}+'/comments/'+${post.postId}}" class="read-more" style="text-decoration: none; color: inherit;">Read more...</a>
-                    </div>
+                    <a th:href="'/r/' + ${subRedditViewDto.getSubRedditName()} + '/comments/' + ${post.postId}" class="body-a">
+                        <div th:if="${post.body != null}">
+                            <p th:utext="${post.body}" class="body-style"></p>
+                        </div>
+                    </a>
                     <div th:if="${post.mediaUri != null}">
                         <img th:src="${post.mediaUri}" alt="Media" class="media-style">
                     </div>

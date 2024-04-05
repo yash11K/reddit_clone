@@ -7,10 +7,7 @@ import io.mountblue.reddit.redditClone.model.Comment;
 import io.mountblue.reddit.redditClone.model.CommentTree;
 import io.mountblue.reddit.redditClone.model.Post;
 import io.mountblue.reddit.redditClone.model.User;
-import io.mountblue.reddit.redditClone.service.CommentManager;
-import io.mountblue.reddit.redditClone.service.CommentService;
-import io.mountblue.reddit.redditClone.service.PostService;
-import io.mountblue.reddit.redditClone.service.UserService;
+import io.mountblue.reddit.redditClone.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +26,7 @@ public class FullPostViewController {
     private CommentTree commentTree;
     private CommentService commentService;
     private UserService userService;
+    private SubRedditService subRedditService;
 
     @GetMapping("/{subRedditName}/comments/{postId}")
     public String viewComments(

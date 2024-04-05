@@ -59,7 +59,6 @@ public class PostViewController {
         }
         postDto.setOp(userService.findByUsername(principal.getName()));
         postService.save(postMapper.newPostMapper(postDto, uri));
-        System.out.println(postDto.toString());
         return "redirect:/feed/all";
     }
 }

@@ -15,7 +15,6 @@ public class VoteManager implements VoteService{
     private PostRepository postRepository;
     @Override
     public void votes(Post post, String voteType) {
-        System.out.println(voteType);
         Long voteCountOnPost = post.getVoteCount();
         if(Objects.equals(voteType, "UPVOTE")) {
             voteCountOnPost += 1L;
@@ -24,6 +23,5 @@ public class VoteManager implements VoteService{
             voteCountOnPost -= 1L;
         post.setVoteCount(voteCountOnPost);
         postRepository.save(post);
-        System.out.println(voteCountOnPost);
     }
 }

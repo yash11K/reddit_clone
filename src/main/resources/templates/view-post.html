@@ -112,7 +112,7 @@
                     <div class="card-body">
                         <h5 class="mb-3 card-title">SubReddits
                             <small><a href="#" class="ml-1"></a></small></h5>
-                        <a th:href="@{/r/new}" class="new-subreddit-button"> + New SubReddit</a>
+                        <a th:href="@{/r/form/new}" class="new-subreddit-button"> + New SubReddit</a>
                         <div th:each="subReddit : ${subReddits}" class="subreddit-container">
                             <a class="card-text, subreddit-link" th:text="'r/'+${subReddit}" th:href="@{'/r/' + ${subReddit}}"
                             ></a>
@@ -125,7 +125,7 @@
                     <div class="card-body">
                         <h5 class="mb-3 card-title">Moderation
                             <small><a href="#" class="ml-1"></a></small></h5>
-                        <a th:href="@{/r/new}" class="new-subreddit-button"> + New SubReddit</a>
+                        <a th:href="@{/r/form/new}" class="new-subreddit-button"> + New SubReddit</a>
                         <div th:each="subReddit : ${modSubReddits}" class="subreddit-container">
                             <a class="card-text, subreddit-link" th:text="'r/'+${subReddit.getSubRedditName()}" th:href="@{'/r/' + ${subReddit}}"
                             ></a>
@@ -165,7 +165,7 @@
                                     <p class="card-text text-justify" th:utext="${fullPostViewDto.post.body}">
                                     </p>
                                     <div class="image-container" th:if="${fullPostViewDto.mediaUri != ''}">
-                                        <img th:src="${'/feed/image/'+fullPostViewDto.mediaUri}"  alt="Image"/>
+                                        <img th:src="${'/feed/image/'+fullPostViewDto.mediaUri}"  alt="Image" class="post-image"/>
                                     </div>
                                     <div class="post-actions">
                                         <form th:action="@{/voting}" method="post">

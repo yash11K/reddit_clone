@@ -14,7 +14,6 @@ public class RoleManager implements RoleService{
     @Override
     public Role findRoleById(Long l) {
         Role role = roleRepository.findById(l).orElseThrow();
-        System.out.println(role);
         return role;
     }
 

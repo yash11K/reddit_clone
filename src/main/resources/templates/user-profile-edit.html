@@ -102,8 +102,8 @@
         </form>
         <div class="button-container">
             <div sec:authorize="isAuthenticated()">
-                <a th:href="@{'/u/' + ${userDto.username}}">
-                    <img th:src="${userDto.getMediaUri()}" alt="" class="rounded-circle ml-3 d-none d-md-block" width="70px" height="70px">
+                <a th:href="@{'/u/' + ${user.username}}">
+                    <img th:src="'/beanheads/'+${user.profilePic}" alt="" class="rounded-circle ml-3 d-none d-md-block" width="70px" height="70px">
                 </a>
             </div>
         </div>

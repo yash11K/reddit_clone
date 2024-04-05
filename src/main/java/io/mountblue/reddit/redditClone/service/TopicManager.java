@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TopicManager implements TopicService{
@@ -19,16 +20,16 @@ public class TopicManager implements TopicService{
     @Override
     public Topic saveTopic(String topicName) {
 
-        Topic existingTopic = topicRepository.findByName(topicName);
-        if (existingTopic != null) {
-            return existingTopic;
+        Optional<Topic> existingTopic = topicRepository.findByName(topicName);
+        if (existingTopic.isPresent()) {
+            return existingTopic.get();
         }
         Topic newTopic = new Topic();
         newTopic.setName(topicName);
         return topicRepository.save(newTopic);
     }
     @Override
-    public Topic findByName(String name) {
+    public Optional<Topic> findByName(String name) {
         return topicRepository.findByName(name);
     }
 
@@ -49,5 +50,4 @@ public class TopicManager implements TopicService{
     public List<Topic> fetchSelectedTopic(List<String> topicNames){
         return topicRepository.findByNameInOrderByName(topicNames);
     }
-
 }

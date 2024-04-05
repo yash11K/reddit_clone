@@ -1,5 +1,6 @@
 package io.mountblue.reddit.redditClone.service;
 
+import com.google.cloud.storage.Option;
 import io.mountblue.reddit.redditClone.dto.TopicDto;
 import io.mountblue.reddit.redditClone.dto.UserDto;
 import io.mountblue.reddit.redditClone.exception.UserNotFound;
@@ -82,14 +83,14 @@ public class UserManager implements UserService {
         List<Topic> existingTopics = existingUser.getTopics();
 
         for (TopicDto topicDto : topicDtos) {
-            Topic existingTopic = topicService.findByName(topicDto.getName());
-            if (existingTopic == null) {
+            Optional<Topic> existingTopic = topicService.findByName(topicDto.getName());
+            if (existingTopic.isEmpty()) {
                 return new ResponseEntity<>("Topic '" + topicDto.getName() + "' does not exist", HttpStatus.BAD_REQUEST);
             }
 
             boolean topicExists = existingTopics.stream().anyMatch(topic -> topic.getName().equals(topicDto.getName()));
             if (!topicExists) {
-                existingTopics.add(existingTopic);
+                existingTopics.add(existingTopic.get());
             }
         }
 

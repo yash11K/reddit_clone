@@ -58,7 +58,6 @@ public class FeedViewController {
                 .karma(postService.getPostCountByUser(user) + commentService.getUserCommentCount(user))
                 .joined(user.getJoinDate())
                 .build();
-        postCardDtos.forEach(postCardDto -> System.out.println(postCardDto.getMedia()));
         model.addAttribute("userDto", userDto);
         model.addAttribute("postCards", postCardDtos);
         model.addAttribute("subReddits", subRedditService.fetchAllSubReddit());

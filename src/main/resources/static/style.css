@@ -237,3 +237,8 @@ body{
     font-size: 14px; /* Adjust count font size */
     color: #555; /* Count text color */
 }
+
+.post-image{
+    height: 700px;
+    width: 700px;
+}
