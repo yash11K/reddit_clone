@@ -1,6 +1,8 @@
 package io.mountblue.reddit.redditClone.security;
 
 import io.mountblue.reddit.redditClone.service.UserService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,6 +25,7 @@ import javax.sql.DataSource;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+
 public class SecurityConfig {
     private final UserService userService;
 
