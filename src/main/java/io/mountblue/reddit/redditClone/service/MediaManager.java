@@ -31,10 +31,7 @@ public class MediaManager implements MediaService{
 
     @Autowired
     public MediaManager(Storage storage) throws IOException {
-        GoogleCredentials credentials = GoogleCredentials.fromStream(new ByteArrayInputStream(GOOGLE_APPLICATION_CREDENTIALS.getBytes()));
-        StorageOptions storageOptions =  StorageOptions.getDefaultInstance().toBuilder()
-                .setCredentials(credentials)
-                .build();
+        StorageOptions storageOptions =  StorageOptions.getDefaultInstance().toBuilder().build();
         this.storage = storageOptions.getService();
     }
 
