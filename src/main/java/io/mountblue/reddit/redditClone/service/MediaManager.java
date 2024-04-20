@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,10 +24,14 @@ import java.util.UUID;
 
 @Service
 public class MediaManager implements MediaService{
+    @Value("${GOOGLE_APPLICATION_CREDENTIALS}")
+    private String GOOGLE_APPLICATION_CREDENTIALS;
+
     private final Storage storage;
+
     @Autowired
     public MediaManager(Storage storage) throws IOException {
-        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("src/main/resources/gcsAuth.json"));
+        GoogleCredentials credentials = GoogleCredentials.fromStream(new ByteArrayInputStream(GOOGLE_APPLICATION_CREDENTIALS.getBytes()));
         StorageOptions storageOptions =  StorageOptions.getDefaultInstance().toBuilder()
                 .setCredentials(credentials)
                 .build();
