@@ -98,7 +98,7 @@ public class SubRedditViewController {
         SubReddit subReddit = subRedditService.findSubRedditByName(subRedditDto.getSubRedditName()).orElseThrow();
         subReddit.setBanner(uri);
         subRedditService.saveDirectSubReddit(subReddit);
-        return "redirect:/r/" + subRedditDto.getSubRedditName(); // Redirect to homepage or appropriate page
+        return "redirect:/r/update/" + subReddit.getSubRedditName(); // Redirect to homepage or appropriate page
     }
 
     @PostMapping("/update/avatar")
@@ -107,7 +107,7 @@ public class SubRedditViewController {
         SubReddit subReddit = subRedditService.findSubRedditByName(subRedditDto.getSubRedditName()).orElseThrow();
         subReddit.setAvatar(uri);
         subRedditService.saveDirectSubReddit(subReddit);
-        return "redirect:/r/" + subRedditDto.getSubRedditName(); // Redirect to homepage or appropriate page
+        return "redirect:/r/update/" + subReddit.getSubRedditName(); // Redirect to homepage or appropriate page
     }
 
     @PostMapping("/update/description")

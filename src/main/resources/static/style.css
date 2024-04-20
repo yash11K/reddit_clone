@@ -239,6 +239,17 @@ body{
 }
 
 .post-image{
-    height: 700px;
-    width: 700px;
+    height: 400px;
+    width: 600px;
+    object-fit: scale-down;
+}
+.post-author{
+    font-size: 5px;
+    color: rgba(45,45,45,0.29);
+}
+
+.overflo-card{
+    min-height: 10px;
+    max-height: 600px;
+    overflow: scroll;
 }

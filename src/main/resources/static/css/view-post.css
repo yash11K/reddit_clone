@@ -255,6 +255,7 @@ textarea {
 .post-image{
     height: 700px;
     width: 700px;
+    object-fit: scale-down;
 }
 
 #comment-form input[type="submit"] {
@@ -270,3 +271,5 @@ textarea {
 #comment-form input[type="submit"]:hover {
     background-color: #45a049;
 }
+
+

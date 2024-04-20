@@ -53,15 +53,17 @@ public class FeedViewController {
                                 .subReddit(post.getSubReddit())
                                 .build()
                 ).toList();
-        User user = userService.findByUsername(principal.getName());
-        UserDto userDto = UserDto.builder().username(user.getUsername()).mediaUri("/beanheads/"+user.getProfilePic())
-                .karma(postService.getPostCountByUser(user) + commentService.getUserCommentCount(user))
-                .joined(user.getJoinDate())
-                .build();
-        model.addAttribute("userDto", userDto);
+        if(principal!=null) {
+            User user = userService.findByUsername(principal.getName());
+            UserDto userDto = UserDto.builder().username(user.getUsername()).mediaUri("/beanheads/" + user.getProfilePic())
+                    .karma(postService.getPostCountByUser(user) + commentService.getUserCommentCount(user))
+                    .joined(user.getJoinDate())
+                    .build();
+            model.addAttribute("userDto", userDto);
+            model.addAttribute("modSubReddits", subRedditService.findSubRedditsByMod(principal.getName()));
+        }
         model.addAttribute("postCards", postCardDtos);
         model.addAttribute("subReddits", subRedditService.fetchAllSubReddit());
-        model.addAttribute("modSubReddits", subRedditService.findSubRedditsByMod(principal.getName()));
         return "feed/feed-all";
     }
 
