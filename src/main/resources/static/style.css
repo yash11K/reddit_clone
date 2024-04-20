@@ -253,3 +253,32 @@ body{
     max-height: 600px;
     overflow: scroll;
 }
+
+@media (max-width: 768px) {
+    .banner {
+        height: 250px;
+    }
+
+    .grid-template {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+
+    .modal-dialog {
+        max-width: 80%;
+    }
+}
+
+/* Media queries for smartphone screens */
+@media (max-width: 576px) {
+    .banner {
+        height: 200px;
+    }
+
+    .grid-template {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+
+    .modal-dialog {
+        max-width: 90%;
+    }
+}
