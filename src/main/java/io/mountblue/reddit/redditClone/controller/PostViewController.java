@@ -13,8 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
 import java.util.List;
 
-import static java.util.Collections.replaceAll;
-
 @AllArgsConstructor
 @Controller
 public class PostViewController {
@@ -34,7 +32,7 @@ public class PostViewController {
         PostDto postDto = new PostDto();
         model.addAttribute("postDto" , postDto);
         model.addAttribute("subRedditNames", subRedditService.fetchAllSubRedditNames());
-        return "/create-post/create-post-root";
+        return "create-post-root";
     }
 
     @PostMapping("/submit/post")
@@ -47,7 +45,7 @@ public class PostViewController {
         model.addAttribute("postDto", postDto);
         model.addAttribute("topics", topics);
         model.addAttribute("flairs", flairService.fetchSubredditFlairNames(postDto.getSubRedditName()));
-        return "/create-post/create-post-sides";
+        return "create-post-sides";
     }
 
     @PostMapping("/submit/sides")
