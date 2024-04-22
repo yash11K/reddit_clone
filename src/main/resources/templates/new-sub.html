@@ -5,6 +5,17 @@
     <title>Title</title>
     <style>
         /* Style for the form container */
+
+        .alert {
+            background-color: #f2dede;
+            border: 1px solid #ebccd1;
+            color: #a94442;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .alert-danger{
+            color: red;
+        }
         #newSubRedditForm {
             width: 60%; /* Increased width */
             margin: 0 auto;
@@ -63,6 +74,9 @@
 </head>
 <body>
 <form id="newSubRedditForm"  method="post" th:object="${subRedditDto}" th:action="@{/r/submit/r}">
+    <div th:if="${subRedditPresent}" class="alert alert-danger">
+        <p th:text="${subRedditPresent}"></p>
+    </div>
     <input type="text" th:field="*{subRedditName}" id="newSubRedditName" placeholder="Subreddit Name" class="new-subreddit-name-input" minlength="3" maxlength="30" required>
     <input type="text" id="newSubRedditBio" th:field="*{subRedditDescription}" placeholder="Talk about your Community">
     <span id="subredditNameError" style="color: red;"></span>

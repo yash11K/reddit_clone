@@ -53,7 +53,7 @@ public class SecurityConfig {
                                 customizer
 //                                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
 //                                        .requestMatchers(HttpMethod.POST, "/**").hasRole("REDDITOR")
-                                .requestMatchers("/login-page", "/logout","/register","/user/new").permitAll()
+                                .requestMatchers("/login-page", "/logout","/register","/user/new","/feed/**","/feed/all").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form->

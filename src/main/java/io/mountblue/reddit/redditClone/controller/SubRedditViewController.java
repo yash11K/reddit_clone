@@ -7,8 +7,10 @@ import io.mountblue.reddit.redditClone.model.SubReddit;
 import io.mountblue.reddit.redditClone.model.User;
 import io.mountblue.reddit.redditClone.service.*;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,7 +53,12 @@ public class SubRedditViewController {
     }
 
     @PostMapping("/submit/r")
-    public String createSubredditPlain(@ModelAttribute SubRedditViewDto subRedditViewDto, Principal principal){
+    public String createSubredditPlain(@ModelAttribute SubRedditViewDto subRedditViewDto, Principal principal, Model model){
+        if(subRedditService.findSubRedditByName(subRedditViewDto.getSubRedditName()).isPresent()){
+            model.addAttribute("subRedditDto", subRedditViewDto);
+            model.addAttribute("subRedditPresent", "SubReddit already present");
+            return "new-sub";
+        }
         subRedditService.saveSub(SubReddit.builder().subRedditName(subRedditViewDto.getSubRedditName())
                 .description(subRedditViewDto.getSubRedditDescription())
                 .createdAt(LocalDateTime.now())
@@ -63,7 +70,11 @@ public class SubRedditViewController {
     }
 
     @PostMapping("/sub/new")
-    public String createSubReddit(@RequestParam String newSubRedditName, Principal principal) {
+    public String createSubReddit(@RequestParam String newSubRedditName, Principal principal, Model model) {
+        if(subRedditService.findSubRedditByName(newSubRedditName).isPresent()){
+            model.addAttribute("subRedditPresent", "SubReddit already present");
+            return "new-sub";
+        }
         SubRedditDto subRedditDto = new SubRedditDto();
         subRedditDto.setSubRedditName(newSubRedditName);
         subRedditService.save(subRedditDto, principal);
@@ -147,19 +158,19 @@ public class SubRedditViewController {
 
         return "redirect:/r/" + subRedditName;
     }
-    @PostMapping("/voting")
-    public String voting(
-            @RequestParam(name = "postId") Long postId,
-            @RequestParam(name = "votetype") String voteType,
-            Model model
-    ) {
-        Post post = postService.fetchPostById(postId);
-        voteService.votes(post, voteType);
-        FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
-        String subRedditName = post.getSubReddit().getSubRedditName();
-        Long voteCounts = post.getVoteCount();
-        model.addAttribute("fullPostViewDto", fullPostViewDto);
-        model.addAttribute("votesCount", voteCounts);
-        return "redirect:/r/" + subRedditName;
-    }
+//    @PostMapping("/voting")
+//    public String voting(
+//            @RequestParam(name = "postId") Long postId,
+//            @RequestParam(name = "votetype") String voteType,
+//            Model model
+//    ) {
+//        Post post = postService.fetchPostById(postId);
+//        voteService.votes(post, voteType);
+//        FullPostViewDto fullPostViewDto = postService.postToFullViewPostDto(post);
+//        String subRedditName = post.getSubReddit().getSubRedditName();
+//        Long voteCounts = post.getVoteCount();
+//        model.addAttribute("fullPostViewDto", fullPostViewDto);
+//        model.addAttribute("votesCount", voteCounts);
+//        return "redirect:/r/" + subRedditName;
+//    }
 }

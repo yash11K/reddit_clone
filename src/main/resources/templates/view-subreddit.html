@@ -442,6 +442,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card-body text-center " th:unless="${#authorization.expression('isAuthenticated()')}">
+                            <a href="login-page">Login To view your Reddit-Card</a>
+                        </div>
                     </div>
                 </div>
                 <div class="card card-left1 mb-4">

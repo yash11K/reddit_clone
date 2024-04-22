@@ -64,11 +64,14 @@
             <input type="text" name="search" id="search" placeholder="Search" class="form-control form-control-sm">
             <input type="submit" value="search" class="search-button">
         </form>
-        <div class="button-container">
-            <div sec:authorize="isAuthenticated()">
+        <div class="button-container" >
+            <div th:if="${#authorization.expression('isAuthenticated()')}">
                 <a th:href="@{'/u/' + ${userDto.username}}">
                     <img th:src="${userDto.getMediaUri()}" alt="" class="rounded-circle ml-3 d-none d-md-block" width="70px" height="70px">
                 </a>
+            </div>
+            <div th:unless="${#authorization.expression('isAuthenticated()')}">
+                <a href="/login-page" class="login-link">login</a>
             </div>
         </div>
         </div>
@@ -79,7 +82,7 @@
         <div class="col-12 col-lg-3">
             <div class="left-column">
                 <div class="card card-left1 mb-4">
-                    <div class="card-body text-center " sec:authorize="isAuthenticated()">
+                    <div class="card-body text-center " th:if="${#authorization.expression('isAuthenticated()')}">
                         <img th:src="${userDto.getMediaUri()}" alt="img" width="120px" height="120px" class="rounded-circle mt-n5">
                         <h5 class="card-title" th:text="'u/'+${userDto.username}"></h5>
                         <p class="card-text text-justify mb-2"></p>
@@ -100,6 +103,9 @@
                             </div>
                             <a th:href="@{/post/new}" class="button">Create</a>
                         </ul>
+                    </div>
+                    <div class="card-body text-center " th:unless="${#authorization.expression('isAuthenticated()')}">
+                        <a href="login-page">Login To view your Reddit-Card</a>
                     </div>
                 </div>
                 <div class="card shadow-sm card-left2 mb-4">
