@@ -1,13 +1,1 @@
-{
-"type": "service_account",
-"project_id": "model-folio-418509",
-"private_key_id": "3b37a228d9aa692e7f253693084ba0dcd194ce0e",
-"private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCMox6iWzT8FrK2\nFiG1ag53wdeAUsE9ad3DCQ1qKk4X8VWGcNCfObX1UUW1gfW4wwii1jAfN2Kd3FOb\nXG9O6kETo+2eBNTBaPXQQiORc+TIbE2Z/6CFZLt+sX5oHlSpUV3NtsEE5+J5jYV4\n4agIC0rI/uzagToyIyZAZ1cj+3SjigktfWev/XcuyTXMIoFTgAYQhmhD8CgjPQKF\nshpi5XOWNB40brWbKqtfxaW6Nse36nEtlhZvol/rU2AQTulqHi4nXgWUll7nK8vF\ng8HPbbN22cqQPi9W8mSfZIGLeuzHIfN6ug7o94w85ozji5dyrspa9SJXKrG/ezWI\nrxh99eSzAgMBAAECggEAHpVqmAwVnayh+I8fjYAe3VQ+NR3KAD0BiORzEl9Y1EQb\nQT1PYRD/zPV7n1k/wopHWoIRvPgibgn39JVJb3Pp6wd/KRoL2nOk4UFA0uTNH/jN\nd2vr0JZzX73hq2rNJnUXXSEdIJ/81Eo+eGc6T2WFQeiOQYZQzY5vRxoyDRUl7FpJ\nyd4tTW2SypX3zTO6RZAZgUUTStu9CFRcxJlDxRf4zq7F2Acz1D+Qnf3gGFL0ACbb\nwE+P5UiQek3slddb8sH7riOI8kXdxf6w+wkCGK4TEByUpcx2RNt/Rf39nWcnmbuu\nQcl7MTC6VQovK4AomGraG1GO2zVYeSsJqB038laZgQKBgQDENvxrOsVRQajpzy5e\nxuaWWM2V/PL6hjnSicR+xKj/yZsc1e6U6BQXjo8SgH4eJrh8qXs/1wfWqyXRxdKq\nVwbvJ+EV2bQL2k8aUbugllvoobUp5QVFXAGTNLfbBWZmrZrC29ZkDElWQGPJNSIs\nimVaeaVthkHthLA5PhJjJZI9kQKBgQC3fQHBZ5aN9ipife6cq5iE44D784RmqSFF\nzyEeDfeDs77J7D2rYQv//qYxHH7jtaSzXQfwKMwnDXsZ+IGH9r9UjPlTEMQAyPS1\nlqo4VAKQmF1gCIj0A/ZGuGSXqWqU4oEVODiTdoMJsf5XhHa1QuYq3ZTJWew4lK98\n/UAX2+ZsAwKBgGxF+1wgfimslc0PaoMaNrvYHPobLulXkCjBpRBe7PLZCSMMWi8J\nMa0eGY0YIn/41ezUiRJdUhH/N0teYjVk+IqX8vjfvR6dRPE9ENA4qFbihNmtaw8v\nCh91A890V2FpgvDr5o4myYEy3t102HrDk9ItNkANyeuLQMMVoYfcf6pBAoGAITjX\nCoeQ8N8zSWX3wBIpqVXv0q6CuHvC9HrOSjzJJeVzk+fcOp11qMIYoSfBqcUHrxoX\nB9q7LA76zPb7rPx2I/7qXanZczLva7l91HkRhdCwh2TENzpIawGT5QndrFted9MY\nG0sH6sd5f6sSOzuDpRs9hz9qz8vMAltwMWG1VLUCgYBY0mwLFQ2YzW5e/mLvhnIm\nZZzR/j+D1E3y4E17l3Z7agRmK92ZiTeaegjgRJzRvSuWquKN2WBRBOxuUtU5XpuC\nsmDNfO7RAqQLICoYSysW+TObnHstAdrlcBXLqCW9o0THLVMEE1+/ODmm2rwJywpA\nRA50d02sQRJf2yc+TuriBQ==\n-----END PRIVATE KEY-----\n",
-"client_email": "mountbluejava@model-folio-418509.iam.gserviceaccount.com",
-"client_id": "101590753405017886737",
-"auth_uri": "https://accounts.google.com/o/oauth2/auth",
-"token_uri": "https://oauth2.googleapis.com/token",
-"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-"client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mountbluejava%40model-folio-418509.iam.gserviceaccount.com",
-"universe_domain": "googleapis.com"
-}
+--Hidden--
